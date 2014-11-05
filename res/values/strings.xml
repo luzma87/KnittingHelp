@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KnittingHelp</string>
+
+    <string name="bugs_mail">nth.development@gmail.com</string>
+    <string name="comments_mail">nth.development@gmail.com</string>
+
+    <string name="db_name">knitting</string>
+
+    <string-array name="options_array">
+        <item>Principal</item>
+        <item>Configuración</item>
+    </string-array>
+
+    <string name="menu_title">Navegación</string>
+    <string name="main_title">KnittingHelp</string>
+
+    <string name="drawer_open">Abrir menú de navegación</string>
+    <string name="drawer_close">Cerrar menú de navegación</string>
+
+    <string name="global_ok">Aceptar</string>
+    <string name="global_cancel">Cancelar</string>
+
+    <string name="dialog_btn_cerrar">Cerrar</string>
+    <string name="help_help">Ayuda</string>
+    <string name="search_btn_label">Buscar</string>
+
+    <string name="new_pattern">Nuevo modelo</string>
+    <string name="delete_pattern_dlg_message">Está seguo de querer eliminar este modelo?</string>
+    <string name="delete_pattern_dlg_title">Eliminar modelo</string>
+    <string name="pattern_deleted">Modelo eliminado</string>
+
+    <string name="pattern_info_title">Modelo</string>
+    <string name="pattern_info_start">Empezar</string>
+    <string name="pattern_info_continue">Continuar</string>
+
+
+</resources>
