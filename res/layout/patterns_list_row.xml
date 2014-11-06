@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/patterns_list_row_image"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_thin"
+        android:padding="3dp"
+
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/patterns_list_row_nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="nombre"
+
+        android:layout_toEndOf="@id/patterns_list_row_image"
+        android:layout_toRightOf="@id/patterns_list_row_image"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/patterns_list_row_contenido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="contenido"
+        android:maxLines="3"
+        android:layout_alignStart="@id/patterns_list_row_nombre"
+        android:layout_alignLeft="@id/patterns_list_row_nombre"
+        android:layout_below="@id/patterns_list_row_nombre" />
+
+</RelativeLayout>
