@@ -32,12 +32,18 @@
     <string name="delete_pattern_dlg_message">Está seguo de querer eliminar este modelo?</string>
     <string name="delete_pattern_dlg_title">Eliminar modelo</string>
     <string name="pattern_deleted">Modelo eliminado</string>
+    <string name="pattern_saved">Modelo guardado</string>
 
     <string name="pattern_info_title">Modelo</string>
     <string name="pattern_info_start">Empezar</string>
     <string name="pattern_info_continue">Continuar</string>
 
     <string name="settings_btn_label">Config.</string>
+    <string name="pattern_title">Título</string>
+    <string name="pattern_content">Contenido</string>
+    <string name="global_save">Guardar</string>
+    <string name="pattern_title_validation_error">Por favor escriba el nombre del modelo</string>
+    <string name="pattern_content_validation_error">Por favor escriba el contenido del modelo</string>
 
 
 </resources>

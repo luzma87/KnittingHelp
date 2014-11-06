@@ -88,6 +88,16 @@ public class DbHelper extends SQLiteOpenHelper {
         Log.e(log, query);
     }
 
+
+    public static String date2string(Date date) {
+        return date2string(date, "yyyy-MM-dd HH:mm");
+    }
+
+    public static String date2string(Date date, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(date);
+    }
+
     public static String formatDateTime(Activity context, String timeToFormat) {
         String finalDateTime = "";
 

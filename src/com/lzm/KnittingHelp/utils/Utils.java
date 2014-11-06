@@ -6,10 +6,13 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Vibrator;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.lzm.KnittingHelp.MainActivity;
 import com.lzm.KnittingHelp.R;
 
@@ -96,4 +99,41 @@ public class Utils {
         }
     }
 
+    public static void toast(String s, Context context) {
+        Toast.makeText(context, s, Toast.LENGTH_LONG).show();
+    }
+
+    public static void vibrate(Context context) {
+        vibrate(100, context);
+    }
+
+    public static void vibrate(int length, Context context) {
+        Vibrator v1 = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for [length] milliseconds
+        v1.vibrate(length);
+
+        // Output yes if can vibrate, no otherwise
+//        if (v1.hasVibrator()) {
+//            Log.v("Can Vibrate", "YES");
+//        } else {
+//            Log.v("Can Vibrate", "NO");
+//        }
+    }
+
+    public static void vibrate(long[] pattern, Context context) {
+        // Start without a delay
+        // Vibrate for 100 milliseconds
+        // Sleep for 1000 milliseconds
+        // long[] pattern = {0, 100, 1000};
+
+        // The first value indicates the number of milliseconds to wait before turning the vibrator ON: 0=Start without a delay
+        // Each element then alternates between vibrate, sleep, vibrate, sleep...
+        // long[] pattern = {0, 100, 1000, 300, 200, 100, 500, 200, 100};
+        Vibrator v1 = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+        //     '0' here means to repeat indefinitely
+        //     '0' is actually the index at which the pattern keeps repeating from (the start)
+        //     To repeat the pattern from any other point, you could increase the index, e.g. '1'
+        v1.vibrate(pattern, -1);
+    }
 }

@@ -3,6 +3,7 @@ package com.lzm.KnittingHelp.db;
 import android.app.Activity;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by DELL on 29/10/2014.
@@ -36,8 +37,10 @@ public class Pattern {
 
     public void save() {
         if (this.id == 0) {
+            this.fechaCreacion = DbHelper.date2string(new Date());
             this.id = this.patternDbHelper.create(this);
         } else {
+            this.fechaModificacion = DbHelper.date2string(new Date());
             this.patternDbHelper.update(this);
         }
     }

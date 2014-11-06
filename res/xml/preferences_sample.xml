@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="inline settings"
+        android:key="pref_key_storage_settings">
+        <CheckBoxPreference
+            android:key="pref_key_auto_delete"
+            android:summary="pref_summary_auto_delete"
+            android:title="pref_title_auto_delete"
+            android:defaultValue="false" />
+        <Preference
+            android:key="pref_key_sms_delete_limit"
+            android:dependency="pref_key_auto_delete"
+            android:summary="pref_summary_delete_limit"
+            android:title="pref_title_sms_delete" />
+        <Preference
+            android:key="pref_key_mms_delete_limit"
+            android:dependency="pref_key_auto_delete"
+            android:summary="pref_summary_delete_limit"
+            android:title="pref_title_mms_delete" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="dialog_based_preferences">
+
+        <EditTextPreference
+            android:key="edittext_preference"
+            android:title="title_edittext_preference"
+            android:summary="summary_edittext_preference"
+            android:dialogTitle="dialog_title_edittext_preference" />
+
+        <ListPreference
+            android:key="list_preference"
+            android:title="title_list_preference"
+            android:summary="summary_list_preference"
+            android:entries="@array/entries_list_preference"
+            android:entryValues="@array/entryvalues_list_preference"
+            android:dialogTitle="dialog_title_list_preference" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="preference_attributes">
+
+        <CheckBoxPreference
+            android:key="parent_checkbox_preference"
+            android:title="title_parent_preference"
+            android:summary="summary_parent_preference" />
+
+        <!-- The visual style of a child is defined by this styled theme attribute. -->
+        <CheckBoxPreference
+            android:key="child_checkbox_preference"
+            android:dependency="parent_checkbox_preference"
+            android:layout="?android:attr/preferenceLayoutChild"
+            android:title="title_child_preference"
+            android:summary="summary_child_preference" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

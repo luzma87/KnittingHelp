@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 import com.lzm.KnittingHelp.MainActivity;
 import com.lzm.KnittingHelp.R;
 import com.lzm.KnittingHelp.activities.PatternInfoActivity;
@@ -73,7 +72,8 @@ public class PatternsListFragment extends MasterFragment {
                 patterns.remove(positionToRemove);
                 adapter.notifyDataSetChanged();
 
-                Toast.makeText(context, getString(R.string.pattern_deleted), Toast.LENGTH_LONG).show();
+                Utils.vibrate(context);
+                Utils.toast(getString(R.string.pattern_deleted), context);
                 return true;
             default:
                 return super.onContextItemSelected(item);

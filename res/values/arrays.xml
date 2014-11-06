@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="entries_list_preference">
+        <item>uno</item>
+        <item>dos</item>
+    </string-array>
+    <string-array name="entryvalues_list_preference">
+        <item>one</item>
+        <item>two</item>
+    </string-array>
+    <string-array name="date_format_list_preference">
+        <item>2014–12–31 15:25</item>
+        <item>2014–12–31 03:25 PM</item>
+        <item>31–12–2014 15:25</item>
+        <item>31–12–2014 03:25 PM</item>
+    </string-array>
+    <string-array name="date_format_values_list_preference">
+        <item>yyyy-MM-dd HH:mm</item>
+        <item>yyyy-MM-dd KK:mm a</item>
+        <item>dd-MM-yyyy HH:mm</item>
+        <item>dd-MM-yyyy KK:mm a</item>
+    </string-array>
+</resources>
