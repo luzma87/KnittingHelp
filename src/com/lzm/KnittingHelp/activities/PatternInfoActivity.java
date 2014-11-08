@@ -51,17 +51,21 @@ public class PatternInfoActivity extends Activity implements View.OnClickListene
         txtNombre.setText(pattern.nombre);
         txtContenido.setText(pattern.contenido);
 
-        String path = pattern.imagen.replaceAll("\\.jpg", "").toLowerCase();
-        if (pattern.fechaCreacion != null) {
-            File imgFile = new File(pattern.imagen);
-            if (imgFile.exists()) {
-                Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath(), 200, 200);
-                imgImagen.setImageBitmap(myBitmap);
+        if (pattern.imagen != null) {
+            String path = pattern.imagen.replaceAll("\\.jpg", "").toLowerCase();
+            if (pattern.fechaCreacion != null) {
+                File imgFile = new File(pattern.imagen);
+                if (imgFile.exists()) {
+                    Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath(), 200, 200);
+                    imgImagen.setImageBitmap(myBitmap);
+                }
+            } else {
+                imgImagen.setImageResource(Utils.getImageResourceByName(this, path));
             }
+            imgImagen.setOnClickListener(this);
         } else {
-            imgImagen.setImageResource(Utils.getImageResourceByName(this, path));
+            imgImagen.setImageResource(R.drawable.ic_launcher);
         }
-        imgImagen.setOnClickListener(this);
     }
 
 

@@ -22,13 +22,16 @@ import java.util.List;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 
-    ViewPager viewPager;
+    public ViewPager viewPager;
     ActionBar actionBar;
 
     public static int screenHeight;
     public static int screenWidth;
 
-    List<MasterFragment> fragments;
+    public final int LIST_POS = 0;
+    public final int CREATE_POS = 1;
+    public final int TAB_COUNT = 2;
+    public List<MasterFragment> fragments;
     List<String> titles;
 
     /**
@@ -50,7 +53,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         screenHeight = displaymetrics.heightPixels;
         screenWidth = displaymetrics.widthPixels;
 
-        fragments = new ArrayList<MasterFragment>();
+        fragments = new ArrayList<MasterFragment>(TAB_COUNT);
         fragments.add(new PatternsListFragment());
         fragments.add(new CreatePatternFragment());
 
@@ -107,6 +110,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.addTab(tab);
     }
 
+    public void selectTab(int pos) {
+        viewPager.setCurrentItem(pos);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -130,7 +137,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
 //        Log.d("LZM", "onTabSelected at position: " + tab.getPosition() + " name: " + tab.getText());
-        viewPager.setCurrentItem(tab.getPosition());
+//        viewPager.setCurrentItem(tab.getPosition());
+        selectTab(tab.getPosition());
     }
 
     @Override

@@ -7,9 +7,9 @@
 
 
     <EditText
-        android:id="@+id/create_pattern_title"
+        android:id="@+id/create_pattern_name"
 
-        android:hint="@string/pattern_title"
+        android:hint="@string/pattern_name"
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
 
-        android:layout_below="@+id/create_pattern_title"
+        android:layout_below="@+id/create_pattern_name"
         android:layout_above="@+id/create_pattern_btn_save">
 
         <EditText
@@ -38,7 +38,7 @@
             android:ems="10"
             android:gravity="top"
 
-            android:layout_below="@id/create_pattern_title" />
+            android:layout_below="@id/create_pattern_name" />
     </ScrollView>
 
     <Button

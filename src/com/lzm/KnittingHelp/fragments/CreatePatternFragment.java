@@ -16,23 +16,46 @@ import com.lzm.KnittingHelp.utils.Utils;
  */
 public class CreatePatternFragment extends MasterFragment {
 
-    EditText txtTitulo;
+    EditText txtNombre;
     EditText txtContenido;
     Button btnSave;
+
+    Pattern pattern;
+
+    long id = 0;
+
+    public void setData(long patternId) {
+        id = patternId;
+        if (id != 0) {
+            pattern = Pattern.get(context, id);
+            txtNombre.setText(pattern.nombre);
+            txtContenido.setText(pattern.contenido);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = (MainActivity) getActivity();
+
         View view = inflater.inflate(R.layout.create_pattern_layout, container, false);
 
-        txtTitulo = (EditText) view.findViewById(R.id.create_pattern_title);
+        txtNombre = (EditText) view.findViewById(R.id.create_pattern_name);
         txtContenido = (EditText) view.findViewById(R.id.create_pattern_content);
+
+        pattern = new Pattern(context);
+
+        if (id != 0) {
+            pattern = Pattern.get(context, id);
+            txtNombre.setText(pattern.nombre);
+            txtContenido.setText(pattern.contenido);
+        }
+
         btnSave = (Button) view.findViewById(R.id.create_pattern_btn_save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Utils.hideSoftKeyboard(context);
-                String nombre = txtTitulo.getText().toString().trim();
+                String nombre = txtNombre.getText().toString().trim();
                 String contenido = txtContenido.getText().toString().trim();
 
                 if (nombre.equals("")) {
@@ -40,15 +63,22 @@ public class CreatePatternFragment extends MasterFragment {
                 } else if (contenido.equals("")) {
                     Utils.toast(getString(R.string.pattern_content_validation_error), context);
                 } else {
-                    Pattern pattern = new Pattern(context);
                     pattern.nombre = nombre;
                     pattern.contenido = contenido;
                     pattern.save();
                     Utils.toast(getString(R.string.pattern_saved), context);
+                    resetForm();
+                    context.selectTab(context.LIST_POS);
+                    ((PatternsListFragment) context.fragments.get(context.LIST_POS)).loadPatterns();
                 }
             }
         });
 
         return view;
+    }
+
+    private void resetForm() {
+        txtNombre.setText("");
+        txtContenido.setText("");
     }
 }

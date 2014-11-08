@@ -4,6 +4,9 @@
     <item
         android:id="@+id/patterns_list_context_menu_delete"
         android:title="@string/global_delete" />
+    <item
+        android:id="@+id/patterns_list_context_menu_edit"
+        android:title="@string/global_edit" />
     <!--<item-->
     <!--android:id="@+id/showUrl2"-->
     <!--android:title="dummy2" />-->

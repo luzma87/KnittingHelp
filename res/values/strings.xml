@@ -22,6 +22,8 @@
 
     <string name="global_ok">Aceptar</string>
     <string name="global_cancel">Cancelar</string>
+    <string name="global_save">Guardar</string>
+    <string name="global_edit">Modificar</string>
     <string name="global_delete">Eliminar</string>
 
     <string name="dialog_btn_cerrar">Cerrar</string>
@@ -39,9 +41,9 @@
     <string name="pattern_info_continue">Continuar</string>
 
     <string name="settings_btn_label">Config.</string>
-    <string name="pattern_title">Título</string>
-    <string name="pattern_content">Contenido</string>
-    <string name="global_save">Guardar</string>
+    <string name="pattern_name">Nombre</string>
+    <string name="pattern_content">Contenido del modelo</string>
+
     <string name="pattern_title_validation_error">Por favor escriba el nombre del modelo</string>
     <string name="pattern_content_validation_error">Por favor escriba el contenido del modelo</string>
 

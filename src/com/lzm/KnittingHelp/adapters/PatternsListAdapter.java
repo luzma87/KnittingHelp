@@ -53,14 +53,17 @@ public class PatternsListAdapter extends ArrayAdapter<Pattern> {
         itemNombre.setText(labelNombre);
         itemContenido.setText(labelContenido);
 
-        if (pattern.fechaCreacion != null) {
-            itemFoto.setImageBitmap(ImageUtils.decodeFile(pattern.imagen, 100, 100, false));
+        if (pattern.imagen != null) {
+            if (pattern.fechaCreacion != null) {
+                itemFoto.setImageBitmap(ImageUtils.decodeFile(pattern.imagen, 100, 100, false));
+            } else {
+                String path = pattern.imagen.replaceAll("\\.jpg", "").toLowerCase();
+                path = "th_" + path;
+                itemFoto.setImageResource(Utils.getImageResourceByName(context, path));
+            }
         } else {
-            String path = pattern.imagen.replaceAll("\\.jpg", "").toLowerCase();
-            path = "th_" + path;
-            itemFoto.setImageResource(Utils.getImageResourceByName(context, path));
+            itemFoto.setImageResource(R.drawable.ic_launcher);
         }
-
         return convertView;
     }
 }

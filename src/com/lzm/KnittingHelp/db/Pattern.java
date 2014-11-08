@@ -20,15 +20,18 @@ public class Pattern {
     PatternDbHelper patternDbHelper;
 
     public Pattern(Activity context) {
+        this.patternDbHelper = new PatternDbHelper(context);
     }
 
     public Pattern(Activity context, String nombre) {
         this.nombre = nombre;
+        this.patternDbHelper = new PatternDbHelper(context);
     }
 
     public Pattern(Activity context, String nombre, String contenido) {
         this.nombre = nombre;
         this.contenido = contenido;
+        this.patternDbHelper = new PatternDbHelper(context);
     }
 
     public String toString() {
