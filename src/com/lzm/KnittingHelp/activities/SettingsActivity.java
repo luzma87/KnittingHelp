@@ -20,6 +20,7 @@ import java.util.List;
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String KEY_PREF_RELOAD_PATTERNS = "pref_reload_pattern";
+    public static final String KEY_PREF_DATE_FORMAT = "pref_date_format";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,16 +30,20 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
+
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(KEY_PREF_RELOAD_PATTERNS)) {
-            System.out.println("AQUIIIIIIIIIIIIII");
-//            Preference connectionPref = findPreference(key);
-//            // Set summary to be the user-description for the selected value
-//            connectionPref.setSummary(sharedPreferences.getString(key, ""));
-        }
+//        if (key.equals(KEY_PREF_RELOAD_PATTERNS)) {
+//            System.out.println("AQUIIIIIIIIIIIIII");
+////            Preference connectionPref = findPreference(key);
+////            // Set summary to be the user-description for the selected value
+////            connectionPref.setSummary(sharedPreferences.getString(key, ""));
+//        } else if (key.equals(KEY_PREF_DATE_FORMAT)) {
+//            System.out.println("********************************** change date format");
+//        }
     }
 
     public static class SettingsFragment extends PreferenceFragment {

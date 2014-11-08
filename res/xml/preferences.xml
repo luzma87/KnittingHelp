@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference
-        android:title="Recargar"
-        android:summary="Recarga los modelos por defecto si fueron eliminados"
+    <com.lzm.KnittingHelp.preferences.ClickPreference
+        android:title="@string/settings_pattern_reload_title"
+        android:summary="@string/settings_pattern_reload_summary"
         android:key="pref_reload_pattern"
 
-        android:icon="@drawable/ic_action_settings" />
-    <PreferenceCategory android:title="Formatos">
-        <ListPreference
-            android:title="Formato de fecha"
-            android:summary="Formato para mostrar las fechas"
-            android:dialogTitle="Formato para mostrar las fechas"
-            android:key="pref_date_format"
+        android:icon="@drawable/ic_action_refresh" />
+    <ListPreference
+        android:title="@string/settings_date_formats_title"
+        android:summary="@string/settings_date_formats_summary"
+        android:dialogTitle="@string/settings_date_formats_title"
+        android:key="pref_date_format"
 
-            android:entries="@array/date_format_list_preference"
-            android:entryValues="@array/date_format_values_list_preference" />
-    </PreferenceCategory>
+        android:entries="@array/date_format_list_preference"
+        android:entryValues="@array/date_format_values_list_preference"
+
+        android:defaultValue="@string/date_format_value_default" />
 
 </PreferenceScreen>

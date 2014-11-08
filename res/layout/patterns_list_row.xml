@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:background="?android:attr/activatedBackgroundIndicator">
 
     <ImageView
         android:id="@+id/patterns_list_row_image"
@@ -24,10 +25,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="nombre"
+        android:textStyle="bold"
 
         android:layout_toEndOf="@id/patterns_list_row_image"
-        android:layout_toRightOf="@id/patterns_list_row_image"
-        android:textStyle="bold|italic" />
+        android:layout_toRightOf="@id/patterns_list_row_image" />
+
+    <TextView
+        android:id="@+id/patterns_list_row_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="23-01-1987 16:45"
+        android:textStyle="italic|normal"
+
+        android:layout_below="@id/patterns_list_row_nombre"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
 
     <TextView
         android:id="@+id/patterns_list_row_contenido"
@@ -35,8 +48,9 @@
         android:layout_height="wrap_content"
         android:text="contenido"
         android:maxLines="3"
+
+        android:layout_below="@id/patterns_list_row_date"
         android:layout_alignStart="@id/patterns_list_row_nombre"
-        android:layout_alignLeft="@id/patterns_list_row_nombre"
-        android:layout_below="@id/patterns_list_row_nombre" />
+        android:layout_alignLeft="@id/patterns_list_row_nombre" />
 
 </RelativeLayout>

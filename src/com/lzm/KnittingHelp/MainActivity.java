@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -150,6 +151,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
 //        Log.d("LZM", "onTabReselected at position: " + tab.getPosition() + " name: " + tab.getText());
+   }
 
-    }
 }

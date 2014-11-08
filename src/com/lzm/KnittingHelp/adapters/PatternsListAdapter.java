@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.lzm.KnittingHelp.MainActivity;
 import com.lzm.KnittingHelp.R;
+import com.lzm.KnittingHelp.db.DbHelper;
 import com.lzm.KnittingHelp.db.Pattern;
 import com.lzm.KnittingHelp.utils.ImageUtils;
 import com.lzm.KnittingHelp.utils.Utils;
@@ -37,8 +38,11 @@ public class PatternsListAdapter extends ArrayAdapter<Pattern> {
         String labelNombre = pattern.nombre;
         String labelContenido = pattern.contenido;
         if (labelContenido.length() > 200) {
-            labelContenido = labelContenido.substring(0, 196) + "...";
+            labelContenido = labelContenido.substring(0, 197) + "...";
         }
+//        String labelFecha = DbHelper.formatDateTime(context, pattern.fechaModificacion);
+        String labelFecha = "";
+
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -46,20 +50,34 @@ public class PatternsListAdapter extends ArrayAdapter<Pattern> {
         }
 
         TextView itemNombre = (TextView) convertView.findViewById(R.id.patterns_list_row_nombre);
+        TextView itemFecha = (TextView) convertView.findViewById(R.id.patterns_list_row_date);
         TextView itemContenido = (TextView) convertView.findViewById(R.id.patterns_list_row_contenido);
 
         ImageView itemFoto = (ImageView) convertView.findViewById(R.id.patterns_list_row_image);
+
+        if (pattern.fechaModificacion != null) {
+            labelFecha = DbHelper.formatDateTime(context, pattern.fechaModificacion);
+            itemFecha.setText(labelFecha);
+            itemFecha.setVisibility(View.VISIBLE);
+        } else {
+            itemFecha.setText("");
+            itemFecha.setVisibility(View.GONE);
+        }
 
         itemNombre.setText(labelNombre);
         itemContenido.setText(labelContenido);
 
         if (pattern.imagen != null) {
-            if (pattern.fechaCreacion != null) {
-                itemFoto.setImageBitmap(ImageUtils.decodeFile(pattern.imagen, 100, 100, false));
-            } else {
-                String path = pattern.imagen.replaceAll("\\.jpg", "").toLowerCase();
-                path = "th_" + path;
-                itemFoto.setImageResource(Utils.getImageResourceByName(context, path));
+            try {
+                if (pattern.fechaCreacion != null) {
+                    itemFoto.setImageBitmap(ImageUtils.decodeFile(pattern.imagen, 100, 100, false));
+                } else {
+                    String path = pattern.imagen.replaceAll("\\.jpg", "").toLowerCase();
+                    path = "th_" + path;
+                    itemFoto.setImageResource(Utils.getImageResourceByName(context, path));
+                }
+            } catch (Exception e) {
+
             }
         } else {
             itemFoto.setImageResource(R.drawable.ic_launcher);

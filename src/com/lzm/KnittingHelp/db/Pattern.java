@@ -41,12 +41,19 @@ public class Pattern {
     public void save() {
         if (this.id == 0) {
             this.fechaCreacion = DbHelper.date2string(new Date());
+            this.fechaModificacion = this.fechaCreacion;
             this.id = this.patternDbHelper.create(this);
         } else {
             this.fechaModificacion = DbHelper.date2string(new Date());
             this.patternDbHelper.update(this);
         }
     }
+
+    public void saveReset() {
+        this.fechaModificacion = this.fechaCreacion;
+        this.id = this.patternDbHelper.create(this);
+    }
+
 
     public static Pattern get(Activity context, long id) {
         PatternDbHelper e = new PatternDbHelper(context);

@@ -25,16 +25,30 @@
     <string name="global_save">Guardar</string>
     <string name="global_edit">Modificar</string>
     <string name="global_delete">Eliminar</string>
+    <plurals name="global_n_selected">
+        <item quantity="one">1 seleccionado</item>
+        <item quantity="other">%1$s seleccionados</item>
+    </plurals>
 
     <string name="dialog_btn_cerrar">Cerrar</string>
     <string name="help_help">Ayuda</string>
     <string name="search_btn_label">Buscar</string>
 
     <string name="new_pattern">Nuevo modelo</string>
-    <string name="delete_pattern_dlg_message">Está seguo de querer eliminar este modelo?</string>
-    <string name="delete_pattern_dlg_title">Eliminar modelo</string>
+    <plurals name="delete_n_patterns_dlg_message">
+        <item quantity="one">¿Está seguro de querer eliminar este modelo?</item>
+        <item quantity="other">¿Está seguro de querer eliminar %1$s modelos?</item>
+    </plurals>
+    <plurals name="delete_n_patterns_dlg_title">
+        <item quantity="one">Eliminar modelo</item>
+        <item quantity="other">Eliminar %1$s modelos?</item>
+    </plurals>
     <string name="pattern_deleted">Modelo eliminado</string>
     <string name="pattern_saved">Modelo guardado</string>
+
+    <string name="pattern_reset_dlg_message">¿Está seguro de querer insertar nuevamente los modelos por defecto?</string>
+    <string name="pattern_reset_dlg_title">Volver a cargar modelos por defecto</string>
+    <string name="pattern_reset_done">Modelos por defecto insertados correctamente.</string>
 
     <string name="pattern_info_title">Modelo</string>
     <string name="pattern_info_start">Empezar</string>
@@ -46,6 +60,12 @@
 
     <string name="pattern_title_validation_error">Por favor escriba el nombre del modelo</string>
     <string name="pattern_content_validation_error">Por favor escriba el contenido del modelo</string>
+
+    <string name="date_format_value_default">dd-MM-yyyy HH:mm</string>
+    <string name="settings_pattern_reload_title">Recargar</string>
+    <string name="settings_pattern_reload_summary">Recarga los modelos por defecto</string>
+    <string name="settings_date_formats_title">Formato de fecha</string>
+    <string name="settings_date_formats_summary">Formato para mostrar las fechas</string>
 
 
 </resources>

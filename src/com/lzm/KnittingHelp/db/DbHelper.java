@@ -1,10 +1,14 @@
 package com.lzm.KnittingHelp.db;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import com.lzm.KnittingHelp.R;
+import com.lzm.KnittingHelp.activities.SettingsActivity;
 
 import java.io.File;
 import java.text.ParseException;
@@ -85,7 +89,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     protected void logQuery(String log, String query) {
-        Log.e(log, query);
+//        Log.e(log, query);
     }
 
 
@@ -101,27 +105,31 @@ public class DbHelper extends SQLiteOpenHelper {
     public static String formatDateTime(Activity context, String timeToFormat) {
         String finalDateTime = "";
 
-        SimpleDateFormat iso8601Format = new SimpleDateFormat(
+        SimpleDateFormat dbFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss");
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        String outFormat = sharedPref.getString(SettingsActivity.KEY_PREF_DATE_FORMAT, context.getString(R.string.date_format_value_default));
 
         Date date = null;
         if (timeToFormat != null) {
             try {
-                date = iso8601Format.parse(timeToFormat);
+                date = dbFormat.parse(timeToFormat);
             } catch (ParseException e) {
                 date = null;
             }
 
             if (date != null) {
-                long when = date.getTime();
-                int flags = 0;
-                flags |= android.text.format.DateUtils.FORMAT_SHOW_TIME;
-                flags |= android.text.format.DateUtils.FORMAT_SHOW_DATE;
-                flags |= android.text.format.DateUtils.FORMAT_ABBREV_MONTH;
-                flags |= android.text.format.DateUtils.FORMAT_SHOW_YEAR;
-
-                finalDateTime = android.text.format.DateUtils.formatDateTime(context,
-                        when + TimeZone.getDefault().getOffset(when), flags);
+                return date2string(date, outFormat);
+//                long when = date.getTime();
+//                int flags = 0;
+//                flags |= android.text.format.DateUtils.FORMAT_SHOW_TIME;
+//                flags |= android.text.format.DateUtils.FORMAT_SHOW_DATE;
+//                flags |= android.text.format.DateUtils.FORMAT_ABBREV_MONTH;
+//                flags |= android.text.format.DateUtils.FORMAT_SHOW_YEAR;
+//
+//                finalDateTime = android.text.format.DateUtils.formatDateTime(context,
+//                        when + TimeZone.getDefault().getOffset(when), flags);
             }
         }
         return finalDateTime;

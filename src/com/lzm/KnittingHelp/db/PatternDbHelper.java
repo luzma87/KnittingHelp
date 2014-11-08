@@ -38,7 +38,7 @@ public class PatternDbHelper extends DbHelper {
 
     public long create(Pattern pattern) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = setValues(pattern, true);
+        ContentValues values = setValues(pattern);
 
         // insert row
         long res = db.insert(TABLE_PATTERN, null, values);
@@ -65,7 +65,7 @@ public class PatternDbHelper extends DbHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Pattern> list = new ArrayList<Pattern>();
         String selectQuery = "SELECT * FROM " + TABLE_PATTERN +
-                " ORDER BY " + KEY_FECHA_CREACION + " DESC";
+                " ORDER BY " + KEY_FECHA_MODIFICACION + " DESC";
         logQuery(LOG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
@@ -109,20 +109,13 @@ public class PatternDbHelper extends DbHelper {
         return obj;
     }
 
-    private ContentValues setValues(Pattern obj, boolean fecha) {
+    private ContentValues setValues(Pattern obj) {
         ContentValues values = new ContentValues();
-        if (fecha) {
-            values.put(KEY_FECHA_CREACION, getDateTime());
-        } else {
-            values.put(KEY_FECHA_MODIFICACION, getDateTime());
-        }
+        values.put(KEY_FECHA_CREACION, obj.fechaCreacion);
+        values.put(KEY_FECHA_MODIFICACION, obj.fechaModificacion);
         values.put(KEY_NOMBRE, obj.nombre);
         values.put(KEY_CONTENIDO, obj.contenido);
         values.put(KEY_IMAGEN, obj.imagen);
         return values;
-    }
-
-    private ContentValues setValues(Pattern obj) {
-        return setValues(obj, false);
     }
 }
