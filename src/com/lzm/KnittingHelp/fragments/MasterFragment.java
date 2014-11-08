@@ -8,4 +8,7 @@ import com.lzm.KnittingHelp.MainActivity;
  */
 public abstract class MasterFragment extends Fragment {
     MainActivity context;
+
+    public void onTabUnselected() {
+    }
 }

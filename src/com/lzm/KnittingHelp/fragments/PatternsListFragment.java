@@ -28,6 +28,8 @@ public class PatternsListFragment extends MasterFragment {
     PatternsListAdapter adapter;
     List<Pattern> patterns;
 
+    ActionMode myActionMode;
+
     public final static String PATTERN_ID_MESSAGE = "com.lzm.KnittingHelp.PATTERN";
 
     @Override
@@ -114,6 +116,7 @@ public class PatternsListFragment extends MasterFragment {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             MenuInflater inflater = mode.getMenuInflater();
             inflater.inflate(R.menu.patterns_list_contextual_action_bar, menu);
+            myActionMode = mode;
 //            mode.setTitle("Action Bar!");
 //            mode.setSubtitle("Subtitle");
             return true;
@@ -210,6 +213,7 @@ public class PatternsListFragment extends MasterFragment {
 
         public void onDestroyActionMode(ActionMode mode) {
             resetCounters();
+            myActionMode = null;
             // do nothing
         }
 
@@ -233,5 +237,10 @@ public class PatternsListFragment extends MasterFragment {
     public void onResume() {
         super.onResume();
         loadPatterns();
+    }
+
+    public void onTabUnselected() {
+        if (myActionMode != null)
+            myActionMode.finish();
     }
 }
