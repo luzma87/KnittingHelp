@@ -77,7 +77,6 @@ public class PatternsListFragment extends MasterFragment {
                 return true;
             case R.id.patterns_list_context_menu_edit:
                 ((CreatePatternFragment) context.fragments.get(context.CREATE_POS)).setData(selected.id);
-                System.out.println("?????????????????????????????????????????????? " + selected.id);
                 context.selectTab(context.CREATE_POS);
                 return true;
             default:
