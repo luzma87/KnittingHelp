@@ -148,9 +148,15 @@ public class PatternsListFragment extends MasterFragment {
             if (patternArrayList.size() == 1) {
                 MenuItem item = menu.findItem(R.id.patterns_list_cab_edit);
                 item.setVisible(true);
+
+                item = menu.findItem(R.id.patterns_list_cab_pic);
+                item.setVisible(true);
                 return true;
             } else {
                 MenuItem item = menu.findItem(R.id.patterns_list_cab_edit);
+                item.setVisible(false);
+
+                item = menu.findItem(R.id.patterns_list_cab_pic);
                 item.setVisible(false);
                 return true;
             }

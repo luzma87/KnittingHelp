@@ -11,6 +11,11 @@
         android:icon="@drawable/ic_action_edit"
         android:title="@string/global_edit"
         android:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/patterns_list_cab_pic"
+        android:icon="@drawable/ic_action_new_picture"
+        android:title="@string/global_add_pic"
+        android:showAsAction="ifRoom|withText" />
     <!--<item-->
     <!--android:id="@+id/showUrl2"-->
     <!--android:title="dummy2" />-->
