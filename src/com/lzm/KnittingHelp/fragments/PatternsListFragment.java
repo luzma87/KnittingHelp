@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.*;
 import android.widget.AbsListView;
@@ -34,6 +35,7 @@ public class PatternsListFragment extends MasterFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //log.e("LZM", "onCreateView");
         context = (MainActivity) getActivity();
         View view = inflater.inflate(R.layout.patterns_list_layout, container, false);
 
@@ -48,7 +50,7 @@ public class PatternsListFragment extends MasterFragment {
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(modeListener);
         // fin contextual action bar
-        loadPatterns();
+//        loadPatterns();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -138,7 +140,7 @@ public class PatternsListFragment extends MasterFragment {
             mode.invalidate();  // Add this to Invalidate CAB
 //            itemSelectedPosition = position;
 //            listView.setItemChecked(position, checked);
-//            Log.d("LZM", "onItemCheckedStateChanged::: selCount=" + selCount + "   id=" + id + "   checked=" + checked + "   selected=" + idList);
+//            //log.e("LZM", "onItemCheckedStateChanged::: selCount=" + selCount + "   id=" + id + "   checked=" + checked + "   selected=" + idList);
         }
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -155,9 +157,9 @@ public class PatternsListFragment extends MasterFragment {
         }
 
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-//            Log.d("LZM", "onItemCheckedStateChanged::: selCount=" + pa + "   posList=" + posList);
+//            //log.e("LZM", "onItemCheckedStateChanged::: selCount=" + pa + "   posList=" + posList);
 //            final int positionToRemove = itemSelectedPosition;
-//            Log.d("LZM", "onActionItemClicked::: " + itemSelectedPosition);
+//            //log.e("LZM", "onActionItemClicked::: " + itemSelectedPosition);
 //            final Pattern selected = patterns.get(positionToRemove);
 //
             final ActionMode m = mode;
@@ -221,26 +223,80 @@ public class PatternsListFragment extends MasterFragment {
     // fin del contextual action bar
 
     public void loadPatterns() {
-//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> RELOAD!!!!!!!!!!!!!!!!!!");
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> RELOAD PATTERNS !!!!!!!!!!!!!!!!!!");
         patterns = Pattern.list(context);
-        if (adapter != null) {
-            adapter.clear();
-            adapter.addAll(patterns);
-            adapter.notifyDataSetChanged();
-        } else {
-            adapter = new PatternsListAdapter(context, patterns);
-            listView.setAdapter(adapter);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadPatterns();
+//        if (adapter != null) {
+//            adapter.clear();
+//            adapter.addAll(patterns);
+//            adapter.notifyDataSetChanged();
+//        } else {
+        adapter = null;
+        adapter = new PatternsListAdapter(context, patterns);
+        listView.setAdapter(adapter);
+//        }
     }
 
     public void onTabUnselected() {
         if (myActionMode != null)
             myActionMode.finish();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //log.e("LZM", "onResume");
+        loadPatterns();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            //log.e("LZM", "onCreate FIRST TIME");
+        } else {
+            //log.e("LZM", "onCreate SUBSEQUENT TIME");
+        }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //log.e("LZM", "onActivityCreated");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //log.e("LZM", "onSaveInstanceState");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //log.e("LZM", "onStart");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //log.e("LZM", "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //log.e("LZM", "onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //log.e("LZM", "onDestroy");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        //log.e("LZM", "onDetach");
     }
 }

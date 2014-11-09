@@ -66,6 +66,10 @@
     <string name="settings_pattern_reload_summary">Recarga los modelos por defecto</string>
     <string name="settings_date_formats_title">Formato de fecha</string>
     <string name="settings_date_formats_summary">Formato para mostrar las fechas</string>
+    <string name="counters_title">Contador</string>
+    <string name="global_max">Máx.</string>
+    <string name="counters_1">Contador 1</string>
+    <string name="counters_2">Contador 2</string>
 
 
 </resources>

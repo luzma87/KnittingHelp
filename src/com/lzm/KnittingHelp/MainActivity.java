@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import com.lzm.KnittingHelp.activities.SettingsActivity;
 import com.lzm.KnittingHelp.adapters.MainFragmentAdapter;
 import com.lzm.KnittingHelp.db.DbHelper;
+import com.lzm.KnittingHelp.fragments.CountersFragment;
 import com.lzm.KnittingHelp.fragments.CreatePatternFragment;
 import com.lzm.KnittingHelp.fragments.MasterFragment;
 import com.lzm.KnittingHelp.fragments.PatternsListFragment;
@@ -32,6 +33,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public final int LIST_POS = 0;
     public final int CREATE_POS = 1;
     public final int TAB_COUNT = 2;
+    public final int COUNTERS_COUNT = 3;
     public List<MasterFragment> fragments;
     List<String> titles;
 
@@ -57,10 +59,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         fragments = new ArrayList<MasterFragment>(TAB_COUNT);
         fragments.add(new PatternsListFragment());
         fragments.add(new CreatePatternFragment());
+        fragments.add(new CountersFragment());
 
         titles = new ArrayList<String>();
         titles.add(getString(R.string.patterns_list_title));
         titles.add(getString(R.string.create_pattern_title));
+        titles.add(getString(R.string.counters_title));
 
         viewPager = (ViewPager) findViewById(R.id.main_pager);
         viewPager.setAdapter(new MainFragmentAdapter(getSupportFragmentManager(), fragments));
@@ -97,10 +101,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     public void initTabs() {
-        int i = 0;
-        for (MasterFragment fragment : fragments) {
-            makeTab(titles.get(i));
-            i++;
+        for (String title : titles) {
+            makeTab(title);
         }
     }
 
@@ -151,6 +153,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
 //        Log.d("LZM", "onTabReselected at position: " + tab.getPosition() + " name: " + tab.getText());
-   }
+    }
 
 }

@@ -70,9 +70,7 @@ public class PatternInfoActivity extends Activity implements View.OnClickListene
         } else {
             imgImagen.setImageResource(R.drawable.ic_launcher);
         }
-
     }
-
 
     @Override
     public void onClick(View view) {

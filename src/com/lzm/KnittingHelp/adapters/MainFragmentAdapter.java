@@ -3,6 +3,7 @@ package com.lzm.KnittingHelp.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import com.lzm.KnittingHelp.fragments.MasterFragment;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by luz on 05/11/14.
  */
-public class MainFragmentAdapter extends FragmentPagerAdapter {
+public class MainFragmentAdapter extends FragmentStatePagerAdapter {
 
     List<MasterFragment> fragmentList;
 
