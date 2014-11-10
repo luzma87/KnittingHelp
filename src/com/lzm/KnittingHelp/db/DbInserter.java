@@ -136,12 +136,39 @@ public class DbInserter {
 
     public static void insertDb(SQLiteDatabase db) {
         db.execSQL("INSERT INTO " + DbHelper.TABLE_PATTERN + " " +
-                "(" + DbHelper.KEY_ID + ", " + PatternDbHelper.KEY_NOMBRE + ", " + PatternDbHelper.KEY_IMAGEN + ", " + PatternDbHelper.KEY_CONTENIDO + ") VALUES " +
+                "(" + DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + ", " +
+                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + ", " +
+                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_IMAGEN + ", " +
+                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO + ") VALUES " +
                 "(\"1\", \"" + tmntNombre + "\", \"" + tmntImagen + "\", \"" + tmntContenido + "\");");
 
         db.execSQL("INSERT INTO " + DbHelper.TABLE_PATTERN + " " +
-                "(" + DbHelper.KEY_ID + ", " + PatternDbHelper.KEY_NOMBRE + ", " + PatternDbHelper.KEY_IMAGEN + ", " + PatternDbHelper.KEY_CONTENIDO + ") VALUES " +
+                "(" + DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + ", " +
+                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + ", " +
+                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_IMAGEN + ", " +
+                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO + ") VALUES " +
                 "(\"2\", \"" + spNombre + "\", \"" + spImagen + "\", \"" + spContenido + "\");");
+//        db.execSQL("INSERT INTO " + DbHelper.TABLE_PATTERN + " " +
+//                "(" + DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + ", " +
+//                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + ", " +
+//                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO + ") VALUES " +
+//                "(\"1\", \"" + tmntNombre + "\", \"" + tmntContenido + "\");");
+//        db.execSQL("INSERT INTO " + DbHelper.TABLE_FOTO + " " +
+//                "(" + DbHelper.ALIAS_FOTO + "_" + FotoDbHelper.KEY_ID + ", " +
+//                DbHelper.ALIAS_FOTO + "_" + FotoDbHelper.KEY_PATTERN_ID + ", " +
+//                DbHelper.ALIAS_FOTO + "_" + FotoDbHelper.KEY_PATH + ") VALUES " +
+//                "(\"1\", \"1\", \"" + tmntImagen + "\");");
+//
+//        db.execSQL("INSERT INTO " + DbHelper.TABLE_PATTERN + " " +
+//                "(" + DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + ", " +
+//                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + ", " +
+//                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO + ") VALUES " +
+//                "(\"2\", \"" + spNombre + "\", \"" + spContenido + "\");");
+//        db.execSQL("INSERT INTO " + DbHelper.TABLE_FOTO + " " +
+//                "(" + DbHelper.ALIAS_FOTO + "_" + FotoDbHelper.KEY_ID + ", " +
+//                DbHelper.ALIAS_FOTO + "_" + FotoDbHelper.KEY_PATTERN_ID + ", " +
+//                DbHelper.ALIAS_FOTO + "_" + FotoDbHelper.KEY_PATH + ") VALUES " +
+//                "(\"2\", \"2\", \"" + spImagen + "\");");
 
     }
 }

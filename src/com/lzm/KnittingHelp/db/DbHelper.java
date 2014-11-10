@@ -33,6 +33,14 @@ public class DbHelper extends SQLiteOpenHelper {
 
     // Table Names
     protected static final String TABLE_PATTERN = "patterns";
+    protected static final String TABLE_FOTO = "fotos";
+    protected static final String TABLE_SECCION = "secciones";
+
+    // alias
+    protected static final String ALIAS_PATTERN = "pt";
+    protected static final String ALIAS_FOTO = "ft";
+    protected static final String ALIAS_SECCION = "sc";
+
 
     // Common column namesDbInserter
     protected static final String KEY_ID = "id";
@@ -50,7 +58,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(createTableSql(TABLE_PATTERN, KEYS_COMMON, PatternDbHelper.KEYS_PATTERN));
+        db.execSQL(createTableSql(TABLE_PATTERN, ALIAS_PATTERN, KEYS_COMMON, PatternDbHelper.KEYS_PATTERN));
+        db.execSQL(createTableSql(TABLE_FOTO, ALIAS_FOTO, KEYS_COMMON, FotoDbHelper.KEYS_FOTO));
+        db.execSQL(createTableSql(TABLE_SECCION, ALIAS_SECCION, KEYS_COMMON, SeccionDbHelper.KEYS_SECCION));
 
         DbInserter.insertDb(db);
     }
@@ -65,13 +75,13 @@ public class DbHelper extends SQLiteOpenHelper {
      * @param columnNames: los campos
      * @return el sql
      */
-    public static String createTableSql(String tableName, String[] common, String[] columnNames) {
+    public static String createTableSql(String tableName, String tableAlias, String[] common, String[] columnNames) {
         String sql = "CREATE TABLE " + tableName + " (" +
-                common[0] + " INTEGER PRIMARY KEY, " +
-                common[1] + " DATETIME, " +
-                common[2] + " DATETIME";
+                tableAlias + "_" + common[0] + " INTEGER PRIMARY KEY, " +
+                tableAlias + "_" + common[1] + " DATETIME, " +
+                tableAlias + "_" + common[2] + " DATETIME";
         for (String c : columnNames) {
-            sql += ", " + c + " TEXT";
+            sql += ", " + tableAlias + "_" + c + " TEXT";
         }
         sql += ")";
 

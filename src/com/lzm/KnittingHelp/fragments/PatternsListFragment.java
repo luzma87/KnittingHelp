@@ -149,8 +149,10 @@ public class PatternsListFragment extends MasterFragment {
                 MenuItem item = menu.findItem(R.id.patterns_list_cab_edit);
                 item.setVisible(true);
 
-                item = menu.findItem(R.id.patterns_list_cab_pic);
-                item.setVisible(true);
+                if (patternArrayList.get(0).fechaCreacion != null) {
+                    item = menu.findItem(R.id.patterns_list_cab_pic);
+                    item.setVisible(true);
+                }
                 return true;
             } else {
                 MenuItem item = menu.findItem(R.id.patterns_list_cab_edit);

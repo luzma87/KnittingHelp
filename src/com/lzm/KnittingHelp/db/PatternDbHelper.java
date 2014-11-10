@@ -16,8 +16,9 @@ public class PatternDbHelper extends DbHelper {
     public static final String KEY_NOMBRE = "nombre";
     public static final String KEY_CONTENIDO = "contenido";
     public static final String KEY_IMAGEN = "imagen";
+    public static final String KEY_CURRENT_SECCION_ID = "current_seccion_id";
 
-    public static final String[] KEYS_PATTERN = {KEY_NOMBRE, KEY_CONTENIDO, KEY_IMAGEN};
+    public static final String[] KEYS_PATTERN = {KEY_NOMBRE, KEY_CONTENIDO, KEY_IMAGEN, KEY_CURRENT_SECCION_ID};
 
     public PatternDbHelper(Activity context) {
         super(context);
@@ -49,7 +50,7 @@ public class PatternDbHelper extends DbHelper {
     public Pattern get(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
         String selectQuery = "SELECT  * FROM " + TABLE_PATTERN + " WHERE "
-                + KEY_ID + " = " + id;
+                + ALIAS_PATTERN + "_" + KEY_ID + " = " + id;
 
         Cursor c = db.rawQuery(selectQuery, null);
         Pattern obj = null;
@@ -65,7 +66,7 @@ public class PatternDbHelper extends DbHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Pattern> list = new ArrayList<Pattern>();
         String selectQuery = "SELECT * FROM " + TABLE_PATTERN +
-                " ORDER BY " + KEY_FECHA_MODIFICACION + " DESC";
+                " ORDER BY " + ALIAS_PATTERN + "_" + KEY_FECHA_MODIFICACION + " DESC";
         logQuery(LOG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
@@ -85,7 +86,7 @@ public class PatternDbHelper extends DbHelper {
         ContentValues values = setValues(obj);
 
         // updating row
-        int res = db.update(TABLE_PATTERN, values, KEY_ID + " = ?",
+        int res = db.update(TABLE_PATTERN, values, ALIAS_PATTERN + "_" + KEY_ID + " = ?",
                 new String[]{String.valueOf(obj.id)});
         db.close();
         return res;
@@ -93,29 +94,29 @@ public class PatternDbHelper extends DbHelper {
 
     public void delete(Pattern obj) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_PATTERN, KEY_ID + " = ?",
+        db.delete(TABLE_PATTERN, ALIAS_PATTERN + "_" + KEY_ID + " = ?",
                 new String[]{String.valueOf(obj.id)});
         db.close();
     }
 
     private Pattern setDatos(Cursor c) {
         Pattern obj = new Pattern(this.context);
-        obj.id = c.getLong((c.getColumnIndex(KEY_ID)));
-        obj.fechaCreacion = c.getString(c.getColumnIndex(KEY_FECHA_CREACION));
-        obj.fechaModificacion = c.getString(c.getColumnIndex(KEY_FECHA_MODIFICACION));
-        obj.nombre = c.getString(c.getColumnIndex(KEY_NOMBRE));
-        obj.contenido = c.getString(c.getColumnIndex(KEY_CONTENIDO));
-        obj.imagen = c.getString(c.getColumnIndex(KEY_IMAGEN));
+        obj.id = c.getLong((c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_ID)));
+        obj.fechaCreacion = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_FECHA_CREACION));
+        obj.fechaModificacion = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_FECHA_MODIFICACION));
+        obj.nombre = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_NOMBRE));
+        obj.contenido = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_CONTENIDO));
+        obj.imagen = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_IMAGEN));
         return obj;
     }
 
     private ContentValues setValues(Pattern obj) {
         ContentValues values = new ContentValues();
-        values.put(KEY_FECHA_CREACION, obj.fechaCreacion);
-        values.put(KEY_FECHA_MODIFICACION, obj.fechaModificacion);
-        values.put(KEY_NOMBRE, obj.nombre);
-        values.put(KEY_CONTENIDO, obj.contenido);
-        values.put(KEY_IMAGEN, obj.imagen);
+        values.put(ALIAS_PATTERN + "_" + KEY_FECHA_CREACION, obj.fechaCreacion);
+        values.put(ALIAS_PATTERN + "_" + KEY_FECHA_MODIFICACION, obj.fechaModificacion);
+        values.put(ALIAS_PATTERN + "_" + KEY_NOMBRE, obj.nombre);
+        values.put(ALIAS_PATTERN + "_" + KEY_CONTENIDO, obj.contenido);
+        values.put(ALIAS_PATTERN + "_" + KEY_IMAGEN, obj.imagen);
         return values;
     }
 }

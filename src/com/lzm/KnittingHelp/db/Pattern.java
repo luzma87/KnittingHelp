@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by DELL on 29/10/2014.
@@ -16,6 +17,9 @@ public class Pattern {
     public String nombre;
     public String contenido;
     public String imagen;
+
+    public long currentSeccionId;
+    public Seccion currentSeccion;
 
     PatternDbHelper patternDbHelper;
 
@@ -68,6 +72,8 @@ public class Pattern {
 
     public void delete(Activity context) {
         PatternDbHelper e = new PatternDbHelper(context);
+        Foto.deleteAllByPattern(context, this);
+        Seccion.deleteAllByPattern(context, this);
         e.delete(this);
     }
 }
