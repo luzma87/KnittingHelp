@@ -19,7 +19,6 @@ public class CreatePatternFragment extends MasterFragment {
     EditText txtNombre;
     EditText txtContenido;
     Button btnSave;
-    Button btnCancel;
 
     Pattern pattern;
 
@@ -47,15 +46,6 @@ public class CreatePatternFragment extends MasterFragment {
 
         pattern = new Pattern(context);
 
-        btnCancel = (Button) view.findViewById(R.id.create_pattern_btn_cancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.hideSoftKeyboard(context);
-                resetForm();
-                context.selectTab(context.LIST_POS);
-            }
-        });
         btnSave = (Button) view.findViewById(R.id.create_pattern_btn_save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override

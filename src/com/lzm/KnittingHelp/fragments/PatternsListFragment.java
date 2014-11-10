@@ -131,7 +131,7 @@ public class PatternsListFragment extends MasterFragment {
                 patternArrayList.add(patterns.get(position));
             } else {
 //                selCount--;
-//                posList.remove(position);
+//                posList.remove(position);851
                 patternArrayList.remove(patterns.get(position));
             }
             int selCount = patternArrayList.size();
@@ -252,6 +252,11 @@ public class PatternsListFragment extends MasterFragment {
         super.onResume();
         //log.e("LZM", "onResume");
         loadPatterns();
+        try {
+            myActionMode.finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

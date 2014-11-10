@@ -1,7 +1,9 @@
 package com.lzm.KnittingHelp;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -18,6 +20,7 @@ import com.lzm.KnittingHelp.fragments.CountersFragment;
 import com.lzm.KnittingHelp.fragments.CreatePatternFragment;
 import com.lzm.KnittingHelp.fragments.MasterFragment;
 import com.lzm.KnittingHelp.fragments.PatternsListFragment;
+import com.lzm.KnittingHelp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public final int COUNTERS_COUNT = 3;
     public List<MasterFragment> fragments;
     List<String> titles;
+    Activity context;
 
     /**
      * Called when the activity is first created.
@@ -44,6 +48,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        context = this;
 
         actionBar = getActionBar();
         actionBar.setTitle(getString(R.string.main_title));
@@ -76,6 +82,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
             @Override
             public void onPageSelected(int i) {
+                Utils.hideSoftKeyboard(context);
                 actionBar.setSelectedNavigationItem(i);
 //                Log.d("LZM", "onPageSelected: position=" + i);
             }
@@ -114,6 +121,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     public void selectTab(int pos) {
+        Utils.hideSoftKeyboard(context);
         viewPager.setCurrentItem(pos);
     }
 
