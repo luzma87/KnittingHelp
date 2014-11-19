@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.lzm.KnittingHelp.MainActivity;
 import com.lzm.KnittingHelp.R;
 import com.lzm.KnittingHelp.activities.PatternInfoActivity;
+import com.lzm.KnittingHelp.activities.PatternViewActivity;
 import com.lzm.KnittingHelp.adapters.PatternsListAdapter;
 import com.lzm.KnittingHelp.db.Pattern;
 import com.lzm.KnittingHelp.utils.Utils;

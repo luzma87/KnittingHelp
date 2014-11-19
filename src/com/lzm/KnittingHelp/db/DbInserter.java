@@ -13,13 +13,10 @@ public class DbInserter {
     static String tmntImagen = "tmnt.jpg";
     static String tmntContenido = "BELLY PLATE\n" +
             "1: ch 5\n" +
-            "2: st in 2nd from hook, st in next 2, st 3 in next. Continue on the other side of the ch, st in \n" +
-            "next 2, st 2 in next (10)\n" +
+            "2: st in 2nd from hook, st in next 2, st 3 in next. Continue on the other side of the ch, st in next 2, st 2 in next (10)\n" +
             "3: st 2 in first, st in next 2, st 2 in next 3, st in next 2, st 2 in next 2 (16)\n" +
-            "4: st 2 in first, st in next 4, st 2 in next, st in next 2, st 2 in next, st in next 4, st 2 in next, st \n" +
-            "in next 2 (20)\n" +
-            "5: st 2 in first, st in next 6, st 3 in next, st in next 3, st 3 in next, st in next 7, st 3 in next, sl \n" +
-            "st, finish. Leave tail for sewing (27)\n\n" +
+            "4: st 2 in first, st in next 4, st 2 in next, st in next 2, st 2 in next, st in next 4, st 2 in next, st in next 2 (20)\n" +
+            "5: st 2 in first, st in next 6, st 3 in next, st in next 3, st 3 in next, st in next 7, st 3 in next, sl st, finish. Leave tail for sewing (27)\n\n" +
             "SHELL\n" +
             "1: st 5 in magic ring (5)\n" +
             "2: st 2 in each around (10)\n" +

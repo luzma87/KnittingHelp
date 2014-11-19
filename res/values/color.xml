@@ -3,15 +3,13 @@
     <!--<color name="purple_light">#a276eb</color>-->
     <!--<color name="purple_middle">#8658ce</color>-->
     <!--<color name="purple_dark">#6a3ab2</color>-->
-    <color name="purple_light">#CDE8AE</color>
-    <color name="purple_middle">#9FCF67</color>
-    <color name="purple_dark">#076324</color>
+    <color name="purple_light">#e1c1f2</color>
+    <color name="purple_middle">#aa66cc</color>
+    <color name="purple_dark">#66387f</color>
 
-    <color name="achievement_not_completed">#939393</color>
-    <color name="achievement_completed">#076324</color>
-
-    <color name="ikiam_oscuro">#076324</color>
-    <color name="ikiam_claro">#9FCF67</color>
+    <color name="seccion_name">#66387f</color>
+    <color name="seccion_content">#aa66cc</color>
+    <color name="line_content">#e1c1f2</color>
 
 
 </resources>

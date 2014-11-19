@@ -32,6 +32,8 @@ public class PatternInfoActivity extends Activity implements View.OnClickListene
 
     Pattern pattern;
 
+    Button btnView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,9 @@ public class PatternInfoActivity extends Activity implements View.OnClickListene
         txtNombre = (TextView) findViewById(R.id.pattern_info_nombre);
         txtContenido = (TextView) findViewById(R.id.pattern_info_contenido);
         imgImagen = (ImageView) findViewById(R.id.pattern_info_imagen);
+
+        btnView = (Button) findViewById(R.id.pattern_info_view);
+        btnView.setOnClickListener(this);
 
         txtNombre.setText(pattern.nombre);
         txtContenido.setText(pattern.contenido);
@@ -100,6 +105,10 @@ public class PatternInfoActivity extends Activity implements View.OnClickListene
                 }
             });
             d.show();
+        } else if (view.getId() == btnView.getId()) {
+            Intent intent = new Intent(this, PatternViewActivity.class);
+            intent.putExtra(PatternsListFragment.PATTERN_ID_MESSAGE, pattern.id);
+            startActivity(intent);
         }
     }
 
