@@ -58,13 +58,13 @@ public class SeccionDbHelper extends DbHelper {
                 "s." + ALIAS_SECCION + "_" + KEY_CONTENIDO + "," +
                 "s." + ALIAS_SECCION + "_" + KEY_IMAGEN + "," +
                 "s." + ALIAS_SECCION + "_" + KEY_ORDEN + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_CREACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_MODIFICACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO + "," +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO +
                 " FROM " + TABLE_SECCION + " s" +
-                " INNER JOIN " + TABLE_PATTERN + " p ON s." + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
+                " INNER JOIN " + TABLE_PATTERN + " p ON s." + ALIAS_SECCION + "_" + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
                 " ORDER BY s." + ALIAS_SECCION + "_" + KEY_FECHA_MODIFICACION + " DESC";
 
         Cursor c = db.rawQuery(selectQuery, null);
@@ -88,13 +88,13 @@ public class SeccionDbHelper extends DbHelper {
                 "s." + ALIAS_SECCION + "_" + KEY_CONTENIDO + "," +
                 "s." + ALIAS_SECCION + "_" + KEY_IMAGEN + "," +
                 "s." + ALIAS_SECCION + "_" + KEY_ORDEN + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_CREACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_MODIFICACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO + "," +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO +
                 " FROM " + TABLE_SECCION + " s" +
-                " INNER JOIN " + TABLE_PATTERN + " p ON s." + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
+                " INNER JOIN " + TABLE_PATTERN + " p ON s." + ALIAS_SECCION + "_" + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
                 " ORDER BY s." + ALIAS_SECCION + "_" + KEY_FECHA_MODIFICACION + " DESC";
         logQuery(LOG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
@@ -121,15 +121,18 @@ public class SeccionDbHelper extends DbHelper {
                 "s." + ALIAS_SECCION + "_" + KEY_CONTENIDO + "," +
                 "s." + ALIAS_SECCION + "_" + KEY_IMAGEN + "," +
                 "s." + ALIAS_SECCION + "_" + KEY_ORDEN + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_CREACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_MODIFICACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO + "," +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_IMAGEN + "," +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO +
                 " FROM " + TABLE_SECCION + " s" +
-                " INNER JOIN " + TABLE_PATTERN + " p ON s." + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
-                " WHERE s." + KEY_PATTERN_ID + " = " + pattern.id +
-                " ORDER BY s." + ALIAS_SECCION + "_" + KEY_FECHA_MODIFICACION + " DESC";
+                " INNER JOIN " + TABLE_PATTERN + " p ON s." + ALIAS_SECCION + "_" + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
+                " WHERE s." + ALIAS_SECCION + "_" + KEY_PATTERN_ID + " = " + pattern.id +
+                " ORDER BY CAST(s." + ALIAS_SECCION + "_" + KEY_ORDEN + " AS INTEGER) ASC";
+        //CAST(value AS INTEGER)
+
         logQuery(LOG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list

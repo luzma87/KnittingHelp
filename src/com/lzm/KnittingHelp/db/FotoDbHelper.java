@@ -54,13 +54,13 @@ public class FotoDbHelper extends DbHelper {
                 "f." + ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION + "," +
                 "f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + "," +
                 "f." + ALIAS_FOTO + "_" + KEY_PATH + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_CREACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_MODIFICACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO + "," +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO +
                 " FROM " + TABLE_FOTO + "f" +
-                " INNER JOIN " + TABLE_PATTERN + " p ON f." + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
+                " INNER JOIN " + TABLE_PATTERN + " p ON f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
                 " WHERE " + ALIAS_FOTO + "_" + KEY_ID + " = " + id;
 
         Cursor c = db.rawQuery(selectQuery, null);
@@ -81,13 +81,13 @@ public class FotoDbHelper extends DbHelper {
                 "f." + ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION + "," +
                 "f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + "," +
                 "f." + ALIAS_FOTO + "_" + KEY_PATH + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_CREACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_MODIFICACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO + "," +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO +
                 " FROM " + TABLE_FOTO + " f" +
-                " INNER JOIN " + TABLE_PATTERN + " p ON f." + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
+                " INNER JOIN " + TABLE_PATTERN + " p ON f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
                 " ORDER BY f." + ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION + " DESC";
         logQuery(LOG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
@@ -111,15 +111,16 @@ public class FotoDbHelper extends DbHelper {
                 "f." + ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION + "," +
                 "f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + "," +
                 "f." + ALIAS_FOTO + "_" + KEY_PATH + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_CREACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_MODIFICACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO + "," +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO +
                 " FROM " + TABLE_FOTO + " f" +
-                " INNER JOIN " + TABLE_PATTERN + " p ON f." + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
-                " WHERE f." + KEY_PATTERN_ID + " = " + pattern.id +
+                " INNER JOIN " + TABLE_PATTERN + " p ON f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
+                " WHERE f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + " = " + pattern.id +
                 " ORDER BY f." + ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION + " DESC";
+
         logQuery(LOG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list

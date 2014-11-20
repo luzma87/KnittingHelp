@@ -11,5 +11,10 @@
     <color name="seccion_content">#aa66cc</color>
     <color name="line_content">#e1c1f2</color>
 
+    <color name="seccion_name_selected">#7c387c</color>
+    <color name="line_content_selected">#efbfdd</color>
+
+    <color name="gray">#808080</color>
+
 
 </resources>

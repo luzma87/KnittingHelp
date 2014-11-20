@@ -4,5 +4,10 @@
     <style name="seccionNombre" parent="@android:style/Widget.TextView">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/purple_light</item>
+    </style>
+
+    <style name="linea" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">12sp</item>
     </style>
 </resources>

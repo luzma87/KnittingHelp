@@ -33,6 +33,16 @@ public class Seccion {
         return contenido;
     }
 
+    public void setPattern(Pattern pattern) {
+        this.pattern = pattern;
+        this.patternId = pattern.id;
+    }
+
+    public void setSeccionPadre(Seccion seccionPadre) {
+        this.seccionPadre = seccionPadre;
+        this.seccionPadreId = seccionPadre.id;
+    }
+
     public void save() {
         if (this.id == 0) {
             this.fechaCreacion = DbHelper.date2string(new Date());
