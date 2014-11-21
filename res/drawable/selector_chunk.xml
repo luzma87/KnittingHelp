@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_selected="true" android:drawable="@color/chunk_content_selected" />
-    <item android:drawable="@color/chunk_content" />
+
+    <item android:state_selected="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+            <corners android:radius="5dp" />
+            <solid android:color="@color/chunk_content_selected" />
+            <stroke android:width="1dip" android:color="@color/chunk_content_selected_border" />
+        </shape>
+    </item>
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+            <corners android:radius="5dp" />
+            <solid android:color="@color/chunk_content" />
+            <stroke android:width="1dip" android:color="@color/chunk_content_border" />
+        </shape>
+    </item>
+
 </selector>

@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.*;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.*;
 import com.lzm.KnittingHelp.R;
 import com.lzm.KnittingHelp.db.Pattern;
 import com.lzm.KnittingHelp.db.Seccion;
@@ -23,14 +23,16 @@ import java.util.List;
  */
 public class PatternViewActivity extends Activity {
     final int SELECTED_SECCION = 0;
-    final int SELECTED_LINEA = 1;
-    final int SELECTED_CHUNK = 2;
+    final int SELECTED_CHUNK = 1;
 
     int selected;
 
     Pattern pattern;
     Activity activity;
     ActionMode mActionMode;
+    Menu mMenu;
+
+    boolean editing = false;
 
     LinearLayout layout;
 
@@ -40,6 +42,8 @@ public class PatternViewActivity extends Activity {
 
     public int screenHeight;
     public int screenWidth;
+
+    int fontSize = 12;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -137,6 +141,7 @@ public class PatternViewActivity extends Activity {
         txvChunk.setTextAppearance(this, R.style.chunk);
         txvChunk.setBackgroundResource(R.drawable.selector_chunk);
         txvChunk.setPadding(10, 10, 10, 10);
+        txvChunk.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 
         LinearLayout.LayoutParams txvLineaParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         txvLineaParams.setMargins(0, 0, 0, 10);
@@ -190,6 +195,7 @@ public class PatternViewActivity extends Activity {
         txvSeccion.setText(seccion.contenido);
         txvSeccion.setTextAppearance(this, R.style.seccionNombre);
         txvSeccion.setBackgroundResource(R.drawable.selector_seccion);
+        txvSeccion.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize + 2);
         final LinearLayout.LayoutParams txvSeccionParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         txvSeccion.setLayoutParams(txvSeccionParams);
         txvSeccion.setPadding(20, 20, 20, 20);
@@ -246,30 +252,7 @@ public class PatternViewActivity extends Activity {
     }
 
     private void selectSeccion(Seccion seccion, View v) {
-        if (selected == SELECTED_SECCION) {
-            TextView tv = (TextView) v;
-            if (v.isSelected()) {
-                v.setSelected(false);
-                selectedSecciones.remove(seccion);
-                selectedTextViews.remove(tv);
-            } else {
-                v.setSelected(true);
-                selectedSecciones.add(seccion);
-                selectedTextViews.add(tv);
-            }
-            int selCount = selectedSecciones.size();
-            if (selCount == 0) {
-                mActionMode.finish();
-            } else {
-                String strSelected = Utils.getPluralResourceByName(activity, "global_n_selected", selCount, "" + selCount);
-                mActionMode.setTitle(strSelected);
-                mActionMode.invalidate();
-            }
-        }
-    }
-
-    private void selectLinea(Seccion seccion, View v) {
-        if (selected == SELECTED_LINEA) {
+        if (!editing && selected == SELECTED_SECCION) {
             TextView tv = (TextView) v;
             if (v.isSelected()) {
                 v.setSelected(false);
@@ -292,7 +275,7 @@ public class PatternViewActivity extends Activity {
     }
 
     private void selectChunk(Seccion seccion, View v) {
-        if (selected == SELECTED_CHUNK) {
+        if (!editing && selected == SELECTED_CHUNK) {
             TextView tv = (TextView) v;
             if (v.isSelected()) {
                 v.setSelected(false);
@@ -342,6 +325,7 @@ public class PatternViewActivity extends Activity {
         // may be called multiple times if the mode is invalidated. (Used for updates to CAB after invalidate() request)
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            mMenu = menu;
             if (selected == SELECTED_SECCION) {
                 // si es seccion escondo el menu de linea
                 menu.findItem(R.id.pattern_view_cab_linea).setVisible(false);
@@ -356,26 +340,6 @@ public class PatternViewActivity extends Activity {
                     menu.findItem(R.id.cab_seccion_editar).setVisible(true);
                 } else {
                     menu.findItem(R.id.cab_seccion_editar).setVisible(false);
-                }
-            } else if (selected == SELECTED_LINEA) {
-                // si es linea escondo el menu seccion
-                menu.findItem(R.id.pattern_view_cab_seccion).setVisible(false);
-                menu.findItem(R.id.pattern_view_cab_linea).setVisible(true);
-                /*
-                    editar                              1       cab_linea_editar
-                    eliminar                            1-n     cab_linea_eliminar
-                    separar en  .   ,   ;   (   [       1-n     cab_linea_split
-                    duplicar                            1-n     cab_linea_duplicar
-                    unir con    .   ,   ;   _           n       cab_linea_join
-                    hacer nueva seccion                 1-n     cab_linea_new
-                 */
-                menu.findItem(R.id.cab_linea_new).setVisible(true);
-                if (selectedSecciones.size() == 1) {
-                    menu.findItem(R.id.cab_linea_editar).setVisible(true);
-                    menu.findItem(R.id.cab_linea_join).setVisible(false);
-                } else {
-                    menu.findItem(R.id.cab_linea_editar).setVisible(false);
-                    menu.findItem(R.id.cab_linea_join).setVisible(true);
                 }
             } else if (selected == SELECTED_CHUNK) {
                 // si es linea escondo el menu seccion
@@ -422,6 +386,29 @@ public class PatternViewActivity extends Activity {
                 // OPCIONES PARA LAS LINEAS
                 case R.id.cab_linea_editar:
                     //textView = > editText + btn guardar
+                    //pattern_view_cab_save     btn save
+                    editing = true;
+                    if (selectedSecciones.size() == 1) {
+                        mMenu.findItem(R.id.pattern_view_cab_save).setVisible(true);
+                    } else {
+                        mMenu.findItem(R.id.pattern_view_cab_save).setVisible(false);
+                    }
+                    TextView editingTv = selectedTextViews.get(0);
+                    editingTv.setVisibility(View.GONE);
+                    String origText = editingTv.getText().toString();
+                    int index = ((ViewGroup) editingTv.getParent()).indexOfChild(editingTv);
+
+                    EditText editText = new EditText(activity);
+                    editText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+                    editText.setText(origText);
+                    LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(screenWidth, editingTv.getHeight() * 2, 1f);
+                    editTextParams.setMargins(0, 0, 0, 0);
+                    editText.setLayoutParams(editTextParams);
+                    ((ViewGroup) editingTv.getParent()).addView(editText, index);
+
+                    editText.requestFocus();
+                    Utils.showSoftKeyboard(activity, editText);
+
                     break;
                 case R.id.cab_linea_eliminar:
                     //elimina la linea
@@ -438,10 +425,13 @@ public class PatternViewActivity extends Activity {
                 case R.id.cab_linea_new:
                     //crea una nueva seccion con las lineas seleccionadas
                     break;
+                case R.id.pattern_view_cab_save:
+                    //guarda los cambios y cierra el cab
+                    break;
                 default:
                     return false;
             }
-            mode.finish(); // Action picked, so close the CAB
+//            mode.finish(); // Action picked, so close the CAB
             return true;
         }
 
@@ -456,9 +446,9 @@ public class PatternViewActivity extends Activity {
      * Copyright 2011 Sherif
      * Updated by Karim Varela to handle LinearLayouts with other views on either side.
      *
-     * @param linearLayout
+     * @param linearLayout : The linear layout in which to add the views
      * @param views        : The views to wrap within LinearLayout
-     * @param context
+     * @param context      : The context of the app
      * @param extraView    : An extra view that may be to the right or left of your LinearLayout.
      * @author Karim Varela
      */
