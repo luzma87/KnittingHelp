@@ -432,6 +432,7 @@ public class PatternViewActivity extends Activity {
                     return false;
             }
 //            mode.finish(); // Action picked, so close the CAB
+            //sss
             return true;
         }
 
