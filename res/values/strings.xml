@@ -71,6 +71,13 @@
     <string name="counters_1">Contador 1</string>
     <string name="counters_2">Contador 2</string>
     <string name="global_add_pic">Agregar foto</string>
+    <string name="global_acciones">Acciones</string>
+    <string name="cab_seccion_linea">Hacer línea</string>
+    <string name="cab_seccion_duplicar">Duplicar</string>
+    <string name="cab_seccion_editar">Editar</string>
+    <string name="cab_linea_split">Dividir</string>
+    <string name="cab_linea_join">Unir</string>
+    <string name="cab_linea_new">Nueva sección</string>
 
 
 </resources>

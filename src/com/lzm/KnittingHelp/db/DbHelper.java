@@ -23,7 +23,7 @@ import java.util.TimeZone;
 public class DbHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
 //    private static String DB_PATH = "/data/data/com.tmm.android.chuck/databases/";
@@ -66,7 +66,16 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE " + TABLE_PATTERN);
+        db.execSQL("DROP TABLE " + TABLE_FOTO);
+        db.execSQL("DROP TABLE " + TABLE_SECCION);
+
+        db.execSQL(createTableSql(TABLE_PATTERN, ALIAS_PATTERN, KEYS_COMMON, PatternDbHelper.KEYS_PATTERN));
+        db.execSQL(createTableSql(TABLE_FOTO, ALIAS_FOTO, KEYS_COMMON, FotoDbHelper.KEYS_FOTO));
+        db.execSQL(createTableSql(TABLE_SECCION, ALIAS_SECCION, KEYS_COMMON, SeccionDbHelper.KEYS_SECCION));
+
+        DbInserter.insertDb(db);
     }
 
     /**

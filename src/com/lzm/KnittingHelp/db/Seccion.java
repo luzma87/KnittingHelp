@@ -9,6 +9,10 @@ import java.util.Date;
  * Created by DELL on 29/10/2014.
  */
 public class Seccion {
+    public static final int TIPO_SECCION = 0;
+    public static final int TIPO_LINEA = 1;
+    public static final int TIPO_CHUNK = 2;
+
     public long id = 0;
     public String fechaCreacion;
     public String fechaModificacion;
@@ -22,6 +26,8 @@ public class Seccion {
 
     public long seccionPadreId;
     public Seccion seccionPadre;
+
+    public int tipo;
 
     SeccionDbHelper seccionDbHelper;
 

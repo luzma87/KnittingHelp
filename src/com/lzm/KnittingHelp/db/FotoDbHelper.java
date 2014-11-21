@@ -49,19 +49,9 @@ public class FotoDbHelper extends DbHelper {
 
     public Foto get(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String selectQuery = "SELECT f." + ALIAS_FOTO + "_" + KEY_ID + ", " +
-                "f." + ALIAS_FOTO + "_" + KEY_FECHA_CREACION + "," +
-                "f." + ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION + "," +
-                "f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + "," +
-                "f." + ALIAS_FOTO + "_" + KEY_PATH + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_CREACION + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_MODIFICACION + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO +
-                " FROM " + TABLE_FOTO + "f" +
-                " INNER JOIN " + TABLE_PATTERN + " p ON f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
-                " WHERE " + ALIAS_FOTO + "_" + KEY_ID + " = " + id;
+
+        String selectQuery = selectQueryFotoPattern();
+        selectQuery += " WHERE f." + ALIAS_FOTO + "_" + KEY_ID + " = " + id;
 
         Cursor c = db.rawQuery(selectQuery, null);
         Foto obj = null;
@@ -76,19 +66,10 @@ public class FotoDbHelper extends DbHelper {
     public ArrayList<Foto> getAll() {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Foto> list = new ArrayList<Foto>();
-        String selectQuery = "SELECT f." + ALIAS_FOTO + "_" + KEY_ID + ", " +
-                "f." + ALIAS_FOTO + "_" + KEY_FECHA_CREACION + "," +
-                "f." + ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION + "," +
-                "f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + "," +
-                "f." + ALIAS_FOTO + "_" + KEY_PATH + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_CREACION + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_MODIFICACION + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO +
-                " FROM " + TABLE_FOTO + " f" +
-                " INNER JOIN " + TABLE_PATTERN + " p ON f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
-                " ORDER BY f." + ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION + " DESC";
+
+        String selectQuery = selectQueryFotoPattern();
+        selectQuery += " ORDER BY f." + ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION + " DESC";
+
         logQuery(LOG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
@@ -106,20 +87,10 @@ public class FotoDbHelper extends DbHelper {
     public ArrayList<Foto> getAllByPattern(Pattern pattern) {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Foto> list = new ArrayList<Foto>();
-        String selectQuery = "SELECT f." + ALIAS_FOTO + "_" + KEY_ID + ", " +
-                "f." + ALIAS_FOTO + "_" + KEY_FECHA_CREACION + "," +
-                "f." + ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION + "," +
-                "f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + "," +
-                "f." + ALIAS_FOTO + "_" + KEY_PATH + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_CREACION + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_MODIFICACION + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + "," +
-                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO +
-                " FROM " + TABLE_FOTO + " f" +
-                " INNER JOIN " + TABLE_PATTERN + " p ON f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID +
-                " WHERE f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + " = " + pattern.id +
-                " ORDER BY f." + ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION + " DESC";
+
+        String selectQuery = selectQueryFotoPattern();
+        selectQuery += " WHERE f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + " = " + pattern.id;
+        selectQuery += " ORDER BY f." + ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION + " DESC";
 
         logQuery(LOG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
@@ -174,6 +145,21 @@ public class FotoDbHelper extends DbHelper {
                     new String[]{String.valueOf(obj.id)});
             db.close();
         }
+    }
+
+    private String selectQueryFotoPattern() {
+        return "SELECT f." + ALIAS_FOTO + "_" + KEY_ID + ", " +
+                "f." + ALIAS_FOTO + "_" + KEY_FECHA_CREACION + "," +
+                "f." + ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION + "," +
+                "f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + "," +
+                "f." + ALIAS_FOTO + "_" + KEY_PATH + "," +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + "," +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_CREACION + "," +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_MODIFICACION + "," +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + "," +
+                "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO +
+                " FROM " + TABLE_FOTO + "f" +
+                " INNER JOIN " + TABLE_PATTERN + " p ON f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID;
     }
 
     private Foto setDatos(Cursor c) {

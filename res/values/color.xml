@@ -9,10 +9,12 @@
 
     <color name="seccion_name">#66387f</color>
     <color name="seccion_content">#aa66cc</color>
-    <color name="line_content">#e1c1f2</color>
+    <color name="linea_content">#e1c1f2</color>
+    <color name="chunk_content">#bfdaef</color>
 
     <color name="seccion_name_selected">#7c387c</color>
-    <color name="line_content_selected">#efbfdd</color>
+    <color name="linea_content_selected">#efbfdd</color>
+    <color name="chunk_content_selected">#bdedc5</color>
 
     <color name="gray">#808080</color>
 

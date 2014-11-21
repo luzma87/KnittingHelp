@@ -154,15 +154,14 @@ public class PatternsListFragment extends MasterFragment {
                     item = menu.findItem(R.id.patterns_list_cab_pic);
                     item.setVisible(true);
                 }
-                return true;
             } else {
                 MenuItem item = menu.findItem(R.id.patterns_list_cab_edit);
                 item.setVisible(false);
 
                 item = menu.findItem(R.id.patterns_list_cab_pic);
                 item.setVisible(false);
-                return true;
             }
+            return true;
         }
 
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
