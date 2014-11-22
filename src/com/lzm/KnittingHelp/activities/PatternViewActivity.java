@@ -387,20 +387,17 @@ public class PatternViewActivity extends Activity {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
-                // OPCIONES PARA LAS SECCIONES
                 case R.id.cab_seccion_linea:
                     //cambiar seccion => linea
                     break;
                 case R.id.cab_seccion_duplicar:
                     //duplicar la seccion con todas sus lineas
                     break;
-                case R.id.cab_seccion_editar:
-                    //textView = > editText + btn guardar
-                    break;
                 case R.id.cab_seccion_eliminar:
                     //elimina la seccion con todas sus lineas
                     break;
-                // OPCIONES PARA LAS LINEAS
+                case R.id.cab_seccion_editar:
+                    //textView = > editText + btn guardar
                 case R.id.cab_linea_editar:
                     //textView = > editText + btn guardar
                     //pattern_view_cab_save     btn save
@@ -423,22 +420,25 @@ public class PatternViewActivity extends Activity {
                     editText = new EditText(activity);
                     editText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
                     editText.setText(origText);
-                    editText.setSingleLine(false);
+                    if (selected == SELECTED_CHUNK) {
+                        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                        editText.setSingleLine(false);
+                        editText.setLines(3);
+                    }
                     editText.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
-                    editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                    editText.setLines(3);
                     LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
                     editTextParams.setMargins(0, 0, 0, 0);
 
-                    // Gets linearlayout
-                    LinearLayout layout = (LinearLayout) editingTv.getParent();
-                    // Gets the layout params that will allow you to resize the layout
-                    ViewGroup.LayoutParams params = layout.getLayoutParams();
-                    // Changes the height and width to the specified *pixels*
-                    params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
+                    if (selected == SELECTED_CHUNK) {
+                        // Gets linearlayout
+                        LinearLayout layout = (LinearLayout) editingTv.getParent();
+                        // Gets the layout params that will allow you to resize the layout
+                        ViewGroup.LayoutParams params = layout.getLayoutParams();
+                        // Changes the height and width to the specified *pixels*
+                        params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
 
-                    editTextParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
-
+                        editTextParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
+                    }
                     editText.setLayoutParams(editTextParams);
                     ((ViewGroup) editingTv.getParent()).addView(editText, index);
 
@@ -471,50 +471,48 @@ public class PatternViewActivity extends Activity {
                         editingTv.setVisibility(View.VISIBLE);
                         editingSeccion.contenido = newContent;
                         editingSeccion.save();
+                        if (selected == SELECTED_SECCION) {
+                            LinearLayout.LayoutParams editingTvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            editingTv.setLayoutParams(editingTvParams);
+                        } else if (selected == SELECTED_CHUNK) {
+                            // Save de un chunk
+                            LinearLayout.LayoutParams editingTvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            editingTv.setLayoutParams(editingTvParams);
 
-//                        // Refresh main activity upon close of dialog box
-//                        Intent refresh = new Intent(activity, PatternViewActivity.class);
-//                        refresh.putExtra(PatternsListFragment.PATTERN_ID_MESSAGE, pattern.id);
-//                        refresh.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                        startActivity(refresh);
-//                        activity.finish(); //
-
-                        LinearLayout.LayoutParams editingTvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        editingTv.setLayoutParams(editingTvParams);
-
-                        List<View> viewsAdd = new ArrayList<View>();
-                        LinearLayout lLayout = (LinearLayout) editingTv.getParent().getParent().getParent();
-                        LinearLayout layoutSeccion = null;
-                        int childcount2 = lLayout.getChildCount();
-                        for (int i = 0; i < childcount2; i++) {
-                            View v = lLayout.getChildAt(i);
+                            List<View> viewsAdd = new ArrayList<View>();
+                            LinearLayout lLayout = (LinearLayout) editingTv.getParent().getParent().getParent();
+                            LinearLayout layoutSeccion = null;
+                            int childcount2 = lLayout.getChildCount();
+                            for (int i = 0; i < childcount2; i++) {
+                                View v = lLayout.getChildAt(i);
 //                            v.setBackgroundColor(Color.GREEN);
-                            layoutSeccion = (LinearLayout) v;
-                            int cc = layoutSeccion.getChildCount();
-                            for (int j = 0; j < cc; j++) {
-                                View v2 = layoutSeccion.getChildAt(j);
+                                layoutSeccion = (LinearLayout) v;
+                                int cc = layoutSeccion.getChildCount();
+                                for (int j = 0; j < cc; j++) {
+                                    View v2 = layoutSeccion.getChildAt(j);
 //                                v2.setBackgroundColor(Color.BLUE);
-                                LinearLayout l2 = (LinearLayout) v2;
-                                int cc2 = l2.getChildCount();
-                                for (int k = 0; k < cc2; k++) {
-                                    View v3 = l2.getChildAt(k);
+                                    LinearLayout l2 = (LinearLayout) v2;
+                                    int cc2 = l2.getChildCount();
+                                    for (int k = 0; k < cc2; k++) {
+                                        View v3 = l2.getChildAt(k);
 //                                    v3.setBackgroundColor(Color.RED);
-                                    viewsAdd.add(v3);
+                                        viewsAdd.add(v3);
+                                    }
+                                    l2.removeAllViews();
                                 }
-                                l2.removeAllViews();
+                                layoutSeccion.removeAllViews();
                             }
-                            layoutSeccion.removeAllViews();
+                            if (layoutSeccion != null) {
+                                populateViews(layoutSeccion, viewsAdd, activity, null);
+
+                                LinearLayout.LayoutParams layoutLineaParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                layoutLineaParams.setMargins(0, 0, 0, 10);
+
+                                layoutSeccion.setLayoutParams(layoutLineaParams);
+                            }
+
+                            editingTv.setGravity(Gravity.LEFT);
                         }
-                        if (layoutSeccion != null) {
-                            populateViews(layoutSeccion, viewsAdd, activity, null);
-
-                            LinearLayout.LayoutParams layoutLineaParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            layoutLineaParams.setMargins(0, 0, 0, 10);
-
-                            layoutSeccion.setLayoutParams(layoutLineaParams);
-                        }
-
-                        editingTv.setGravity(Gravity.LEFT);
                         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 //                        Utils.hideSoftKeyboard(activity);
