@@ -3,10 +3,13 @@ package com.lzm.KnittingHelp.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.*;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.lzm.KnittingHelp.R;
@@ -20,6 +23,8 @@ import java.util.List;
 
 /**
  * Created by luz on 19/11/14.
+ * <p/>
+ * <div>Icon made by <a href="http://www.typicons.com" title="Stephen Hutchings">Stephen Hutchings</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
  */
 public class PatternViewActivity extends Activity {
     final int SELECTED_SECCION = 0;
@@ -33,6 +38,10 @@ public class PatternViewActivity extends Activity {
     Menu mMenu;
 
     boolean editing = false;
+    EditText editText = null;
+    TextView editingTv = null;
+    LinearLayout editingTvParent = null;
+    Seccion editingSeccion = null;
 
     LinearLayout layout;
 
@@ -305,6 +314,14 @@ public class PatternViewActivity extends Activity {
         selectedTextViews = new ArrayList<TextView>();
     }
 
+    public void resetEditor() {
+        editing = false;
+        editText = null;
+        editingTv = null;
+        editingTvParent = null;
+        editingSeccion = null;
+    }
+
     public void closeCAB() {
         mActionMode = null;
         resetArrays();
@@ -393,22 +410,42 @@ public class PatternViewActivity extends Activity {
                     } else {
                         mMenu.findItem(R.id.pattern_view_cab_save).setVisible(false);
                     }
-                    TextView editingTv = selectedTextViews.get(0);
+                    editingTv = selectedTextViews.get(0);
+                    editingSeccion = selectedSecciones.get(0);
                     editingTv.setVisibility(View.GONE);
-                    String origText = editingTv.getText().toString();
-                    int index = ((ViewGroup) editingTv.getParent()).indexOfChild(editingTv);
 
-                    EditText editText = new EditText(activity);
+                    editingTvParent = (LinearLayout) editingTv.getParent();
+
+                    String origText = editingTv.getText().toString();
+
+                    int index = ((ViewGroup) editingTvParent).indexOfChild(editingTv);
+
+                    editText = new EditText(activity);
                     editText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
                     editText.setText(origText);
-                    LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(screenWidth, editingTv.getHeight() * 2, 1f);
+                    editText.setSingleLine(false);
+                    editText.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
+                    editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                    editText.setLines(3);
+                    LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
                     editTextParams.setMargins(0, 0, 0, 0);
+
+                    // Gets linearlayout
+                    LinearLayout layout = (LinearLayout) editingTv.getParent();
+                    // Gets the layout params that will allow you to resize the layout
+                    ViewGroup.LayoutParams params = layout.getLayoutParams();
+                    // Changes the height and width to the specified *pixels*
+                    params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
+
+                    editTextParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
+
                     editText.setLayoutParams(editTextParams);
                     ((ViewGroup) editingTv.getParent()).addView(editText, index);
 
                     editText.requestFocus();
-                    Utils.showSoftKeyboard(activity, editText);
-
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+                    imm.toggleSoftInput(0, 0);
                     break;
                 case R.id.cab_linea_eliminar:
                     //elimina la linea
@@ -427,6 +464,63 @@ public class PatternViewActivity extends Activity {
                     break;
                 case R.id.pattern_view_cab_save:
                     //guarda los cambios y cierra el cab
+                    if (editText != null) {
+                        String newContent = editText.getText().toString().trim();
+                        editingTvParent.removeView(editText);
+                        editingTv.setText(newContent);
+                        editingTv.setVisibility(View.VISIBLE);
+                        editingSeccion.contenido = newContent;
+                        editingSeccion.save();
+
+//                        // Refresh main activity upon close of dialog box
+//                        Intent refresh = new Intent(activity, PatternViewActivity.class);
+//                        refresh.putExtra(PatternsListFragment.PATTERN_ID_MESSAGE, pattern.id);
+//                        refresh.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                        startActivity(refresh);
+//                        activity.finish(); //
+
+                        LinearLayout.LayoutParams editingTvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        editingTv.setLayoutParams(editingTvParams);
+
+                        List<View> viewsAdd = new ArrayList<View>();
+                        LinearLayout lLayout = (LinearLayout) editingTv.getParent().getParent().getParent();
+                        LinearLayout layoutSeccion = null;
+                        int childcount2 = lLayout.getChildCount();
+                        for (int i = 0; i < childcount2; i++) {
+                            View v = lLayout.getChildAt(i);
+//                            v.setBackgroundColor(Color.GREEN);
+                            layoutSeccion = (LinearLayout) v;
+                            int cc = layoutSeccion.getChildCount();
+                            for (int j = 0; j < cc; j++) {
+                                View v2 = layoutSeccion.getChildAt(j);
+//                                v2.setBackgroundColor(Color.BLUE);
+                                LinearLayout l2 = (LinearLayout) v2;
+                                int cc2 = l2.getChildCount();
+                                for (int k = 0; k < cc2; k++) {
+                                    View v3 = l2.getChildAt(k);
+//                                    v3.setBackgroundColor(Color.RED);
+                                    viewsAdd.add(v3);
+                                }
+                                l2.removeAllViews();
+                            }
+                            layoutSeccion.removeAllViews();
+                        }
+                        if (layoutSeccion != null) {
+                            populateViews(layoutSeccion, viewsAdd, activity, null);
+
+                            LinearLayout.LayoutParams layoutLineaParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            layoutLineaParams.setMargins(0, 0, 0, 10);
+
+                            layoutSeccion.setLayoutParams(layoutLineaParams);
+                        }
+
+                        editingTv.setGravity(Gravity.LEFT);
+                        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+//                        Utils.hideSoftKeyboard(activity);
+                        resetEditor();
+                        mode.finish(); // Action picked, so close the CAB
+                    }
                     break;
                 default:
                     return false;
@@ -470,7 +564,7 @@ public class PatternViewActivity extends Activity {
 
         LinearLayout.LayoutParams params;
         LinearLayout newLL = new LinearLayout(context);
-        newLL.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        newLL.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         newLL.setGravity(Gravity.LEFT);
         newLL.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -493,7 +587,7 @@ public class PatternViewActivity extends Activity {
                 linearLayout.addView(newLL);
 
                 newLL = new LinearLayout(context);
-                newLL.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                newLL.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 newLL.setOrientation(LinearLayout.HORIZONTAL);
                 newLL.setGravity(Gravity.LEFT);
                 params = new LinearLayout.LayoutParams(LL.getMeasuredWidth(), LL.getMeasuredHeight());
