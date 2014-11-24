@@ -50,12 +50,12 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_next" />
 
-        <ImageButton
-            android:id="@+id/pattern_view_btn_counters"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_counters"
-            android:visibility="gone" />
+        <!--<ImageButton-->
+        <!--android:id="@+id/pattern_view_btn_counters"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/ic_counters"-->
+        <!--android:visibility="gone" />-->
     </LinearLayout>
 
     <ScrollView

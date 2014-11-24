@@ -3,6 +3,7 @@ package com.lzm.KnittingHelp.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -70,7 +71,9 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
     ImageButton btnNextChunk;
     ImageButton btnNextSeccion;
 
-    int scrollThresh = 100;
+    int scrollThresh = 40;
+
+    float density;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,8 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         setContentView(R.layout.pattern_view_layout);
 
         activity = this;
+
+        density = getResources().getDisplayMetrics().density;
 
         // Get the message from the intent
         Intent intent = getIntent();
@@ -728,7 +733,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         }
     }
 
-    private void moveToChunk(final boolean next) {
+    private void moveToChunk_old(final boolean next) {
         reloadIfNeeded();
         if (current == null) {
             currentPos = 0;
@@ -819,7 +824,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                                 scrollBy = (sal + tvHeight) * -1;
                             }
                         }
-                        System.out.println("SCROLLLLLLLLL " + scrollBy);
+//                        System.out.println("SCROLLLLLLLLL " + scrollBy);
                         scrollView.scrollBy(0, scrollBy);
                     }
 
@@ -864,6 +869,86 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                 }
             });
         }
+    }
+
+    private void moveToChunk(final boolean next) {
+        reloadIfNeeded();
+        if (current == null) {
+            currentPos = 0;
+        }
+        resetCurrentState();
+        int salto = 0;
+
+        do {
+            if (next) {
+                currentPos += 1;
+                if (currentPos < seccionList.size() - 1) {
+                    current = seccionList.get(currentPos);
+                } else {
+                    currentPos = seccionList.size() - 1;
+                    break;
+                }
+            } else {
+                currentPos -= 1;
+                if (currentPos >= 0) {
+                    current = seccionList.get(currentPos);
+                } else {
+                    currentPos = 0;
+                    break;
+                }
+            }
+            if (current.tipo == Seccion.TIPO_SECCION) {
+                salto += textViewList.get(currentPos).getHeight();
+            }
+        } while (current.tipo != Seccion.TIPO_CHUNK);
+        final TextView currentTv = textViewList.get(currentPos);
+        final int fSalto = salto;
+        if (currentTv != null) {
+            currentTv.setBackgroundResource(R.drawable.selector_current_chunk);
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    int scrollBy = 0;
+                    Rect rectTv = new Rect();
+                    boolean vis = currentTv.getGlobalVisibleRect(rectTv);
+                    Rect rectLl = new Rect();
+                    layout.getGlobalVisibleRect(rectLl);
+
+                    int currentChunkRealHeight = currentTv.getHeight();
+                    int currentChunkVisibleTop = rectTv.top;
+                    int currentChunkRealBottom = rectTv.top + currentChunkRealHeight;
+                    int currentChunkVisibleBottom = rectTv.bottom;
+                    int currentChunkRealTop = currentChunkVisibleBottom - currentChunkRealHeight;
+
+                    if (next) {
+                        if (currentChunkRealBottom >= rectLl.bottom) {
+                            if (vis) {
+                                int x = rectLl.bottom - currentChunkRealHeight;
+                                scrollBy = currentChunkVisibleTop - x;
+                                scrollBy += (int) Math.ceil(scrollThresh * density);
+                            } else {
+                                scrollBy = fSalto + currentChunkRealHeight + (int) Math.ceil(scrollThresh * density);
+                            }
+                        }
+                    } else {
+                        if (currentChunkRealTop <= rectLl.top) {
+                            if (vis) {
+                                scrollBy = rectLl.top - currentChunkRealTop;
+                                scrollBy += (int) Math.ceil(scrollThresh * density);
+                                scrollBy *= -1;
+                            }
+                        } else {
+                            if (!vis) {
+                                scrollBy = fSalto + currentChunkRealHeight + (int) Math.ceil(scrollThresh * density);
+                                scrollBy *= -1;
+                            }
+                        }
+                    }
+                    scrollView.scrollBy(0, scrollBy);
+                }
+            });
+        }
+
     }
 
     @Override
