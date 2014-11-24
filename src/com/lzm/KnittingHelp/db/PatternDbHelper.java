@@ -62,6 +62,21 @@ public class PatternDbHelper extends DbHelper {
         return obj;
     }
 
+    public Pattern getConCurrentSeccion(long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = selectQueryPatternCurrentSeccion() +
+                " WHERE " + ALIAS_PATTERN + "_" + KEY_ID + " = " + id;
+        logQuery(LOG, selectQuery);
+        Cursor c = db.rawQuery(selectQuery, null);
+        Pattern obj = null;
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            obj = setDatosConCurrentSeccion(c);
+        }
+        db.close();
+        return obj;
+    }
+
     public ArrayList<Pattern> getAll() {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Pattern> list = new ArrayList<Pattern>();
@@ -99,6 +114,25 @@ public class PatternDbHelper extends DbHelper {
         db.close();
     }
 
+    private String selectQueryPatternCurrentSeccion() {
+        return "SELECT p." + ALIAS_PATTERN + "_" + KEY_ID + ", " +
+                " p." + ALIAS_PATTERN + "_" + KEY_FECHA_CREACION + ", " +
+                " p." + ALIAS_PATTERN + "_" + KEY_FECHA_MODIFICACION + ", " +
+                " p." + ALIAS_PATTERN + "_" + KEY_NOMBRE + ", " +
+                " p." + ALIAS_PATTERN + "_" + KEY_CONTENIDO + ", " +
+                " p." + ALIAS_PATTERN + "_" + KEY_IMAGEN + ", " +
+                " p." + ALIAS_PATTERN + "_" + KEY_CURRENT_SECCION_ID + ", " +
+                " s." + ALIAS_SECCION + "_" + SeccionDbHelper.KEY_ID + ", " +
+                " s." + ALIAS_SECCION + "_" + SeccionDbHelper.KEY_FECHA_CREACION + ", " +
+                " s." + ALIAS_SECCION + "_" + SeccionDbHelper.KEY_FECHA_MODIFICACION + ", " +
+                " s." + ALIAS_SECCION + "_" + SeccionDbHelper.KEY_CONTENIDO + ", " +
+                " s." + ALIAS_SECCION + "_" + SeccionDbHelper.KEY_IMAGEN + ", " +
+                " s." + ALIAS_SECCION + "_" + SeccionDbHelper.KEY_ORDEN + ", " +
+                " s." + ALIAS_SECCION + "_" + SeccionDbHelper.KEY_TIPO +
+                " FROM " + TABLE_PATTERN + " p " +
+                " LEFT OUTER JOIN " + TABLE_SECCION + " s ON p." + ALIAS_PATTERN + "_" + KEY_CURRENT_SECCION_ID + " = s." + ALIAS_SECCION + "_" + KEY_ID;
+    }
+
     private Pattern setDatos(Cursor c) {
         Pattern obj = new Pattern(this.context);
         obj.id = c.getLong((c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_ID)));
@@ -107,6 +141,29 @@ public class PatternDbHelper extends DbHelper {
         obj.nombre = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_NOMBRE));
         obj.contenido = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_CONTENIDO));
         obj.imagen = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_IMAGEN));
+        return obj;
+    }
+
+    private Pattern setDatosConCurrentSeccion(Cursor c) {
+        Pattern obj = new Pattern(this.context);
+        obj.id = c.getLong((c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_ID)));
+        obj.fechaCreacion = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_FECHA_CREACION));
+        obj.fechaModificacion = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_FECHA_MODIFICACION));
+        obj.nombre = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_NOMBRE));
+        obj.contenido = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_CONTENIDO));
+        obj.imagen = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_IMAGEN));
+
+        Seccion obj2 = new Seccion(this.context);
+        obj2.id = c.getLong((c.getColumnIndex(ALIAS_SECCION + "_" + SeccionDbHelper.KEY_ID)));
+        obj2.fechaCreacion = c.getString(c.getColumnIndex(ALIAS_SECCION + "_" + SeccionDbHelper.KEY_FECHA_CREACION));
+        obj2.fechaModificacion = c.getString(c.getColumnIndex(ALIAS_SECCION + "_" + SeccionDbHelper.KEY_FECHA_MODIFICACION));
+        obj2.setPattern(obj);
+        obj2.contenido = c.getString(c.getColumnIndex(ALIAS_SECCION + "_" + SeccionDbHelper.KEY_CONTENIDO));
+        obj2.imagen = c.getString(c.getColumnIndex(ALIAS_SECCION + "_" + SeccionDbHelper.KEY_IMAGEN));
+        obj2.orden = c.getInt(c.getColumnIndex(ALIAS_SECCION + "_" + SeccionDbHelper.KEY_ORDEN));
+        obj2.tipo = c.getInt(c.getColumnIndex(ALIAS_SECCION + "_" + SeccionDbHelper.KEY_TIPO));
+
+        obj.setCurrentSeccion(obj2);
         return obj;
     }
 

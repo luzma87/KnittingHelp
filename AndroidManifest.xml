@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".activities.PatternInfoActivity" />
         <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.PatternViewActivity" />
+        <activity
+            android:name=".activities.PatternViewActivity"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 </manifest>

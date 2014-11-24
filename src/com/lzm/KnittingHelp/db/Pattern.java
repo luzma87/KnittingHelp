@@ -19,7 +19,7 @@ public class Pattern {
     public String imagen;
 
     public long currentSeccionId;
-    public Seccion currentSeccion;
+    public Seccion currentSeccion = null;
 
     PatternDbHelper patternDbHelper;
 
@@ -36,6 +36,11 @@ public class Pattern {
         this.nombre = nombre;
         this.contenido = contenido;
         this.patternDbHelper = new PatternDbHelper(context);
+    }
+
+    public void setCurrentSeccion(Seccion currentSeccion) {
+        this.currentSeccion = currentSeccion;
+        this.currentSeccionId = currentSeccion.id;
     }
 
     public String toString() {
@@ -58,10 +63,14 @@ public class Pattern {
         this.id = this.patternDbHelper.create(this);
     }
 
-
     public static Pattern get(Activity context, long id) {
         PatternDbHelper e = new PatternDbHelper(context);
         return e.get(id);
+    }
+
+    public static Pattern getConCurrentSeccion(Activity context, long id) {
+        PatternDbHelper e = new PatternDbHelper(context);
+        return e.getConCurrentSeccion(id);
     }
 
     public static ArrayList<Pattern> list(Activity context) {

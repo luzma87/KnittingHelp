@@ -109,6 +109,31 @@ public class SeccionDbHelper extends DbHelper {
         return list;
     }
 
+    public int updateOrdenFromSeccion(Seccion seccion, int cant, boolean includes) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "UPDATE " + TABLE_SECCION +
+                " SET " + ALIAS_SECCION + "_" + KEY_ORDEN + " = (CAST(" + ALIAS_SECCION + "_" + KEY_ORDEN + " AS INTEGER) + " + cant + ")" +
+                " WHERE " + ALIAS_SECCION + "_" + KEY_PATTERN_ID + " = " + seccion.patternId + " AND";
+        String innerSelect = "SELECT " + ALIAS_SECCION + "_" + KEY_ORDEN + " FROM " + TABLE_SECCION +
+                " WHERE " + ALIAS_SECCION + "_" + KEY_ID + " = " + seccion.id;
+        if (includes) {
+            sql += " CAST(" + ALIAS_SECCION + "_" + KEY_ORDEN + " AS INTEGER) >= (" + innerSelect + ")";
+        } else {
+            sql += " CAST(" + ALIAS_SECCION + "_" + KEY_ORDEN + " AS INTEGER) > (" + innerSelect + ")";
+        }
+        db.execSQL(sql);
+        Cursor c = db.rawQuery(innerSelect, null);
+        int nuevoOrden = -1;
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                nuevoOrden = c.getInt(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_ORDEN));
+            } while (c.moveToNext());
+        }
+        db.close();
+        return nuevoOrden;
+    }
+
     public int update(Seccion obj) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = setValues(obj);
@@ -130,6 +155,13 @@ public class SeccionDbHelper extends DbHelper {
     public void deleteByPattern(Pattern obj) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_SECCION, ALIAS_SECCION + "_" + KEY_PATTERN_ID + " = ?",
+                new String[]{String.valueOf(obj.id)});
+        db.close();
+    }
+
+    public void deleteByPadre(Seccion obj) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_SECCION, ALIAS_SECCION + "_" + KEY_SECCION_PADRE_ID + " = ?",
                 new String[]{String.valueOf(obj.id)});
         db.close();
     }

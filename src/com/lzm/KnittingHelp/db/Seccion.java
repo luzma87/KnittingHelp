@@ -75,6 +75,16 @@ public class Seccion {
         return e.getAllByPattern(pattern);
     }
 
+    public static void updateOrdenIncludes(Activity context, Seccion seccion, int cant) {
+        SeccionDbHelper e = new SeccionDbHelper(context);
+        e.updateOrdenFromSeccion(seccion, cant, true);
+    }
+
+    public static int updateOrdenExcludes(Activity context, Seccion seccion, int cant) {
+        SeccionDbHelper e = new SeccionDbHelper(context);
+        return e.updateOrdenFromSeccion(seccion, cant, false);
+    }
+
     public void delete(Activity context) {
         SeccionDbHelper e = new SeccionDbHelper(context);
         e.delete(this);

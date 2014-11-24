@@ -17,6 +17,8 @@
     <color name="linea_content_selected">#efbfdd</color>
     <color name="chunk_content_selected">#bdedc5</color>
     <color name="chunk_content_selected_border">#11b200</color>
+    <color name="chunk_content_current">#ffff00</color>
+    <color name="chunk_content_current_border">#666600</color>
 
     <color name="gray">#808080</color>
 
