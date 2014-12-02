@@ -141,6 +141,7 @@ public class PatternDbHelper extends DbHelper {
         obj.nombre = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_NOMBRE));
         obj.contenido = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_CONTENIDO));
         obj.imagen = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_IMAGEN));
+        obj.currentSeccionId = c.getLong(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_CURRENT_SECCION_ID));
         return obj;
     }
 
@@ -174,6 +175,7 @@ public class PatternDbHelper extends DbHelper {
         values.put(ALIAS_PATTERN + "_" + KEY_NOMBRE, obj.nombre);
         values.put(ALIAS_PATTERN + "_" + KEY_CONTENIDO, obj.contenido);
         values.put(ALIAS_PATTERN + "_" + KEY_IMAGEN, obj.imagen);
+        values.put(ALIAS_PATTERN + "_" + KEY_CURRENT_SECCION_ID, obj.currentSeccionId);
         return values;
     }
 }

@@ -5,7 +5,7 @@
     android:versionName="1.0">
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="16"
         android:targetSdkVersion="20" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.PatternInfoActivity" />
+        <activity android:name=".activities.PatternEditActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity
             android:name=".activities.PatternViewActivity"

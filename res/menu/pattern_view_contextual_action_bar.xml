@@ -1,50 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/pattern_view_cab_save"
-        android:title="@string/global_save"
-        android:icon="@drawable/ic_action_save"
-        android:visible="false" />
-    <item
-        android:id="@+id/pattern_view_cab_seccion"
-        android:title="@string/global_acciones">
-        <menu>
-            <item
-                android:id="@+id/cab_seccion_linea"
-                android:title="@string/cab_seccion_linea" />
-            <item
-                android:id="@+id/cab_seccion_duplicar"
-                android:title="@string/cab_seccion_duplicar" />
-            <item
-                android:id="@+id/cab_seccion_editar"
-                android:title="@string/global_edit" />
-            <item
-                android:id="@+id/cab_seccion_eliminar"
-                android:title="@string/global_delete" />
-        </menu>
-    </item>
-    <item
-        android:id="@+id/pattern_view_cab_linea"
-        android:title="@string/global_acciones">
-        <menu>
-            <item
-                android:id="@+id/cab_linea_split"
-                android:title="@string/cab_linea_split" />
-            <item
-                android:id="@+id/cab_linea_join"
-                android:title="@string/cab_linea_join" />
-            <item
-                android:id="@+id/cab_linea_new"
-                android:title="@string/cab_linea_new" />
-            <item
-                android:id="@+id/cab_linea_duplicar"
-                android:title="@string/cab_seccion_duplicar" />
-            <item
-                android:id="@+id/cab_linea_editar"
-                android:title="@string/global_edit" />
-            <item
-                android:id="@+id/cab_linea_eliminar"
-                android:title="@string/global_delete" />
-        </menu>
-    </item>
+        android:id="@+id/pattern_view_cab_active"
+        android:title="@string/global_set_active"
+        android:icon="@drawable/ic_bookmark" />
 </menu>

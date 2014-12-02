@@ -109,6 +109,33 @@ public class SeccionDbHelper extends DbHelper {
         return list;
     }
 
+    public ArrayList<Seccion> getAllByPadre(Seccion padre) {
+        return getAllByPadre(padre.id);
+    }
+
+    public ArrayList<Seccion> getAllByPadre(long padreId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Seccion> list = new ArrayList<Seccion>();
+        String selectQuery = selectQuerySeccionPattern();
+        selectQuery += " WHERE s." + ALIAS_SECCION + "_" + KEY_SECCION_PADRE_ID + " = " + padreId;
+        selectQuery += " ORDER BY CAST(s." + ALIAS_SECCION + "_" + KEY_ORDEN + " AS INTEGER) ASC";
+
+        //CAST(value AS INTEGER)
+
+        logQuery(LOG, selectQuery);
+        Cursor c = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Seccion obj = setDatosConPattern(c);
+                // adding to tags list
+                list.add(obj);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return list;
+    }
+
     public int updateOrdenFromSeccion(Seccion seccion, int cant, boolean includes) {
         SQLiteDatabase db = this.getReadableDatabase();
         String sql = "UPDATE " + TABLE_SECCION +
@@ -145,10 +172,27 @@ public class SeccionDbHelper extends DbHelper {
         return res;
     }
 
-    public void delete(Seccion obj) {
+    public int delete(Seccion obj) {
+        long lineaId = obj.seccionPadreId;
+        int count = 1;
+        ArrayList<Seccion> seccionesLinea = getAllByPadre(lineaId);
+        if (seccionesLinea.size() == 1) {
+            count = 2;
+            deleteById(lineaId);
+        }
+        updateOrdenFromSeccion(obj, count * -1, false);
+
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_SECCION, ALIAS_SECCION + "_" + KEY_ID + " = ?",
                 new String[]{String.valueOf(obj.id)});
+        db.close();
+        return count;
+    }
+
+    public void deleteById(long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_SECCION, ALIAS_SECCION + "_" + KEY_ID + " = ?",
+                new String[]{String.valueOf(id)});
         db.close();
     }
 

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/pattern_edit_cab_save"
+        android:title="@string/global_save"
+        android:icon="@drawable/ic_action_save"
+        android:visible="false" />
+    <item
+        android:id="@+id/pattern_edit_cab_seccion"
+        android:title="@string/global_acciones">
+        <menu>
+            <item
+                android:id="@+id/cab_seccion_linea"
+                android:title="@string/cab_seccion_linea"
+                android:icon="@drawable/ic_action_view_as_list" />
+            <item
+                android:id="@+id/cab_seccion_duplicar"
+                android:title="@string/cab_seccion_duplicar"
+                android:visible="false" />
+            <item
+                android:id="@+id/cab_seccion_editar"
+                android:title="@string/global_edit"
+                android:icon="@drawable/ic_action_edit" />
+            <item
+                android:id="@+id/cab_seccion_eliminar"
+                android:title="@string/global_delete"
+                android:icon="@drawable/ic_action_discard"
+                android:visible="false" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/pattern_edit_cab_linea"
+        android:title="@string/global_acciones">
+        <menu>
+            <item
+                android:id="@+id/cab_linea_split"
+                android:title="@string/cab_linea_split"
+                android:visible="false" />
+            <item
+                android:id="@+id/cab_linea_join"
+                android:title="@string/cab_linea_join"
+                android:visible="false" />
+            <item
+                android:id="@+id/cab_linea_new"
+                android:title="@string/cab_linea_new"
+                android:visible="false" />
+            <item
+                android:id="@+id/cab_linea_duplicar"
+                android:title="@string/cab_seccion_duplicar"
+                android:visible="false" />
+            <item
+                android:id="@+id/cab_linea_editar"
+                android:title="@string/global_edit"
+                android:icon="@drawable/ic_action_edit" />
+            <item
+                android:id="@+id/cab_linea_eliminar"
+                android:icon="@drawable/ic_action_discard"
+                android:title="@string/global_delete" />
+        </menu>
+    </item>
+</menu>

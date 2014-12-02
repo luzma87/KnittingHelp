@@ -85,9 +85,9 @@ public class Seccion {
         return e.updateOrdenFromSeccion(seccion, cant, false);
     }
 
-    public void delete(Activity context) {
+    public int delete(Activity context) {
         SeccionDbHelper e = new SeccionDbHelper(context);
-        e.delete(this);
+        return e.delete(this);
     }
 
     public static void deleteAllByPattern(Activity context, Pattern pattern) {

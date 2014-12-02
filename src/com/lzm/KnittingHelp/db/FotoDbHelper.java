@@ -158,7 +158,7 @@ public class FotoDbHelper extends DbHelper {
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_MODIFICACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO +
-                " FROM " + TABLE_FOTO + "f" +
+                " FROM " + TABLE_FOTO + " f" +
                 " INNER JOIN " + TABLE_PATTERN + " p ON f." + ALIAS_FOTO + "_" + KEY_PATTERN_ID + " = p." + ALIAS_PATTERN + "_" + KEY_ID;
     }
 

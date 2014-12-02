@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import com.lzm.KnittingHelp.MainActivity;
 import com.lzm.KnittingHelp.R;
+import com.lzm.KnittingHelp.activities.PatternEditActivity;
 import com.lzm.KnittingHelp.activities.PatternInfoActivity;
 import com.lzm.KnittingHelp.activities.PatternViewActivity;
 import com.lzm.KnittingHelp.adapters.PatternsListAdapter;
@@ -58,12 +59,16 @@ public class PatternsListFragment extends MasterFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 Pattern selected = patterns.get(pos);
 
-                Intent intent = new Intent(context, PatternInfoActivity.class);
-                intent.putExtra(PATTERN_ID_MESSAGE, selected.id);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                overridePendingTransition(R.anim.activity_push_up_in, R.anim.push_up_out);
-//                context.overridePendingTransition(R.anim.activity_push_up_in, R.anim.activity_push_up_out);
-                startActivity(intent);
+                if (selected.currentSeccionId > 0) {
+                    Intent intent = new Intent(context, PatternViewActivity.class);
+                    intent.putExtra(PATTERN_ID_MESSAGE, selected.id);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(context, PatternEditActivity.class);
+                    intent.putExtra(PATTERN_ID_MESSAGE, selected.id);
+                    startActivity(intent);
+                }
+
             }
         });
         return view;

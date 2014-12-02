@@ -1,19 +1,14 @@
 package com.lzm.KnittingHelp.activities;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Point;
+import android.graphics.Color;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
@@ -24,7 +19,6 @@ import com.lzm.KnittingHelp.db.Pattern;
 import com.lzm.KnittingHelp.db.Seccion;
 import com.lzm.KnittingHelp.fragments.PatternsListFragment;
 import com.lzm.KnittingHelp.utils.Utils;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,20 +27,14 @@ import java.util.List;
  * Created by luz on 19/11/14.
  * <p/>
  * <div>Icon made by <a href="http://www.typicons.com" title="Stephen Hutchings">Stephen Hutchings</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
- * <div>Icon made by <a href="http://graphberry.com" title="GraphBerry">GraphBerry</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
  */
-public class PatternViewActivity extends Activity implements View.OnClickListener {
+public class PatternEditActivity extends Activity implements View.OnClickListener {
     final int SELECTED_SECCION = 0;
     final int SELECTED_CHUNK = 1;
 
     int selected;
     Seccion current;
     int currentPos = -1;
-
-    int lastScroll = 0;
-    int firstViewTop = 0;
-
-    boolean changed = false;
 
     Pattern pattern;
     Activity activity;
@@ -72,19 +60,14 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
 
     int fontSize = 12;
 
-    ImageButton btnPrevSeccion;
-    ImageButton btnPrevChunk;
-    ImageButton btnNextChunk;
-    ImageButton btnNextSeccion;
-
-    int scrollThresh = 55;
-
     float density;
+
+    ImageButton btnPlay;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pattern_view_layout);
+        setContentView(R.layout.pattern_edit_layout);
 
         activity = this;
 
@@ -97,16 +80,6 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         current = pattern.currentSeccion;
 
         getActionBar().setTitle(pattern.nombre);
-
-        btnPrevSeccion = (ImageButton) findViewById(R.id.pattern_view_btn_prev_seccion);
-        btnPrevChunk = (ImageButton) findViewById(R.id.pattern_view_btn_prev_linea);
-        btnNextChunk = (ImageButton) findViewById(R.id.pattern_view_btn_next_linea);
-        btnNextSeccion = (ImageButton) findViewById(R.id.pattern_view_btn_next_seccion);
-
-        btnPrevSeccion.setOnClickListener(this);
-        btnPrevChunk.setOnClickListener(this);
-        btnNextChunk.setOnClickListener(this);
-        btnNextSeccion.setOnClickListener(this);
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -164,8 +137,11 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
             }
         }
 
-        layout = (LinearLayout) findViewById(R.id.pattern_view_linear_layout);
-        scrollView = (ScrollView) findViewById(R.id.pattern_view_scroll);
+        layout = (LinearLayout) findViewById(R.id.pattern_edit_linear_layout);
+        scrollView = (ScrollView) findViewById(R.id.pattern_edit_scroll);
+
+        btnPlay = (ImageButton) findViewById(R.id.pattern_edit_btn_play);
+        btnPlay.setOnClickListener(this);
 
         LinearLayout layoutSeccion = null;
         LinearLayout layoutLinea = null;
@@ -194,74 +170,11 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         if (layoutLinea != null) {
             populateViews(layoutLinea, listChunks, this, null);
         }
-
-        if (current != null && current.id > 0) {
-            setChunkSelected(current);
-
-            final TextView currentTv = textViewList.get(currentPos);
-
-            ViewTreeObserver viewTreeObserver = currentTv.getViewTreeObserver();
-            if (viewTreeObserver.isAlive()) {
-                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        currentTv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        Rect rectTv = new Rect();
-                        currentTv.getGlobalVisibleRect(rectTv);
-                        Rect rectLl = new Rect();
-                        layout.getGlobalVisibleRect(rectLl);
-
-                        int currentChunkRealHeight = currentTv.getHeight();
-                        int currentChunkVisibleBottom = rectTv.bottom;
-                        int currentChunkRealTop = currentChunkVisibleBottom - currentChunkRealHeight;
-
-                        scrollView.scrollBy(0, currentChunkRealTop - scrollThresh);
-                    }
-                });
-            }
-        } else {
-            moveToChunk(true);
-        }
     } //onCreate
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.view_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action buttons
-        switch (item.getItemId()) {
-            case R.id.view_menu_edit_btn:
-                new AlertDialog.Builder(this)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle(R.string.pttern_view_dialog_edit_title)
-                        .setMessage(R.string.pttern_view_dialog_edit_contenido)
-                        .setPositiveButton(R.string.global_continuar, new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(activity, PatternEditActivity.class);
-                                intent.putExtra(PatternsListFragment.PATTERN_ID_MESSAGE, pattern.id);
-                                startActivity(intent);
-                            }
-
-                        })
-                        .setNegativeButton(R.string.global_cancel, null)
-                        .show();
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     private View setChunk(final Seccion seccion) {
         TextView txvChunk = new TextView(this);
-        txvChunk.setText(seccion.contenido);
+        txvChunk.setText(/*"[" + seccion.orden + "] " +*/ seccion.contenido);
         txvChunk.setMaxLines(20);
         txvChunk.setMaxWidth(screenWidth - 100);
         txvChunk.setTextAppearance(this, R.style.chunk);
@@ -277,9 +190,9 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         txvChunk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (mActionMode != null) {
-//                    selectChunk(seccion, v);
-//                }
+                if (mActionMode != null) {
+                    selectChunk(seccion, v);
+                }
             }
         });
 
@@ -328,7 +241,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
     private LinearLayout setSeccion(final Seccion seccion) {
         // Aqui crea el textView para el nombre de la seccion
         final TextView txvSeccion = new TextView(this);
-        txvSeccion.setText(seccion.contenido);
+        txvSeccion.setText(/*"[" + seccion.orden + "] " + */seccion.contenido);
         txvSeccion.setTextAppearance(this, R.style.seccionNombre);
         txvSeccion.setBackgroundResource(R.drawable.selector_seccion);
         txvSeccion.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize + 2);
@@ -351,28 +264,38 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         txvSeccion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (mActionMode != null) {
-//                    selectSeccion(seccion, v);
-//                }
+                if (mActionMode == null) {
+                    if (layoutSeccion.isShown()) {
+                        layoutSeccion.setVisibility(View.GONE);
+                        txvSeccionParams.setMargins(0, 0, 0, 20);
+                        txvSeccion.setLayoutParams(txvSeccionParams);
+                    } else {
+                        layoutSeccion.setVisibility(View.VISIBLE);
+                        txvSeccionParams.setMargins(0, 0, 0, 0);
+                        txvSeccion.setLayoutParams(txvSeccionParams);
+                    }
+                } else {
+                    selectSeccion(seccion, v);
+                }
             }
         });
 
-//        txvSeccion.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                // TODO Auto-generated method stub
-//                if (mActionMode != null) {
-//                    return false;
-//                }
-//
-//                // Start the CAB using the ActionMode.Callback defined above
-//                mActionMode = startActionMode(mActionModeCallback);
-//                selected = SELECTED_SECCION;
-//                resetArrays();
-//                selectSeccion(seccion, v);
-//                return true;
-//            }
-//        }); // fin listeners del nombre de la seccion
+        txvSeccion.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                // TODO Auto-generated method stub
+                if (mActionMode != null) {
+                    return false;
+                }
+
+                // Start the CAB using the ActionMode.Callback defined above
+                mActionMode = startActionMode(mActionModeCallback);
+                selected = SELECTED_SECCION;
+                resetArrays();
+                selectSeccion(seccion, v);
+                return true;
+            }
+        }); // fin listeners del nombre de la seccion
         layout.addView(layoutSeccion);
 
         return layoutSeccion;
@@ -432,6 +355,16 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         selectedTextViews = new ArrayList<TextView>();
     }
 
+    public void resetEditor() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        editing = false;
+        editText = null;
+        editingTv = null;
+        editingTvParent = null;
+        editingSeccion = null;
+    }
+
     public void closeCAB() {
         mActionMode = null;
         resetArrays();
@@ -443,7 +376,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate a menu resource providing context menu items
             MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.pattern_view_contextual_action_bar, menu);
+            inflater.inflate(R.menu.pattern_edit_contextual_action_bar, menu);
             mActionMode = mode;
             return true;
         }
@@ -452,30 +385,237 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         // may be called multiple times if the mode is invalidated. (Used for updates to CAB after invalidate() request)
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-//            mMenu = menu;
-//            if (selected == SELECTED_CHUNK) {
-//                menu.findItem(R.id.cab_linea_new).setVisible(false);
-//                if (selectedSecciones.size() == 1) {
-//                    menu.findItem(R.id.cab_linea_editar).setVisible(true);
-//                    menu.findItem(R.id.cab_linea_join).setVisible(false);
-//                } else {
-//                    menu.findItem(R.id.cab_linea_editar).setVisible(false);
+            mMenu = menu;
+            if (selected == SELECTED_SECCION) {
+                // si es seccion escondo el menu de linea
+                menu.findItem(R.id.pattern_edit_cab_linea).setVisible(false);
+                menu.findItem(R.id.pattern_edit_cab_seccion).setVisible(true);
+                /*
+                    cambiar a linea             1-n     cab_seccion_linea
+                    duplicar                    1-n     cab_seccion_duplicar
+                    editar                      1       cab_seccion_editar
+                    eliminar                    1-n     cab_seccion_eliminar
+                 */
+                if (selectedSecciones.size() == 1) {
+                    menu.findItem(R.id.cab_seccion_editar).setVisible(true);
+                } else {
+                    menu.findItem(R.id.cab_seccion_editar).setVisible(false);
+                }
+            } else if (selected == SELECTED_CHUNK) {
+                // si es linea escondo el menu seccion
+                menu.findItem(R.id.pattern_edit_cab_seccion).setVisible(false);
+                menu.findItem(R.id.pattern_edit_cab_linea).setVisible(true);
+                /*
+                    editar                              1       cab_linea_editar
+                    eliminar                            1-n     cab_linea_eliminar
+                    separar en  .   ,   ;   (   [       1-n     cab_linea_split
+                    duplicar                            1-n     cab_linea_duplicar
+                    unir con    .   ,   ;   _           n       cab_linea_join
+                    hacer nueva seccion                 1-n     cab_linea_new
+                 */
+                menu.findItem(R.id.cab_linea_new).setVisible(false);
+                if (selectedSecciones.size() == 1) {
+                    menu.findItem(R.id.cab_linea_editar).setVisible(true);
+                    menu.findItem(R.id.cab_linea_join).setVisible(false);
+                } else {
+                    menu.findItem(R.id.cab_linea_editar).setVisible(false);
 //                    menu.findItem(R.id.cab_linea_join).setVisible(true);
-//                }
-//            }
-//            return true;
-            return false; // Return false if nothing is done
+                }
+            }
+            return true;
+//            return false; // Return false if nothing is done
         }
 
         // Called when the user selects a contextual menu item
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.pattern_view_cab_active:
-                    //activa el chunk seleccionado
-                    TextView chunk = selectedTextViews.get(0);
-                    setChunkSelected(chunk);
+                case R.id.cab_seccion_linea:
+                    //cambiar seccion => linea
+                    int pos = 0;
+                    for (Seccion selectedSeccion : selectedSecciones) {
+                        int nuevoOrdenSeccion = Seccion.updateOrdenExcludes(activity, selectedSeccion, 2);
+
+                        Seccion nuevaLinea = new Seccion(activity);
+                        nuevaLinea.tipo = Seccion.TIPO_LINEA;
+                        nuevaLinea.contenido = "";
+                        nuevaLinea.setPattern(pattern);
+                        nuevaLinea.setSeccionPadre(selectedSeccion);
+                        nuevaLinea.orden = nuevoOrdenSeccion + 1;
+                        nuevaLinea.save();
+
+                        Seccion nuevoChunk = new Seccion(activity);
+                        nuevoChunk.tipo = Seccion.TIPO_CHUNK;
+                        nuevoChunk.contenido = selectedSeccion.contenido;
+                        nuevoChunk.setPattern(pattern);
+                        nuevoChunk.setSeccionPadre(nuevaLinea);
+                        nuevoChunk.orden = nuevaLinea.orden + 1;
+                        nuevoChunk.save();
+
+                        List<View> listChunks = new ArrayList<View>();
+                        listChunks.add(setChunk(nuevoChunk));
+
+                        View seccionView = selectedTextViews.get(pos);
+                        LinearLayout seccionViewParent = (LinearLayout) seccionView.getParent();
+                        int indexSeccion = ((ViewGroup) seccionViewParent).indexOfChild(seccionView);
+                        LinearLayout layoutSeccion = (LinearLayout) seccionViewParent.getChildAt(indexSeccion + 1);
+                        LinearLayout layoutLinea = setLinea(nuevaLinea, layoutSeccion, 0);
+                        populateViews(layoutLinea, listChunks, activity, null);
+                        pos++;
+                    }
+                    mode.finish(); // Action picked, so close the CAB
+                    break;
+                case R.id.cab_seccion_duplicar:
+                    //duplicar la seccion con todas sus lineas
+                    break;
+                case R.id.cab_seccion_eliminar:
+                    //elimina la seccion con todas sus lineas
+                    break;
+                case R.id.cab_seccion_editar:
+                    //textView = > editText + btn guardar
+                case R.id.cab_linea_editar:
+                    //textView = > editText + btn guardar
+                    //pattern_edit_cab_save     btn save
+                    editing = true;
+                    if (selectedSecciones.size() == 1) {
+                        mMenu.findItem(R.id.pattern_edit_cab_save).setVisible(true);
+                    } else {
+                        mMenu.findItem(R.id.pattern_edit_cab_save).setVisible(false);
+                    }
+                    editingTv = selectedTextViews.get(0);
+                    editingSeccion = selectedSecciones.get(0);
+                    editingTv.setVisibility(View.GONE);
+
+                    editingTvParent = (LinearLayout) editingTv.getParent();
+
+                    String origText = editingTv.getText().toString();
+
+                    int index = ((ViewGroup) editingTvParent).indexOfChild(editingTv);
+
+                    editText = new EditText(activity);
+                    editText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+                    editText.setText(origText);
+                    if (selected == SELECTED_CHUNK) {
+                        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                        editText.setSingleLine(false);
+                        editText.setLines(3);
+                    }
+                    editText.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
+                    LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+                    editTextParams.setMargins(0, 0, 0, 0);
+
+                    if (selected == SELECTED_CHUNK) {
+                        // Gets linearlayout
+                        LinearLayout layout = (LinearLayout) editingTv.getParent();
+                        // Gets the layout params that will allow you to resize the layout
+                        ViewGroup.LayoutParams params = layout.getLayoutParams();
+                        // Changes the height and width to the specified *pixels*
+                        params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
+
+                        editTextParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
+                    }
+                    editText.setLayoutParams(editTextParams);
+                    ((ViewGroup) editingTv.getParent()).addView(editText, index);
+
+                    editText.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+                    imm.toggleSoftInput(0, 0);
+                    break;
+                case R.id.cab_linea_eliminar:
+                    //elimina la linea
+                    pos = 0;
+                    for (Seccion selectedSeccion : selectedSecciones) {
+                        int c = selectedSeccion.delete(activity);
+                        seccionList.remove(selectedSeccion);
+                        TextView tx = selectedTextViews.get(pos);
+                        LinearLayout layoutLinea = ((LinearLayout) tx.getParent());
+                        LinearLayout layoutLinea2 = ((LinearLayout) tx.getParent().getParent());
+                        LinearLayout layoutSeccion = ((LinearLayout) tx.getParent().getParent().getParent());
+                        LinearLayout layoutSeccion2 = ((LinearLayout) tx.getParent().getParent().getParent().getParent());
+
+//                        tx.setBackgroundColor(Color.RED);
+//                        layoutLinea.setBackgroundColor(Color.BLUE);
+//                        layoutLinea2.setBackgroundColor(Color.YELLOW);
+//                        layoutSeccion.setBackgroundColor(Color.GREEN);
+//                        layoutSeccion2.setBackgroundColor(Color.GRAY);
+
+                        layoutLinea.removeView(tx);
+                        textViewList.remove(tx);
+                        if (c == 2) {
+                            layoutSeccion2.removeView(layoutSeccion);
+                        }
+                        pos++;
+                    }
                     mode.finish();
+                    break;
+                case R.id.cab_linea_split:
+                    //muestra opciones para separar en .    ,   ;   (   [
+                    break;
+                case R.id.cab_linea_duplicar:
+                    //duplica la linea
+                    break;
+                case R.id.cab_linea_join:
+                    //muestra opciones para unir con .  ,   ;   [_]
+                    break;
+                case R.id.cab_linea_new:
+                    //crea una nueva seccion con las lineas seleccionadas
+                    break;
+                case R.id.pattern_edit_cab_save:
+                    //guarda los cambios y cierra el cab
+                    if (editText != null) {
+                        String newContent = editText.getText().toString().trim();
+                        editingTvParent.removeView(editText);
+                        editingTv.setText(newContent);
+                        editingTv.setVisibility(View.VISIBLE);
+                        editingSeccion.contenido = newContent;
+                        editingSeccion.save();
+                        if (selected == SELECTED_SECCION) {
+                            LinearLayout.LayoutParams editingTvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            editingTv.setLayoutParams(editingTvParams);
+                        } else if (selected == SELECTED_CHUNK) {
+                            // Save de un chunk
+                            LinearLayout.LayoutParams editingTvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            editingTv.setLayoutParams(editingTvParams);
+
+                            List<View> viewsAdd = new ArrayList<View>();
+                            LinearLayout lLayout = (LinearLayout) editingTv.getParent().getParent().getParent();
+                            LinearLayout layoutSeccion = null;
+                            int childcount2 = lLayout.getChildCount();
+                            for (int i = 0; i < childcount2; i++) {
+                                View v = lLayout.getChildAt(i);
+//                            v.setBackgroundColor(Color.GREEN);
+                                layoutSeccion = (LinearLayout) v;
+                                int cc = layoutSeccion.getChildCount();
+                                for (int j = 0; j < cc; j++) {
+                                    View v2 = layoutSeccion.getChildAt(j);
+//                                v2.setBackgroundColor(Color.BLUE);
+                                    LinearLayout l2 = (LinearLayout) v2;
+                                    int cc2 = l2.getChildCount();
+                                    for (int k = 0; k < cc2; k++) {
+                                        View v3 = l2.getChildAt(k);
+//                                    v3.setBackgroundColor(Color.RED);
+                                        viewsAdd.add(v3);
+                                    }
+                                    l2.removeAllViews();
+                                }
+                                layoutSeccion.removeAllViews();
+                            }
+                            if (layoutSeccion != null) {
+                                populateViews(layoutSeccion, viewsAdd, activity, null);
+
+                                LinearLayout.LayoutParams layoutLineaParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                layoutLineaParams.setMargins(0, 0, 0, 10);
+
+                                layoutSeccion.setLayoutParams(layoutLineaParams);
+                            }
+
+                            editingTv.setGravity(Gravity.LEFT);
+                        }
+                        //                        Utils.hideSoftKeyboard(activity);
+                        resetEditor();
+                        mode.finish(); // Action picked, so close the CAB
+                    }
                     break;
                 default:
                     return false;
@@ -488,52 +628,22 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            if (editing) {
+                editingTvParent.removeView(editText);
+                editingTv.setVisibility(View.VISIBLE);
+                if (selected == SELECTED_CHUNK) {
+                    LinearLayout.LayoutParams layoutLineaParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    layoutLineaParams.setMargins(0, 0, 0, 10);
+                    editingTvParent.setLayoutParams(layoutLineaParams);
+                } else {
+                    LinearLayout.LayoutParams editingTvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    editingTv.setLayoutParams(editingTvParams);
+                }
+                resetEditor();
+            }
             closeCAB();
         }
     };
-
-    private void setChunkSelected(TextView view) {
-//        System.out.println("********************* set chunk selected");
-//        System.out.println("currentPos = " + currentPos);
-        if (currentPos > -1) {
-            TextView sel = textViewList.get(currentPos);
-            sel.setBackgroundResource(R.drawable.selector_chunk);
-        }
-        currentPos = textViewList.indexOf(view);
-        Seccion chunk = seccionList.get(currentPos);
-        current = chunk;
-        view.setBackgroundResource(R.drawable.selector_current_chunk);
-        pattern.setCurrentSeccion(chunk);
-        pattern.save();
-    }
-
-    private long getCurrentChunk(Seccion chunk) {
-        long pos = 0;
-        for (Seccion seccion : seccionList) {
-            if (seccion.id == chunk.id) {
-                return pos;
-            }
-            pos++;
-        }
-        return -1;
-    }
-
-    private void setChunkSelected(Seccion chunk) {
-//        System.out.println("********************* set chunk selected");
-//        System.out.println("currentPos = " + currentPos);
-        if (currentPos > -1) {
-            TextView sel = textViewList.get(currentPos);
-            sel.setBackgroundResource(R.drawable.selector_chunk);
-        }
-        currentPos = (int) getCurrentChunk(chunk);
-        if (currentPos > -1) {
-            TextView view = textViewList.get(currentPos);
-            current = chunk;
-            view.setBackgroundResource(R.drawable.selector_current_chunk);
-            pattern.setCurrentSeccion(chunk);
-            pattern.save();
-        }
-    }
 
     /**
      * Copyright 2011 Sherif
@@ -598,162 +708,12 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         linearLayout.addView(newLL);
     }
 
-    private void resetCurrentState() {
-        for (int i = 0; i < textViewList.size(); i++) {
-            TextView textView = textViewList.get(i);
-            if (textView != null) {
-                if (seccionList.get(i).tipo == Seccion.TIPO_CHUNK) {
-                    textView.setBackgroundResource(R.drawable.selector_chunk);
-                } else if (seccionList.get(i).tipo == Seccion.TIPO_SECCION) {
-                    textView.setBackgroundResource(R.drawable.selector_seccion);
-                }
-            }
-        }
-    }
-
-    private void moveToChunk(final boolean next) {
-        if (current == null) {
-            currentPos = 0;
-        }
-        resetCurrentState();
-        int salto = 0;
-
-        do {
-            if (next) {
-                currentPos += 1;
-                if (currentPos < seccionList.size() - 1) {
-                    current = seccionList.get(currentPos);
-                } else {
-                    currentPos = seccionList.size() - 1;
-                    break;
-                }
-            } else {
-                currentPos -= 1;
-                if (currentPos >= 0) {
-                    current = seccionList.get(currentPos);
-                } else {
-                    currentPos = 0;
-                    break;
-                }
-            }
-            if (current.tipo == Seccion.TIPO_SECCION) {
-                salto += textViewList.get(currentPos).getHeight();
-            }
-        } while (current.tipo != Seccion.TIPO_CHUNK);
-        final TextView currentTv = textViewList.get(currentPos);
-        final int fSalto = salto;
-        if (currentTv != null) {
-//            currentTv.setBackgroundResource(R.drawable.selector_current_chunk);
-            setChunkSelected(currentTv);
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    int scrollBy = 0;
-                    Rect rectTv = new Rect();
-                    boolean vis = currentTv.getGlobalVisibleRect(rectTv);
-                    Rect rectLl = new Rect();
-                    layout.getGlobalVisibleRect(rectLl);
-
-                    int currentChunkRealHeight = currentTv.getHeight();
-                    int currentChunkVisibleTop = rectTv.top;
-                    int currentChunkRealBottom = rectTv.top + currentChunkRealHeight;
-                    int currentChunkVisibleBottom = rectTv.bottom;
-                    int currentChunkRealTop = currentChunkVisibleBottom - currentChunkRealHeight;
-
-                    if (next) {
-                        if (currentChunkRealBottom >= rectLl.bottom) {
-                            if (vis) {
-                                int x = rectLl.bottom - currentChunkRealHeight;
-                                scrollBy = currentChunkVisibleTop - x;
-                                scrollBy += (int) Math.ceil(scrollThresh * density);
-                            } else {
-                                scrollBy = fSalto + currentChunkRealHeight + (int) Math.ceil(scrollThresh * density);
-                            }
-                        }
-                    } else {
-                        if (currentChunkRealTop <= rectLl.top) {
-                            if (vis) {
-                                scrollBy = rectLl.top - currentChunkRealTop;
-                                scrollBy += (int) Math.ceil(scrollThresh * density);
-                                scrollBy *= -1;
-                            }
-                        } else {
-                            if (!vis) {
-                                scrollBy = fSalto + currentChunkRealHeight + (int) Math.ceil(scrollThresh * density);
-                                scrollBy *= -1;
-                            }
-                        }
-                    }
-                    System.out.println("*************************************************");
-                    System.out.println("visible:   " + vis);
-                    System.out.println("scroll0     " + scrollView.getScrollY());
-                    System.out.println("*************************************************");
-                    scrollView.scrollBy(0, scrollBy);
-                    System.out.println("scroll1    " + scrollView.getScrollY());
-
-                    vis = currentTv.getGlobalVisibleRect(rectTv);
-                    currentChunkRealHeight = currentTv.getHeight();
-                    currentChunkVisibleTop = rectTv.top;
-                    currentChunkRealBottom = rectTv.top + currentChunkRealHeight;
-                    currentChunkVisibleBottom = rectTv.bottom;
-                    currentChunkRealTop = currentChunkVisibleBottom - currentChunkRealHeight;
-
-                    System.out.println("'''''''''''''''''''''''''''''''''''''''''''''");
-                    System.out.println("real height    " + currentChunkRealHeight);
-                    System.out.println("visible top    " + currentChunkVisibleTop);
-                    System.out.println("real top       " + currentChunkRealTop);
-                    System.out.println("visible bottom " + currentChunkVisibleBottom);
-                    System.out.println("real bottom    " + currentChunkRealBottom);
-                    System.out.println("Layout top      " + rectLl.top);
-                    System.out.println("'''''''''''''''''''''''''''''''''''''''''''''");
-                    if (!vis || currentChunkRealHeight != rectTv.height()) {
-                        int ns = currentChunkRealTop;
-                        if (scrollView.getScrollY() > currentChunkRealTop) {
-                            ns = currentChunkRealTop - scrollView.getScrollY();
-                            ns *= -1;
-                        }
-                        System.out.println(">>>>>>>>>>>>>>>> " + ns);
-                        scrollView.scrollBy(0, ns);
-                        System.out.println("scroll2     " + scrollView.getScrollY());
-                        vis = currentTv.getGlobalVisibleRect(rectTv);
-                    }
-                    System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++");
-                    System.out.println("visible:   " + vis);
-                    System.out.println("scroll3     " + scrollView.getScrollY());
-                    System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++");
-                }
-            });
-        }
-    }
-
     @Override
     public void onClick(View view) {
-        if (view.getId() == btnPrevSeccion.getId()) {
-            do {
-                currentPos -= 1;
-                if (currentPos < seccionList.size() - 1) {
-                    current = seccionList.get(currentPos);
-                } else {
-                    currentPos = seccionList.size() - 1;
-                    break;
-                }
-            } while (current.tipo != Seccion.TIPO_SECCION);
-            moveToChunk(true);
-        } else if (view.getId() == btnPrevChunk.getId()) {
-            moveToChunk(false);
-        } else if (view.getId() == btnNextChunk.getId()) {
-            moveToChunk(true);
-        } else if (view.getId() == btnNextSeccion.getId()) {
-            do {
-                currentPos += 1;
-                if (currentPos < seccionList.size() - 1) {
-                    current = seccionList.get(currentPos);
-                } else {
-                    currentPos = seccionList.size() - 1;
-                    break;
-                }
-            } while (current.tipo != Seccion.TIPO_SECCION);
-            moveToChunk(true);
+        if (view.getId() == btnPlay.getId()) {
+            Intent intent = new Intent(activity, PatternViewActivity.class);
+            intent.putExtra(PatternsListFragment.PATTERN_ID_MESSAGE, pattern.id);
+            startActivity(intent);
         }
     }
 }

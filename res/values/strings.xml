@@ -25,6 +25,7 @@
     <string name="global_save">Guardar</string>
     <string name="global_edit">Modificar</string>
     <string name="global_delete">Eliminar</string>
+    <string name="global_continuar">Continuar</string>
     <plurals name="global_n_selected">
         <item quantity="one">1 seleccionado</item>
         <item quantity="other">%1$s seleccionados</item>
@@ -78,6 +79,9 @@
     <string name="cab_linea_split">Dividir</string>
     <string name="cab_linea_join">Unir</string>
     <string name="cab_linea_new">Nueva sección</string>
+    <string name="global_set_active">Establecer como activo</string>
 
+    <string name="pttern_view_dialog_edit_title">Editar</string>
+    <string name="pttern_view_dialog_edit_contenido">Al editar un modelo se reiniciará la posición actual. Desea continuar?</string>
 
 </resources>
