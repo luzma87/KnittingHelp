@@ -75,6 +75,21 @@ public class Seccion {
         return e.getAllByPattern(pattern);
     }
 
+    public static ArrayList<Seccion> findAllSeccionesByPattern(Activity context, Pattern pattern) {
+        SeccionDbHelper e = new SeccionDbHelper(context);
+        return e.getAllByPatternAndTipo(pattern, TIPO_SECCION);
+    }
+
+    public static ArrayList<Seccion> findAllLineasByPattern(Activity context, Pattern pattern) {
+        SeccionDbHelper e = new SeccionDbHelper(context);
+        return e.getAllByPatternAndTipo(pattern, TIPO_LINEA);
+    }
+
+    public static ArrayList<Seccion> findAllChunksByPattern(Activity context, Pattern pattern) {
+        SeccionDbHelper e = new SeccionDbHelper(context);
+        return e.getAllByPatternAndTipo(pattern, TIPO_CHUNK);
+    }
+
     public static void updateOrdenIncludes(Activity context, Seccion seccion, int cant) {
         SeccionDbHelper e = new SeccionDbHelper(context);
         e.updateOrdenFromSeccion(seccion, cant, true);

@@ -1,9 +1,7 @@
 package com.lzm.KnittingHelp.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -26,12 +24,10 @@ import java.util.List;
  * Created by luz on 19/11/14.
  * <p/>
  * <div>Icon made by <a href="http://www.typicons.com" title="Stephen Hutchings">Stephen Hutchings</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
- * <div>Icon made by <a href="http://www.google.com" title="Google">Google</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
  */
-public class PatternEditActivity extends Activity implements View.OnClickListener {
+public class PatternEditOldActivity extends Activity implements View.OnClickListener {
     final int SELECTED_SECCION = 0;
-    final int SELECTED_LINEA = 1;
-    final int SELECTED_CHUNK = 2;
+    final int SELECTED_CHUNK = 1;
 
     int selected;
     Seccion current;
@@ -236,7 +232,6 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
         } else {
             layoutSeccion.addView(layoutLinea);
         }
-
         return layoutLinea;
     }
 
@@ -391,7 +386,6 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
             if (selected == SELECTED_SECCION) {
                 // si es seccion escondo el menu de linea
                 menu.findItem(R.id.pattern_edit_cab_chunk).setVisible(false);
-                menu.findItem(R.id.pattern_edit_cab_linea).setVisible(false);
                 menu.findItem(R.id.pattern_edit_cab_seccion).setVisible(true);
                 /*
                     cambiar a linea             1-n     cab_seccion_linea
@@ -404,34 +398,17 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
                 } else {
                     menu.findItem(R.id.cab_seccion_editar).setVisible(false);
                 }
-            } /*else if (selected == SELECTED_LINEA) {
+            } else if (selected == SELECTED_CHUNK) {
                 // si es linea escondo el menu seccion
                 menu.findItem(R.id.pattern_edit_cab_seccion).setVisible(false);
-                menu.findItem(R.id.pattern_edit_cab_chunk).setVisible(false);
-                menu.findItem(R.id.pattern_edit_cab_linea).setVisible(true);
-                *//*
+                menu.findItem(R.id.pattern_edit_cab_chunk).setVisible(true);
+                /*
+                    editar                              1       cab_linea_editar
                     eliminar                            1-n     cab_linea_eliminar
                     separar en  .   ,   ;   (   [       1-n     cab_linea_split
                     duplicar                            1-n     cab_linea_duplicar
                     unir con    .   ,   ;   _           n       cab_linea_join
-                    hacer nueva seccion                 1-n     cab_seccion_new
-                 *//*
-                menu.findItem(R.id.cab_seccion_new).setVisible(false);
-                if (selectedSecciones.size() == 1) {
-                    menu.findItem(R.id.cab_linea_join).setVisible(false);
-                }
-            }*/ else if (selected == SELECTED_CHUNK) {
-                // si es linea escondo el menu seccion
-                menu.findItem(R.id.pattern_edit_cab_seccion).setVisible(false);
-                menu.findItem(R.id.pattern_edit_cab_linea).setVisible(false);
-                menu.findItem(R.id.pattern_edit_cab_chunk).setVisible(true);
-                /*
-                    editar                              1       cab_chunk_editar
-                    eliminar                            1-n     cab_chunk_eliminar
-                    separar en  .   ,   ;   (   [       1-n     cab_chunk_split
-                    duplicar                            1-n     cab_chunk_duplicar
-                    unir con    .   ,   ;   _           n       cab_chunk_join
-                    hacer nueva linea                   1-n     cab_linea_new
+                    hacer nueva seccion                 1-n     cab_linea_new
                  */
                 menu.findItem(R.id.cab_linea_new).setVisible(false);
                 if (selectedSecciones.size() == 1) {
@@ -543,7 +520,7 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
                     imm.toggleSoftInput(0, 0);
                     break;
                 case R.id.cab_chunk_eliminar:
-                    //elimina el chunk
+                    //elimina la linea
                     pos = 0;
                     for (Seccion selectedSeccion : selectedSecciones) {
                         int c = selectedSeccion.delete(activity);
@@ -571,23 +548,41 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
                     break;
                 case R.id.cab_chunk_split:
                     //muestra opciones para separar en .    ,   ;   (   [
-                    final CharSequence opcionesSplit[] = new CharSequence[]{getString(R.string.global_punto), getString(R.string.global_coma),
-                            getString(R.string.global_punto_coma), getString(R.string.global_parentesis),
-                            getString(R.string.global_corchetes)};
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setTitle(getString(R.string.cab_linea_split));
-                    builder.setItems(opcionesSplit, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // the user clicked on colors[which]
-                            System.out.println("************************* " + opcionesSplit[which]);
-                        }
-                    });
-                    builder.show();
                     break;
                 case R.id.cab_chunk_duplicar:
                     //duplica la linea
+                    pos = 0;
+                    for (Seccion selectedSeccion : selectedSecciones) {
+                        int nuevoOrdenSeccion = Seccion.updateOrdenExcludes(activity, selectedSeccion, 2);
+
+                        Seccion nuevaLinea = new Seccion(activity);
+                        nuevaLinea.tipo = Seccion.TIPO_LINEA;
+                        nuevaLinea.contenido = "";
+                        nuevaLinea.setPattern(pattern);
+                        nuevaLinea.seccionPadreId = selectedSeccion.seccionPadreId;
+                        nuevaLinea.orden = nuevoOrdenSeccion + 1;
+                        nuevaLinea.save();
+
+                        Seccion nuevoChunk = new Seccion(activity);
+                        nuevoChunk.tipo = Seccion.TIPO_CHUNK;
+                        nuevoChunk.contenido = selectedSeccion.contenido;
+                        nuevoChunk.setPattern(pattern);
+                        nuevoChunk.setSeccionPadre(nuevaLinea);
+                        nuevoChunk.orden = nuevaLinea.orden + 1;
+                        nuevoChunk.save();
+
+                        List<View> listChunks = new ArrayList<View>();
+                        listChunks.add(setChunk(nuevoChunk));
+
+                        View seccionView = selectedTextViews.get(pos);
+                        LinearLayout seccionViewParent = (LinearLayout) seccionView.getParent().getParent().getParent();
+                        int indexSeccion = ((ViewGroup) seccionViewParent).indexOfChild(seccionView);
+                        LinearLayout layoutSeccion = (LinearLayout) seccionViewParent.getChildAt(indexSeccion + 1);
+                        LinearLayout layoutLinea = setLinea(nuevaLinea, layoutSeccion, 0);
+                        populateViews(layoutLinea, listChunks, activity, null);
+                        pos++;
+                    }
+                    mode.finish(); // Action picked, so close the CAB
                     break;
                 case R.id.cab_chunk_join:
                     //muestra opciones para unir con .  ,   ;   [_]

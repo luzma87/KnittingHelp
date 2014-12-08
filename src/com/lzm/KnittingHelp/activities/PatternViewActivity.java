@@ -34,6 +34,7 @@ import java.util.List;
  * <p/>
  * <div>Icon made by <a href="http://www.typicons.com" title="Stephen Hutchings">Stephen Hutchings</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
  * <div>Icon made by <a href="http://graphberry.com" title="GraphBerry">GraphBerry</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
+ * <div>Icon made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
  */
 public class PatternViewActivity extends Activity implements View.OnClickListener {
     final int SELECTED_SECCION = 0;
@@ -206,16 +207,17 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                     @Override
                     public void onGlobalLayout() {
                         currentTv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        Rect rectTv = new Rect();
-                        currentTv.getGlobalVisibleRect(rectTv);
-                        Rect rectLl = new Rect();
-                        layout.getGlobalVisibleRect(rectLl);
-
-                        int currentChunkRealHeight = currentTv.getHeight();
-                        int currentChunkVisibleBottom = rectTv.bottom;
-                        int currentChunkRealTop = currentChunkVisibleBottom - currentChunkRealHeight;
-
-                        scrollView.scrollBy(0, currentChunkRealTop - scrollThresh);
+                        moveToChunk(currentTv);
+//                        Rect rectTv = new Rect();
+//                        currentTv.getGlobalVisibleRect(rectTv);
+//                        Rect rectLl = new Rect();
+//                        layout.getGlobalVisibleRect(rectLl);
+//
+//                        int currentChunkRealHeight = currentTv.getHeight();
+//                        int currentChunkVisibleBottom = rectTv.bottom;
+//                        int currentChunkRealTop = currentChunkVisibleBottom - currentChunkRealHeight;
+//
+//                        scrollView.scrollBy(0, currentChunkRealTop - scrollThresh);
                     }
                 });
             }
@@ -632,7 +634,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                 if (currentPos >= 0) {
                     current = seccionList.get(currentPos);
                 } else {
-                    currentPos = 0;
+                    currentPos = 2;
                     break;
                 }
             }
@@ -640,6 +642,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                 salto += textViewList.get(currentPos).getHeight();
             }
         } while (current.tipo != Seccion.TIPO_CHUNK);
+
         final TextView currentTv = textViewList.get(currentPos);
         final int fSalto = salto;
         if (currentTv != null) {
@@ -688,6 +691,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                     System.out.println("visible:   " + vis);
                     System.out.println("scroll0     " + scrollView.getScrollY());
                     System.out.println("*************************************************");
+                    System.out.println("SCROLL BY 1:::: " + scrollBy);
                     scrollView.scrollBy(0, scrollBy);
                     System.out.println("scroll1    " + scrollView.getScrollY());
 
@@ -712,7 +716,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                             ns = currentChunkRealTop - scrollView.getScrollY();
                             ns *= -1;
                         }
-                        System.out.println(">>>>>>>>>>>>>>>> " + ns);
+                        System.out.println("SCROLL BY 2:::: " + ns);
                         scrollView.scrollBy(0, ns);
                         System.out.println("scroll2     " + scrollView.getScrollY());
                         vis = currentTv.getGlobalVisibleRect(rectTv);
@@ -724,6 +728,19 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                 }
             });
         }
+    }
+
+    private void moveToChunk(TextView textView) {
+        Rect rectTv = new Rect();
+        textView.getGlobalVisibleRect(rectTv);
+        Rect rectLl = new Rect();
+        layout.getGlobalVisibleRect(rectLl);
+
+        int currentChunkRealHeight = textView.getHeight();
+        int currentChunkVisibleBottom = rectTv.bottom;
+        int currentChunkRealTop = currentChunkVisibleBottom - currentChunkRealHeight;
+
+        scrollView.scrollTo(0, currentChunkRealTop - scrollThresh);
     }
 
     @Override
@@ -755,5 +772,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
             } while (current.tipo != Seccion.TIPO_SECCION);
             moveToChunk(true);
         }
+//        TextView currentTv = textViewList.get(currentPos);
+//        moveToChunk(currentTv);
     }
 }

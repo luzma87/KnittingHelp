@@ -109,6 +109,30 @@ public class SeccionDbHelper extends DbHelper {
         return list;
     }
 
+    public ArrayList<Seccion> getAllByPatternAndTipo(Pattern pattern, int tipo) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Seccion> list = new ArrayList<Seccion>();
+        String selectQuery = selectQuerySeccionPattern();
+        selectQuery += " WHERE s." + ALIAS_SECCION + "_" + KEY_TIPO + " = " + tipo +
+                " AND s." + ALIAS_SECCION + "_" + KEY_PATTERN_ID + " = " + pattern.id;
+        selectQuery += " ORDER BY CAST(s." + ALIAS_SECCION + "_" + KEY_ORDEN + " AS INTEGER) ASC";
+
+        //CAST(value AS INTEGER)
+
+        logQuery(LOG, selectQuery);
+        Cursor c = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Seccion obj = setDatosConPattern(c);
+                // adding to tags list
+                list.add(obj);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return list;
+    }
+
     public ArrayList<Seccion> getAllByPadre(Seccion padre) {
         return getAllByPadre(padre.id);
     }
@@ -176,7 +200,7 @@ public class SeccionDbHelper extends DbHelper {
         long lineaId = obj.seccionPadreId;
         int count = 1;
         ArrayList<Seccion> seccionesLinea = getAllByPadre(lineaId);
-        if (seccionesLinea.size() == 1) {
+        if (seccionesLinea.size() <= 1) {
             count = 2;
             deleteById(lineaId);
         }

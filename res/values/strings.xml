@@ -78,10 +78,17 @@
     <string name="cab_seccion_editar">Editar</string>
     <string name="cab_linea_split">Dividir</string>
     <string name="cab_linea_join">Unir</string>
-    <string name="cab_linea_new">Nueva sección</string>
+    <string name="cab_linea_new">Nueva línea</string>
+    <string name="cab_seccion_new">Nueva sección</string>
     <string name="global_set_active">Establecer como activo</string>
 
     <string name="pttern_view_dialog_edit_title">Editar</string>
     <string name="pttern_view_dialog_edit_contenido">Al editar un modelo se reiniciará la posición actual. Desea continuar?</string>
+
+    <string name="global_punto">.   Punto</string>
+    <string name="global_coma">,   Coma</string>
+    <string name="global_punto_coma">;   Punto y coma</string>
+    <string name="global_parentesis">( ) Paréntesis</string>
+    <string name="global_corchetes">[ ] Corchetes</string>
 
 </resources>

@@ -41,19 +41,48 @@
                 android:title="@string/cab_linea_join"
                 android:visible="false" />
             <item
-                android:id="@+id/cab_linea_new"
-                android:title="@string/cab_linea_new"
+                android:id="@+id/cab_seccion_new"
+                android:title="@string/cab_seccion_new"
                 android:visible="false" />
             <item
                 android:id="@+id/cab_linea_duplicar"
                 android:title="@string/cab_seccion_duplicar"
+                android:icon="@drawable/ic_duplicate"
+                android:visible="true" />
+            <item
+                android:id="@+id/cab_linea_eliminar"
+                android:icon="@drawable/ic_action_discard"
+                android:title="@string/global_delete" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/pattern_edit_cab_chunk"
+        android:title="@string/global_acciones">
+        <menu>
+            <item
+                android:id="@+id/cab_chunk_split"
+                android:title="@string/cab_linea_split"
+                android:icon="@drawable/ic_split"
+                android:visible="true" />
+            <item
+                android:id="@+id/cab_chunk_join"
+                android:title="@string/cab_linea_join"
                 android:visible="false" />
             <item
-                android:id="@+id/cab_linea_editar"
+                android:id="@+id/cab_linea_new"
+                android:title="@string/cab_linea_new"
+                android:visible="false" />
+            <item
+                android:id="@+id/cab_chunk_duplicar"
+                android:title="@string/cab_seccion_duplicar"
+                android:icon="@drawable/ic_duplicate"
+                android:visible="true" />
+            <item
+                android:id="@+id/cab_chunk_editar"
                 android:title="@string/global_edit"
                 android:icon="@drawable/ic_action_edit" />
             <item
-                android:id="@+id/cab_linea_eliminar"
+                android:id="@+id/cab_chunk_eliminar"
                 android:icon="@drawable/ic_action_discard"
                 android:title="@string/global_delete" />
         </menu>
