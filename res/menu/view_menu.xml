@@ -17,6 +17,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/view_menu_font_size_decrease_btn"
+        android:icon="@drawable/ic_mn_font_dec"
+        android:title="@string/view_font_size_decrease"
+        android:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/view_menu_font_size_increase_btn"
+        android:icon="@drawable/ic_mn_font_inc"
+        android:title="@string/view_font_size_increase"
+        android:showAsAction="ifRoom|withText" />
+    <item
         android:id="@+id/view_menu_edit_btn"
         android:icon="@drawable/ic_action_edit"
         android:title="@string/global_edit"

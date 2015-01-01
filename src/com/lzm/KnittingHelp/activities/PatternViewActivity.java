@@ -168,33 +168,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         layout = (LinearLayout) findViewById(R.id.pattern_view_linear_layout);
         scrollView = (ScrollView) findViewById(R.id.pattern_view_scroll);
 
-        LinearLayout layoutSeccion = null;
-        LinearLayout layoutLinea = null;
-        List<View> listChunks = new ArrayList<View>();
-
-        int pos = 0;
-        for (Seccion seccion : seccionList) {
-            if (seccion == current) {
-                currentPos = pos;
-            }
-            if (seccion.tipo == Seccion.TIPO_SECCION) {
-                layoutSeccion = setSeccion(seccion);
-            } // if seccion.tipo == TIPO_SECCION
-            else if (seccion.tipo == Seccion.TIPO_LINEA) {
-                if (layoutLinea != null) {
-                    populateViews(layoutLinea, listChunks, this, null);
-                    listChunks = new ArrayList<View>();
-                }
-                layoutLinea = setLinea(seccion, layoutSeccion);
-            } // if seccion.tipo == TIPO_LINEA
-            else if (seccion.tipo == Seccion.TIPO_CHUNK) {
-                listChunks.add(setChunk(seccion));
-            } // if seccion.tipo == TIPO_CHUNK
-            pos++;
-        }
-        if (layoutLinea != null) {
-            populateViews(layoutLinea, listChunks, this, null);
-        }
+        populateAll();
 
         if (current != null && current.id > 0) {
             setChunkSelected(current);
@@ -226,6 +200,38 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         }
     } //onCreate
 
+    private void populateAll() {
+        layout.removeAllViews();
+
+        LinearLayout layoutSeccion = null;
+        LinearLayout layoutLinea = null;
+        List<View> listChunks = new ArrayList<View>();
+
+        int pos = 0;
+        for (Seccion seccion : seccionList) {
+            if (seccion == current) {
+                currentPos = pos;
+            }
+            if (seccion.tipo == Seccion.TIPO_SECCION) {
+                layoutSeccion = setSeccion(seccion);
+            } // if seccion.tipo == TIPO_SECCION
+            else if (seccion.tipo == Seccion.TIPO_LINEA) {
+                if (layoutLinea != null) {
+                    populateViews(layoutLinea, listChunks, this, null);
+                    listChunks = new ArrayList<View>();
+                }
+                layoutLinea = setLinea(seccion, layoutSeccion);
+            } // if seccion.tipo == TIPO_LINEA
+            else if (seccion.tipo == Seccion.TIPO_CHUNK) {
+                listChunks.add(setChunk(seccion));
+            } // if seccion.tipo == TIPO_CHUNK
+            pos++;
+        }
+        if (layoutLinea != null) {
+            populateViews(layoutLinea, listChunks, this, null);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -255,6 +261,23 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                         .setNegativeButton(R.string.global_cancel, null)
                         .show();
 
+                return true;
+            case R.id.view_menu_font_size_increase_btn:
+
+                if (fontSize < 25) {
+                    fontSize += 2;
+                } else {
+                    fontSize = 26;
+                }
+                populateAll();
+                return true;
+            case R.id.view_menu_font_size_decrease_btn:
+                if (fontSize > 9) {
+                    fontSize -= 2;
+                } else {
+                    fontSize = 8;
+                }
+                populateAll();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

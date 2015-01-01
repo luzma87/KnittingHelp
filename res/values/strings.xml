@@ -91,4 +91,7 @@
     <string name="global_parentesis">( ) Paréntesis</string>
     <string name="global_corchetes">[ ] Corchetes</string>
 
+    <string name="view_font_size_increase">Aumentar tamaño de letra</string>
+    <string name="view_font_size_decrease">Disminuir tamaño de letra</string>
+
 </resources>

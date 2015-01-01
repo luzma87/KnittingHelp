@@ -29,6 +29,8 @@ public class Seccion {
 
     public int tipo;
 
+    public String separador;
+
     SeccionDbHelper seccionDbHelper;
 
     public Seccion(Activity context) {

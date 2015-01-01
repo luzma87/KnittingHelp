@@ -19,8 +19,9 @@ public class SeccionDbHelper extends DbHelper {
     public static final String KEY_ORDEN = "orden";
     public static final String KEY_SECCION_PADRE_ID = "seccion_padre_id";
     public static final String KEY_TIPO = "tipo";
+    public static final String KEY_SEPARADOR = "separador";
 
-    public static final String[] KEYS_SECCION = {KEY_PATTERN_ID, KEY_CONTENIDO, KEY_IMAGEN, KEY_ORDEN, KEY_SECCION_PADRE_ID, KEY_TIPO};
+    public static final String[] KEYS_SECCION = {KEY_PATTERN_ID, KEY_CONTENIDO, KEY_IMAGEN, KEY_ORDEN, KEY_SECCION_PADRE_ID, KEY_TIPO, KEY_SEPARADOR};
 
     public SeccionDbHelper(Activity context) {
         super(context);
@@ -244,6 +245,7 @@ public class SeccionDbHelper extends DbHelper {
                 "s." + ALIAS_SECCION + "_" + KEY_IMAGEN + "," +
                 "s." + ALIAS_SECCION + "_" + KEY_ORDEN + "," +
                 "s." + ALIAS_SECCION + "_" + KEY_TIPO + "," +
+                "s." + ALIAS_SECCION + "_" + KEY_SEPARADOR + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_CREACION + "," +
                 "p." + ALIAS_PATTERN + "_" + PatternDbHelper.KEY_FECHA_MODIFICACION + "," +
@@ -265,6 +267,7 @@ public class SeccionDbHelper extends DbHelper {
         obj.orden = c.getInt(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_ORDEN));
         obj.seccionPadreId = c.getLong(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_SECCION_PADRE_ID));
         obj.tipo = c.getInt(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_TIPO));
+        obj.separador = c.getString(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_SEPARADOR));
         return obj;
     }
 
@@ -279,6 +282,7 @@ public class SeccionDbHelper extends DbHelper {
         obj.orden = c.getInt(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_ORDEN));
         obj.seccionPadreId = c.getLong(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_SECCION_PADRE_ID));
         obj.tipo = c.getInt(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_TIPO));
+        obj.separador = c.getString(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_SEPARADOR));
 
         Pattern obj2 = new Pattern(this.context);
         obj2.id = c.getLong((c.getColumnIndex(ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID)));
@@ -302,6 +306,7 @@ public class SeccionDbHelper extends DbHelper {
         values.put(ALIAS_SECCION + "_" + KEY_ORDEN, obj.orden);
         values.put(ALIAS_SECCION + "_" + KEY_SECCION_PADRE_ID, obj.seccionPadreId);
         values.put(ALIAS_SECCION + "_" + KEY_TIPO, obj.tipo);
+        values.put(ALIAS_SECCION + "_" + KEY_SEPARADOR, obj.separador);
         return values;
     }
 }

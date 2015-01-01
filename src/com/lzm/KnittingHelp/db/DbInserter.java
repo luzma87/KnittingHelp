@@ -1,14 +1,12 @@
 package com.lzm.KnittingHelp.db;
 
 import android.app.Activity;
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
  * Created by DELL on 28/09/2014.
  */
 public class DbInserter {
-
     static String tmntNombre = "Amigurumi Tiny Mutant Ninja Turtle";
     static String tmntImagen = "tmnt.jpg";
     static String tmntContenido = "BELLY PLATE\n" +
@@ -126,6 +124,7 @@ public class DbInserter {
         Pattern tmnt = new Pattern(context, tmntNombre, tmntContenido);
         tmnt.imagen = tmntImagen;
         tmnt.saveReset();
+
         Pattern sp = new Pattern(context, spNombre, spContenido);
         sp.imagen = spImagen;
         sp.saveReset();
@@ -145,27 +144,5 @@ public class DbInserter {
                 DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_IMAGEN + ", " +
                 DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO + ") VALUES " +
                 "(\"2\", \"" + spNombre + "\", \"" + spImagen + "\", \"" + spContenido + "\");");
-//        db.execSQL("INSERT INTO " + DbHelper.TABLE_PATTERN + " " +
-//                "(" + DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + ", " +
-//                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + ", " +
-//                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO + ") VALUES " +
-//                "(\"1\", \"" + tmntNombre + "\", \"" + tmntContenido + "\");");
-//        db.execSQL("INSERT INTO " + DbHelper.TABLE_FOTO + " " +
-//                "(" + DbHelper.ALIAS_FOTO + "_" + FotoDbHelper.KEY_ID + ", " +
-//                DbHelper.ALIAS_FOTO + "_" + FotoDbHelper.KEY_PATTERN_ID + ", " +
-//                DbHelper.ALIAS_FOTO + "_" + FotoDbHelper.KEY_PATH + ") VALUES " +
-//                "(\"1\", \"1\", \"" + tmntImagen + "\");");
-//
-//        db.execSQL("INSERT INTO " + DbHelper.TABLE_PATTERN + " " +
-//                "(" + DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID + ", " +
-//                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_NOMBRE + ", " +
-//                DbHelper.ALIAS_PATTERN + "_" + PatternDbHelper.KEY_CONTENIDO + ") VALUES " +
-//                "(\"2\", \"" + spNombre + "\", \"" + spContenido + "\");");
-//        db.execSQL("INSERT INTO " + DbHelper.TABLE_FOTO + " " +
-//                "(" + DbHelper.ALIAS_FOTO + "_" + FotoDbHelper.KEY_ID + ", " +
-//                DbHelper.ALIAS_FOTO + "_" + FotoDbHelper.KEY_PATTERN_ID + ", " +
-//                DbHelper.ALIAS_FOTO + "_" + FotoDbHelper.KEY_PATH + ") VALUES " +
-//                "(\"2\", \"2\", \"" + spImagen + "\");");
-
     }
 }

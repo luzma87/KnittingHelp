@@ -59,15 +59,15 @@ public class PatternsListFragment extends MasterFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 Pattern selected = patterns.get(pos);
 
-                if (selected.currentSeccionId > 0) {
-                    Intent intent = new Intent(context, PatternViewActivity.class);
-                    intent.putExtra(PATTERN_ID_MESSAGE, selected.id);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(context, PatternEditActivity.class);
-                    intent.putExtra(PATTERN_ID_MESSAGE, selected.id);
-                    startActivity(intent);
-                }
+//                if (selected.currentSeccionId > 0) {
+                Intent intent = new Intent(context, PatternViewActivity.class);
+                intent.putExtra(PATTERN_ID_MESSAGE, selected.id);
+                startActivity(intent);
+//                } else {
+//                    Intent intent = new Intent(context, PatternEditActivity.class);
+//                    intent.putExtra(PATTERN_ID_MESSAGE, selected.id);
+//                    startActivity(intent);
+//                }
 
             }
         });
