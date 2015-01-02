@@ -25,14 +25,14 @@ public class CountersFragment extends MasterFragment implements View.OnClickList
     Button btnDec1;
     EditText txtMax1;
 
-    int count1 = 0;
+    int count1 = 1;
     int max1 = 0;
 
     Button btnInc2;
     Button btnDec2;
     EditText txtMax2;
 
-    int count2 = 0;
+    int count2 = 1;
     int max2 = 0;
 
     @Override
@@ -120,7 +120,7 @@ public class CountersFragment extends MasterFragment implements View.OnClickList
                 Utils.vibrate(1000, context);
             }
         } else if (view.getId() == btnDec1.getId()) {
-            if (count1 > 0) {
+            if (count1 > 1) {
                 count1 -= 1;
             }
             btnInc1.setText("" + count1);
@@ -135,7 +135,7 @@ public class CountersFragment extends MasterFragment implements View.OnClickList
                 Utils.vibrate(1000, context);
             }
         } else if (view.getId() == btnDec2.getId()) {
-            if (count2 > 0) {
+            if (count2 > 1) {
                 count2 -= 1;
             }
             btnInc2.setText("" + count2);

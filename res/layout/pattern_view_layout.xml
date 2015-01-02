@@ -11,12 +11,98 @@
         android:orientation="horizontal"
         android:layout_alignParentBottom="true">
 
-        <Button
+        <LinearLayout
+            android:id="@+id/pattern_view_layout_counter1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button3"
-            android:visibility="gone" />
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/pattern_view_btn_counter1_menos"
+
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_red"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="-" />
+
+            <Button
+                android:id="@+id/pattern_view_btn_counter1_mas"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_green"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pattern_view_layout_counter2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/pattern_view_btn_counter2_menos"
+
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_red"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="-" />
+
+            <Button
+                android:id="@+id/pattern_view_btn_counter2_mas"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_green"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="1" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/pattern_view_layout_counter3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/pattern_view_btn_counter3_menos"
+
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_red"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="-" />
+
+            <Button
+                android:id="@+id/pattern_view_btn_counter3_mas"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_green"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="1" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -50,26 +136,27 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_next" />
 
-        <!--<ImageButton-->
-        <!--android:id="@+id/pattern_view_btn_counters"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:src="@drawable/ic_counters"-->
-        <!--android:visibility="gone" />-->
+        <ImageButton
+            android:id="@+id/pattern_view_btn_counters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_counters" />
     </LinearLayout>
 
     <ScrollView
         android:id="@+id/pattern_view_scroll"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/pattern_view_layout_botones"
         android:padding="10dp">
 
         <LinearLayout
+            android:id="@+id/pattern_view_linear_layout"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/pattern_view_linear_layout" />
+            android:orientation="vertical" />
     </ScrollView>
 
 </RelativeLayout>

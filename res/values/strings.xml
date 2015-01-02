@@ -93,5 +93,7 @@
 
     <string name="view_font_size_increase">Aumentar tamaño de letra</string>
     <string name="view_font_size_decrease">Disminuir tamaño de letra</string>
+    <string name="set_counters_title">Modificar contador</string>
+    <string name="set_counters_message">Ingrese el nuevo valor del contador</string>
 
 </resources>

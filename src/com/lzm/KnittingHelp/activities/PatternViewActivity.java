@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -36,7 +37,7 @@ import java.util.List;
  * <div>Icon made by <a href="http://graphberry.com" title="GraphBerry">GraphBerry</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
  * <div>Icon made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
  */
-public class PatternViewActivity extends Activity implements View.OnClickListener {
+public class PatternViewActivity extends Activity implements View.OnClickListener, View.OnLongClickListener {
     final int SELECTED_SECCION = 0;
     final int SELECTED_CHUNK = 1;
 
@@ -78,6 +79,22 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
     ImageButton btnNextChunk;
     ImageButton btnNextSeccion;
 
+    ImageButton btnCounters;
+//    LinearLayout layoutCounter1;
+//    LinearLayout layoutCounter2;
+//    Button btnCounter1Menos;
+//    Button btnCounter1Mas;
+//    Button btnCounter2Menos;
+//    Button btnCounter2Mas;
+
+    LinearLayout[] layoutsCounters;
+    Button[] btnCountersMas;
+    Button[] btnCountersMenos;
+    int[] counters;
+
+//    int counter1 = 1;
+//    int counter2 = 1;
+
     int scrollThresh = 55;
 
     float density;
@@ -103,6 +120,55 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         btnPrevChunk = (ImageButton) findViewById(R.id.pattern_view_btn_prev_linea);
         btnNextChunk = (ImageButton) findViewById(R.id.pattern_view_btn_next_linea);
         btnNextSeccion = (ImageButton) findViewById(R.id.pattern_view_btn_next_seccion);
+
+        btnCounters = (ImageButton) findViewById(R.id.pattern_view_btn_counters);
+
+        btnCounters.setOnClickListener(this);
+
+        layoutsCounters = new LinearLayout[3];
+        btnCountersMas = new Button[3];
+        btnCountersMenos = new Button[3];
+        counters = new int[3];
+
+        layoutsCounters[0] = (LinearLayout) findViewById(R.id.pattern_view_layout_counter1);
+        layoutsCounters[1] = (LinearLayout) findViewById(R.id.pattern_view_layout_counter2);
+        layoutsCounters[2] = (LinearLayout) findViewById(R.id.pattern_view_layout_counter3);
+
+        btnCountersMas[0] = (Button) findViewById(R.id.pattern_view_btn_counter1_mas);
+        btnCountersMas[1] = (Button) findViewById(R.id.pattern_view_btn_counter2_mas);
+        btnCountersMas[2] = (Button) findViewById(R.id.pattern_view_btn_counter3_mas);
+
+        btnCountersMenos[0] = (Button) findViewById(R.id.pattern_view_btn_counter1_menos);
+        btnCountersMenos[1] = (Button) findViewById(R.id.pattern_view_btn_counter2_menos);
+        btnCountersMenos[2] = (Button) findViewById(R.id.pattern_view_btn_counter3_menos);
+
+        for (Button button : btnCountersMas) {
+            button.setOnClickListener(this);
+            button.setOnLongClickListener(this);
+        }
+        for (Button button : btnCountersMenos) {
+            button.setOnClickListener(this);
+        }
+        for (int i = 0; i < counters.length; i++) {
+            counters[i] = 1;
+        }
+
+
+//        layoutCounter1 = (LinearLayout) findViewById(R.id.pattern_view_layout_counter1);
+//        layoutCounter2 = (LinearLayout) findViewById(R.id.pattern_view_layout_counter2);
+//        btnCounters = (ImageButton) findViewById(R.id.pattern_view_btn_counters);
+//        btnCounter1Menos = (Button) findViewById(R.id.pattern_view_btn_counter1_menos);
+//        btnCounter1Mas = (Button) findViewById(R.id.pattern_view_btn_counter1_mas);
+//        btnCounter2Menos = (Button) findViewById(R.id.pattern_view_btn_counter2_menos);
+//        btnCounter2Mas = (Button) findViewById(R.id.pattern_view_btn_counter2_mas);
+
+//        btnCounter1Menos.setOnClickListener(this);
+//        btnCounter1Mas.setOnClickListener(this);
+//        btnCounter2Menos.setOnClickListener(this);
+//        btnCounter2Mas.setOnClickListener(this);
+//
+//        btnCounter1Mas.setOnLongClickListener(this);
+//        btnCounter2Mas.setOnLongClickListener(this);
 
         btnPrevSeccion.setOnClickListener(this);
         btnPrevChunk.setOnClickListener(this);
@@ -169,6 +235,47 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         scrollView = (ScrollView) findViewById(R.id.pattern_view_scroll);
 
         populateAll();
+    } //onCreate
+
+    private void populateAll() {
+        layout.removeAllViews();
+
+        LinearLayout layoutSeccion = null;
+        LinearLayout layoutLinea = null;
+        List<View> listChunks = new ArrayList<View>();
+
+//        System.out.println("CURRENT:::: " + current.id);
+
+        textViewList = new ArrayList<TextView>();
+
+        int pos = 0;
+        for (Seccion seccion : seccionList) {
+//            System.out.println("seccion id: " + seccion.id + "     current id: " + current.id);
+            if (seccion.id == current.id) {
+                currentPos = pos;
+//                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//                System.out.println("POS= " + pos + "    current pos .. .. " + currentPos);
+            }
+            if (seccion.tipo == Seccion.TIPO_SECCION) {
+                layoutSeccion = setSeccion(seccion);
+            } // if seccion.tipo == TIPO_SECCION
+            else if (seccion.tipo == Seccion.TIPO_LINEA) {
+                if (layoutLinea != null) {
+                    populateViews(layoutLinea, listChunks, this, null);
+                    listChunks = new ArrayList<View>();
+                }
+                layoutLinea = setLinea(seccion, layoutSeccion);
+            } // if seccion.tipo == TIPO_LINEA
+            else if (seccion.tipo == Seccion.TIPO_CHUNK) {
+                listChunks.add(setChunk(seccion));
+            } // if seccion.tipo == TIPO_CHUNK
+//            System.out.println("............................... POS = " + pos + "    current pos .. .. " + currentPos);
+            pos++;
+        }
+        if (layoutLinea != null) {
+            populateViews(layoutLinea, listChunks, this, null);
+        }
+//        System.out.println(":::END::: " + currentPos);
 
         if (current != null && current.id > 0) {
             setChunkSelected(current);
@@ -197,38 +304,6 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
             }
         } else {
             moveToChunk(true);
-        }
-    } //onCreate
-
-    private void populateAll() {
-        layout.removeAllViews();
-
-        LinearLayout layoutSeccion = null;
-        LinearLayout layoutLinea = null;
-        List<View> listChunks = new ArrayList<View>();
-
-        int pos = 0;
-        for (Seccion seccion : seccionList) {
-            if (seccion == current) {
-                currentPos = pos;
-            }
-            if (seccion.tipo == Seccion.TIPO_SECCION) {
-                layoutSeccion = setSeccion(seccion);
-            } // if seccion.tipo == TIPO_SECCION
-            else if (seccion.tipo == Seccion.TIPO_LINEA) {
-                if (layoutLinea != null) {
-                    populateViews(layoutLinea, listChunks, this, null);
-                    listChunks = new ArrayList<View>();
-                }
-                layoutLinea = setLinea(seccion, layoutSeccion);
-            } // if seccion.tipo == TIPO_LINEA
-            else if (seccion.tipo == Seccion.TIPO_CHUNK) {
-                listChunks.add(setChunk(seccion));
-            } // if seccion.tipo == TIPO_CHUNK
-            pos++;
-        }
-        if (layoutLinea != null) {
-            populateViews(layoutLinea, listChunks, this, null);
         }
     }
 
@@ -319,7 +394,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                 // Start the CAB using the ActionMode.Callback defined above
                 mActionMode = startActionMode(mActionModeCallback);
                 selected = SELECTED_CHUNK;
-                resetArrays();
+                resetSelectedArrays();
                 selectChunk(seccion, v);
                 return true;
             }
@@ -393,7 +468,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
 //                // Start the CAB using the ActionMode.Callback defined above
 //                mActionMode = startActionMode(mActionModeCallback);
 //                selected = SELECTED_SECCION;
-//                resetArrays();
+//                resetSelectedArrays();
 //                selectSeccion(seccion, v);
 //                return true;
 //            }
@@ -449,7 +524,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         }
     }
 
-    public void resetArrays() {
+    public void resetSelectedArrays() {
         selectedSecciones = new ArrayList<Seccion>();
         for (TextView selectedTextView : selectedTextViews) {
             selectedTextView.setSelected(false);
@@ -459,7 +534,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
 
     public void closeCAB() {
         mActionMode = null;
-        resetArrays();
+        resetSelectedArrays();
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -768,34 +843,131 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == btnPrevSeccion.getId()) {
-            do {
-                currentPos -= 1;
-                if (currentPos < seccionList.size() - 1) {
-                    current = seccionList.get(currentPos);
-                } else {
-                    currentPos = seccionList.size() - 1;
-                    break;
-                }
-            } while (current.tipo != Seccion.TIPO_SECCION);
-            moveToChunk(true);
-        } else if (view.getId() == btnPrevChunk.getId()) {
-            moveToChunk(false);
-        } else if (view.getId() == btnNextChunk.getId()) {
-            moveToChunk(true);
-        } else if (view.getId() == btnNextSeccion.getId()) {
-            do {
-                currentPos += 1;
-                if (currentPos < seccionList.size() - 1) {
-                    current = seccionList.get(currentPos);
-                } else {
-                    currentPos = seccionList.size() - 1;
-                    break;
-                }
-            } while (current.tipo != Seccion.TIPO_SECCION);
-            moveToChunk(true);
+        boolean cont = true;
+        for (int i = 0; i < btnCountersMas.length; i++) {
+            if (view.getId() == btnCountersMas[i].getId()) {
+                counters[i] += 1;
+                btnCountersMas[i].setText("" + counters[i]);
+                cont = false;
+                break;
+            }
         }
+        if (cont) {
+            for (int i = 0; i < btnCountersMenos.length; i++) {
+                if (view.getId() == btnCountersMenos[i].getId()) {
+                    if (counters[i] > 1) {
+                        counters[i] -= 1;
+                        btnCountersMas[i].setText("" + counters[i]);
+                    }
+                    cont = false;
+                    break;
+                }
+            }
+            if (cont) {
+                if (view.getId() == btnPrevSeccion.getId()) {
+                    do {
+                        currentPos -= 1;
+                        if (currentPos < seccionList.size() - 1) {
+                            current = seccionList.get(currentPos);
+                        } else {
+                            currentPos = seccionList.size() - 1;
+                            break;
+                        }
+                    } while (current.tipo != Seccion.TIPO_SECCION);
+                    moveToChunk(true);
+                } else if (view.getId() == btnPrevChunk.getId()) {
+                    moveToChunk(false);
+                } else if (view.getId() == btnNextChunk.getId()) {
+                    moveToChunk(true);
+                } else if (view.getId() == btnNextSeccion.getId()) {
+                    do {
+                        currentPos += 1;
+                        if (currentPos < seccionList.size() - 1) {
+                            current = seccionList.get(currentPos);
+                        } else {
+                            currentPos = seccionList.size() - 1;
+                            break;
+                        }
+                    } while (current.tipo != Seccion.TIPO_SECCION);
+                    moveToChunk(true);
+                } else if (view.getId() == btnCounters.getId()) {
+                    if (layoutsCounters[0].isShown()) {
+                        btnCounters.setImageResource(R.drawable.ic_counters);
+                        for (LinearLayout linearLayout : layoutsCounters) {
+                            linearLayout.setVisibility(View.GONE);
+                        }
+
+//                btnCounters.setBackgroundResource(R.drawable.ic_counters);
+//                layoutCounter1.setVisibility(View.GONE);
+//                layoutCounter2.setVisibility(View.GONE);
+                    } else {
+                        btnCounters.setImageResource(R.drawable.ic_counters_hide);
+                        for (LinearLayout linearLayout : layoutsCounters) {
+                            linearLayout.setVisibility(View.VISIBLE);
+                        }
+//                btnCounters.setBackgroundResource(R.drawable.ic_counters_hide);
+//                layoutCounter1.setVisibility(View.VISIBLE);
+//                layoutCounter2.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        }
+        /*else if (view.getId() == btnCounter1Mas.getId()) {
+            counter1++;
+            btnCounter1Mas.setText("" + counter1);
+        } else if (view.getId() == btnCounter1Menos.getId()) {
+            if (counter1 > 1) {
+                counter1--;
+            }
+            btnCounter1Mas.setText("" + counter1);
+        } else if (view.getId() == btnCounter2Mas.getId()) {
+            counter2++;
+            btnCounter2Mas.setText("" + counter2);
+        } else if (view.getId() == btnCounter2Menos.getId()) {
+            if (counter2 > 1) {
+                counter2--;
+            }
+            btnCounter2Mas.setText("" + counter2);
+        }*/
 //        TextView currentTv = textViewList.get(currentPos);
 //        moveToChunk(currentTv);
+    }
+
+    private void alertCounter(final int pos) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle(R.string.set_counters_title);
+        alert.setMessage(R.string.set_counters_message);
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        alert.setView(input);
+
+        alert.setPositiveButton(R.string.global_ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                counters[pos] = Integer.parseInt(input.getText().toString());
+                btnCountersMas[pos].setText("" + counters[pos]);
+                // Do something with value!
+            }
+        });
+
+        alert.setNegativeButton(R.string.global_cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+        alert.show();
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        for (int i = 0; i < btnCountersMas.length; i++) {
+            if (view.getId() == btnCountersMas[i].getId()) {
+                alertCounter(i);
+            }
+        }
+        return false;
     }
 }
