@@ -52,6 +52,9 @@ public class Seccion {
     }
 
     public void save() {
+        if (this.separador == null) {
+            this.separador = "";
+        }
         if (this.id == 0) {
             this.fechaCreacion = DbHelper.date2string(new Date());
             this.fechaModificacion = this.fechaCreacion;
@@ -97,14 +100,18 @@ public class Seccion {
         e.updateOrdenFromSeccion(seccion, cant, true);
     }
 
+
     public static int updateOrdenExcludes(Activity context, Seccion seccion, int cant) {
         SeccionDbHelper e = new SeccionDbHelper(context);
         return e.updateOrdenFromSeccion(seccion, cant, false);
     }
 
-    public int delete(Activity context) {
-        SeccionDbHelper e = new SeccionDbHelper(context);
-        return e.delete(this);
+    public int updateOrdenExcludes(int cant) {
+        return this.seccionDbHelper.updateOrdenFromSeccion(this, cant, false);
+    }
+
+    public int delete() {
+        return this.seccionDbHelper.delete(this);
     }
 
     public static void deleteAllByPattern(Activity context, Pattern pattern) {

@@ -173,6 +173,7 @@ public class SeccionDbHelper extends DbHelper {
         } else {
             sql += " CAST(" + ALIAS_SECCION + "_" + KEY_ORDEN + " AS INTEGER) > (" + innerSelect + ")";
         }
+//        System.out.println(sql);
         db.execSQL(sql);
         Cursor c = db.rawQuery(innerSelect, null);
         int nuevoOrden = -1;

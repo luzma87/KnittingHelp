@@ -523,7 +523,7 @@ public class PatternEditOldActivity extends Activity implements View.OnClickList
                     //elimina la linea
                     pos = 0;
                     for (Seccion selectedSeccion : selectedSecciones) {
-                        int c = selectedSeccion.delete(activity);
+                        int c = selectedSeccion.delete();
                         seccionList.remove(selectedSeccion);
                         TextView tx = selectedTextViews.get(pos);
                         LinearLayout layoutLinea = ((LinearLayout) tx.getParent());

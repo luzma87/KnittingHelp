@@ -45,6 +45,8 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
     Seccion current;
     int currentPos = -1;
 
+//    boolean created = false;
+
     int lastScroll = 0;
     int firstViewTop = 0;
 
@@ -163,6 +165,15 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         screenHeight = displaymetrics.heightPixels;
         screenWidth = displaymetrics.widthPixels;
 
+        layout = (LinearLayout) findViewById(R.id.pattern_view_linear_layout);
+        scrollView = (ScrollView) findViewById(R.id.pattern_view_scroll);
+
+//        populateAll();
+//        created = true;
+//        System.out.println("fin on create   " + created);
+    } //onCreate
+
+    private void setLists() {
         textViewList = new ArrayList<TextView>();
         seccionList = Seccion.findAllByPattern(this, pattern);
         selectedSecciones = new ArrayList<Seccion>();
@@ -196,6 +207,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                     seccionList.add(linea);
                     orden++;
 
+//                    String[] chunks = strLinea.split("[.,]");
                     String[] chunks = new String[1];
                     chunks[0] = strLinea;
                     for (String strChunk : chunks) {
@@ -212,12 +224,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                 }
             }
         }
-
-        layout = (LinearLayout) findViewById(R.id.pattern_view_linear_layout);
-        scrollView = (ScrollView) findViewById(R.id.pattern_view_scroll);
-
-        populateAll();
-    } //onCreate
+    }
 
     private void populateAll() {
         layout.removeAllViews();
@@ -226,17 +233,12 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         LinearLayout layoutLinea = null;
         List<View> listChunks = new ArrayList<View>();
 
-//        System.out.println("CURRENT:::: " + current.id);
-
         textViewList = new ArrayList<TextView>();
 
         int pos = 0;
         for (Seccion seccion : seccionList) {
-//            System.out.println("seccion id: " + seccion.id + "     current id: " + current.id);
             if (seccion.id == current.id) {
                 currentPos = pos;
-//                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-//                System.out.println("POS= " + pos + "    current pos .. .. " + currentPos);
             }
             if (seccion.tipo == Seccion.TIPO_SECCION) {
                 layoutSeccion = setSeccion(seccion);
@@ -251,14 +253,11 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
             else if (seccion.tipo == Seccion.TIPO_CHUNK) {
                 listChunks.add(setChunk(seccion));
             } // if seccion.tipo == TIPO_CHUNK
-//            System.out.println("............................... POS = " + pos + "    current pos .. .. " + currentPos);
             pos++;
         }
         if (layoutLinea != null) {
             populateViews(layoutLinea, listChunks, this, null);
         }
-//        System.out.println(":::END::: " + currentPos);
-
         if (current != null && current.id > 0) {
             setChunkSelected(current);
 
@@ -271,16 +270,6 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                     public void onGlobalLayout() {
                         currentTv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         moveToChunk(currentTv);
-//                        Rect rectTv = new Rect();
-//                        currentTv.getGlobalVisibleRect(rectTv);
-//                        Rect rectLl = new Rect();
-//                        layout.getGlobalVisibleRect(rectLl);
-//
-//                        int currentChunkRealHeight = currentTv.getHeight();
-//                        int currentChunkVisibleBottom = rectTv.bottom;
-//                        int currentChunkRealTop = currentChunkVisibleBottom - currentChunkRealHeight;
-//
-//                        scrollView.scrollBy(0, currentChunkRealTop - scrollThresh);
                     }
                 });
             }
@@ -302,7 +291,7 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         switch (item.getItemId()) {
             case R.id.view_menu_edit_btn:
                 new AlertDialog.Builder(this)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
+//                        .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle(R.string.pttern_view_dialog_edit_title)
                         .setMessage(R.string.pttern_view_dialog_edit_contenido)
                         .setPositiveButton(R.string.global_continuar, new DialogInterface.OnClickListener() {
@@ -346,7 +335,16 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
 
     private View setChunk(final Seccion seccion) {
         TextView txvChunk = new TextView(this);
-        txvChunk.setText(seccion.contenido);
+        //        txvChunk.setText(/*"[" + seccion.orden + "] " +*/ seccion.contenido);
+        if (seccion.separador.equals("[")) {
+            txvChunk.setText("[" + seccion.contenido + "]");
+        } else if (seccion.separador.equals("(")) {
+            txvChunk.setText("(" + seccion.contenido + ")");
+        } else if (seccion.separador.equals("{")) {
+            txvChunk.setText("{" + seccion.contenido + "}");
+        } else {
+            txvChunk.setText(seccion.contenido + seccion.separador);
+        }
         txvChunk.setMaxLines(20);
         txvChunk.setMaxWidth(screenWidth - 100);
         txvChunk.setTextAppearance(this, R.style.chunk);
@@ -949,4 +947,13 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         }
         return false;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        System.out.println("on resume   " + created);
+        setLists();
+        populateAll();
+    }
+
 }

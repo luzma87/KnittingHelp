@@ -90,6 +90,7 @@
     <string name="global_punto_coma">;   Punto y coma</string>
     <string name="global_parentesis">( ) Paréntesis</string>
     <string name="global_corchetes">[ ] Corchetes</string>
+    <string name="global_llaves">{ } Llaves</string>
 
     <string name="view_font_size_increase">Aumentar tamaño de letra</string>
     <string name="view_font_size_decrease">Disminuir tamaño de letra</string>

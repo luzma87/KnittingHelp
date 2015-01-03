@@ -86,7 +86,69 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
         this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         screenHeight = displaymetrics.heightPixels;
         screenWidth = displaymetrics.widthPixels;
+        setLists();
 
+//        textViewList = new ArrayList<TextView>();
+//        seccionList = Seccion.findAllByPattern(this, pattern);
+//        selectedSecciones = new ArrayList<Seccion>();
+//        selectedTextViews = new ArrayList<TextView>();
+//
+//        if (seccionList.size() == 0) {
+//            String contenido = pattern.contenido;
+//            String[] secciones = contenido.split("\n\n");
+//            int orden = 1;
+//
+//            for (String strSeccion : secciones) {
+//                String[] lineas = strSeccion.split("\n");
+//                String nombreSeccion = lineas[0];
+//                Seccion seccion = new Seccion(this);
+//                seccion.setPattern(pattern);
+//                seccion.contenido = nombreSeccion;
+//                seccion.orden = orden;
+//                seccion.tipo = Seccion.TIPO_SECCION;
+//                seccion.save();
+//                seccionList.add(seccion);
+//                orden++;
+//                for (int i = 1; i < lineas.length; i++) {
+//                    String strLinea = lineas[i];
+//                    Seccion linea = new Seccion(this);
+//                    linea.setPattern(pattern);
+//                    linea.setSeccionPadre(seccion);
+//                    linea.contenido = "";
+//                    linea.orden = orden;
+//                    linea.tipo = Seccion.TIPO_LINEA;
+//                    linea.save();
+//                    seccionList.add(linea);
+//                    orden++;
+//
+////                    String[] chunks = strLinea.split("[.,]");
+//                    String[] chunks = new String[1];
+//                    chunks[0] = strLinea;
+//                    for (String strChunk : chunks) {
+//                        Seccion chunk = new Seccion(this);
+//                        chunk.setPattern(pattern);
+//                        chunk.setSeccionPadre(linea);
+//                        chunk.contenido = strChunk;
+//                        chunk.orden = orden;
+//                        chunk.tipo = Seccion.TIPO_CHUNK;
+//                        chunk.save();
+//                        seccionList.add(chunk);
+//                        orden++;
+//                    }
+//                }
+//            }
+//        }
+
+        layout = (LinearLayout) findViewById(R.id.pattern_edit_linear_layout);
+        scrollView = (ScrollView) findViewById(R.id.pattern_edit_scroll);
+
+        btnPlay = (ImageButton) findViewById(R.id.pattern_edit_btn_play);
+        btnPlay.setOnClickListener(this);
+
+        populateAll();
+    } //onCreate
+
+    private void setLists() {
         textViewList = new ArrayList<TextView>();
         seccionList = Seccion.findAllByPattern(this, pattern);
         selectedSecciones = new ArrayList<Seccion>();
@@ -137,22 +199,22 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
                 }
             }
         }
+    }
 
-        layout = (LinearLayout) findViewById(R.id.pattern_edit_linear_layout);
-        scrollView = (ScrollView) findViewById(R.id.pattern_edit_scroll);
-
-        btnPlay = (ImageButton) findViewById(R.id.pattern_edit_btn_play);
-        btnPlay.setOnClickListener(this);
+    private void populateAll() {
+        layout.removeAllViews();
 
         LinearLayout layoutSeccion = null;
         LinearLayout layoutLinea = null;
         List<View> listChunks = new ArrayList<View>();
 
+        textViewList = new ArrayList<TextView>();
+
         int pos = 0;
         for (Seccion seccion : seccionList) {
-            if (seccion == current) {
-                currentPos = pos;
-            }
+//            System.out.println("id: " + seccion.id + "    tipo: " +
+//                    (seccion.tipo == Seccion.TIPO_SECCION ? "seccion" : seccion.tipo == Seccion.TIPO_LINEA ? "linea" : "chunk") +
+//                    "    orden: " + seccion.orden + "\n" + seccion.contenido);
             if (seccion.tipo == Seccion.TIPO_SECCION) {
                 layoutSeccion = setSeccion(seccion);
             } // if seccion.tipo == TIPO_SECCION
@@ -171,11 +233,23 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
         if (layoutLinea != null) {
             populateViews(layoutLinea, listChunks, this, null);
         }
-    } //onCreate
+    }
 
     private View setChunk(final Seccion seccion) {
         TextView txvChunk = new TextView(this);
-        txvChunk.setText(/*"[" + seccion.orden + "] " +*/ seccion.contenido);
+//        txvChunk.setText(/*"[" + seccion.orden + "] " +*/ seccion.contenido);
+//        String str = "[padre=" + seccion.seccionPadreId + ", orden=" + seccion.orden + "] " + seccion.contenido;
+        String str = seccion.contenido;
+        if (seccion.separador.equals("[")) {
+            str = "[" + str + "]";
+        } else if (seccion.separador.equals("(")) {
+            str = "(" + str + ")";
+        } else if (seccion.separador.equals("{")) {
+            str = "{" + str + "}";
+        } else {
+            str += seccion.separador;
+        }
+        txvChunk.setText(str);
         txvChunk.setMaxLines(20);
         txvChunk.setMaxWidth(screenWidth - 100);
         txvChunk.setTextAppearance(this, R.style.chunk);
@@ -208,7 +282,7 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
                 // Start the CAB using the ActionMode.Callback defined above
                 mActionMode = startActionMode(mActionModeCallback);
                 selected = SELECTED_CHUNK;
-                resetArrays();
+                resetSelectedArrays();
                 selectChunk(seccion, v);
                 return true;
             }
@@ -293,7 +367,7 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
                 // Start the CAB using the ActionMode.Callback defined above
                 mActionMode = startActionMode(mActionModeCallback);
                 selected = SELECTED_SECCION;
-                resetArrays();
+                resetSelectedArrays();
                 selectSeccion(seccion, v);
                 return true;
             }
@@ -349,7 +423,7 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
         }
     }
 
-    public void resetArrays() {
+    public void resetSelectedArrays() {
         selectedSecciones = new ArrayList<Seccion>();
         for (TextView selectedTextView : selectedTextViews) {
             selectedTextView.setSelected(false);
@@ -369,7 +443,7 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
 
     public void closeCAB() {
         mActionMode = null;
-        resetArrays();
+        resetSelectedArrays();
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -448,7 +522,7 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
 
         // Called when the user selects a contextual menu item
         @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.cab_seccion_linea:
                     //cambiar seccion => linea
@@ -546,7 +620,7 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
                     //elimina el chunk
                     pos = 0;
                     for (Seccion selectedSeccion : selectedSecciones) {
-                        int c = selectedSeccion.delete(activity);
+                        int c = selectedSeccion.delete();
                         seccionList.remove(selectedSeccion);
                         TextView tx = selectedTextViews.get(pos);
                         LinearLayout layoutLinea = ((LinearLayout) tx.getParent());
@@ -573,7 +647,7 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
                     //muestra opciones para separar en .    ,   ;   (   [
                     final CharSequence opcionesSplit[] = new CharSequence[]{getString(R.string.global_punto), getString(R.string.global_coma),
                             getString(R.string.global_punto_coma), getString(R.string.global_parentesis),
-                            getString(R.string.global_corchetes)};
+                            getString(R.string.global_corchetes), getString(R.string.global_llaves)};
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                     builder.setTitle(getString(R.string.cab_linea_split));
@@ -581,7 +655,74 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // the user clicked on colors[which]
-                            System.out.println("************************* " + opcionesSplit[which]);
+                            String split = opcionesSplit[which].toString();
+                            String[] parts = split.split(" ");
+                            split = parts[0];
+//                            System.out.println("************************* " + split);
+                            System.out.println("**********************************************************");
+                            for (Seccion seccion : selectedSecciones) {
+                                // el contenido del chunk seleccionado separado en el caracter seleccionado
+                                if (split.equals(".")) {
+                                    parts = seccion.contenido.split("\\.");
+                                } else if (split.equals("(")) {
+                                    parts = seccion.contenido.split("\\(");
+                                } else if (split.equals("[")) {
+                                    parts = seccion.contenido.split("\\[");
+                                } else if (split.equals("{")) {
+                                    parts = seccion.contenido.split("\\{");
+                                } else {
+                                    parts = seccion.contenido.split(split);
+                                }
+                                // el id de la linea padre del chunk seleccionado: va a ser el padre de todos los nuevos chunks
+                                Long padreId = seccion.seccionPadreId;
+
+                                // la cantidad de nuevos chunks que se van a insertar: hay que modificar los ordenes en cant-1
+                                int cant = parts.length;
+                                // el orden del chunk seleccionado: va a ser el orden del 1r chunk, sumando 1 para cada sucesivo
+                                int orden = seccion.updateOrdenExcludes(cant) + 1;
+
+                                // creo un nuevo chunk para cada parte nueva
+                                for (int i = 0; i < parts.length; i++) {
+                                    String part = parts[i];
+                                    if (split.equals("(")) {
+                                        part = part.replaceAll("\\)", "");
+                                    } else if (split.equals("[")) {
+                                        part = part.replaceAll("\\]", "");
+                                    } else if (split.equals("{")) {
+                                        part = part.replaceAll("\\}", "");
+                                    }
+//                                    System.out.println("creando nuevo chunk en pos " + orden);
+//                                    System.out.println(part);
+                                    Seccion nuevoChunk = new Seccion(activity);
+                                    nuevoChunk.patternId = pattern.id;
+                                    nuevoChunk.seccionPadreId = padreId;
+                                    nuevoChunk.contenido = part;
+                                    nuevoChunk.tipo = Seccion.TIPO_CHUNK;
+                                    nuevoChunk.orden = orden;
+                                    if (split.equals("(") || split.equals("[") || split.equals("{")) {
+                                        if (i < parts.length - 1) {
+                                            nuevoChunk.separador = "";
+                                        } else {
+                                            nuevoChunk.separador = split;
+                                        }
+                                    } else {
+                                        if (i < parts.length - 1) {
+                                            nuevoChunk.separador = split;
+                                        } else {
+                                            nuevoChunk.separador = "";
+                                        }
+                                    }
+                                    nuevoChunk.save();
+//                                    System.out.println("nuevo chunk orden = " + nuevoChunk.orden);
+//                                    System.out.println("=====================================");
+                                    orden += 1;
+                                }
+                                // una vez creados los nuevos chunks elimino el seleccionado
+                                seccion.delete();
+                            }
+                            setLists();
+                            populateAll();
+                            mode.finish();
                         }
                     });
                     builder.show();
@@ -609,42 +750,44 @@ public class PatternEditActivity extends Activity implements View.OnClickListene
                             editingTv.setLayoutParams(editingTvParams);
                         } else if (selected == SELECTED_CHUNK) {
                             // Save de un chunk
-                            LinearLayout.LayoutParams editingTvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            editingTv.setLayoutParams(editingTvParams);
-
-                            List<View> viewsAdd = new ArrayList<View>();
-                            LinearLayout lLayout = (LinearLayout) editingTv.getParent().getParent().getParent();
-                            LinearLayout layoutSeccion = null;
-                            int childcount2 = lLayout.getChildCount();
-                            for (int i = 0; i < childcount2; i++) {
-                                View v = lLayout.getChildAt(i);
-//                            v.setBackgroundColor(Color.GREEN);
-                                layoutSeccion = (LinearLayout) v;
-                                int cc = layoutSeccion.getChildCount();
-                                for (int j = 0; j < cc; j++) {
-                                    View v2 = layoutSeccion.getChildAt(j);
-//                                v2.setBackgroundColor(Color.BLUE);
-                                    LinearLayout l2 = (LinearLayout) v2;
-                                    int cc2 = l2.getChildCount();
-                                    for (int k = 0; k < cc2; k++) {
-                                        View v3 = l2.getChildAt(k);
-//                                    v3.setBackgroundColor(Color.RED);
-                                        viewsAdd.add(v3);
-                                    }
-                                    l2.removeAllViews();
-                                }
-                                layoutSeccion.removeAllViews();
-                            }
-                            if (layoutSeccion != null) {
-                                populateViews(layoutSeccion, viewsAdd, activity, null);
-
-                                LinearLayout.LayoutParams layoutLineaParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                                layoutLineaParams.setMargins(0, 0, 0, 10);
-
-                                layoutSeccion.setLayoutParams(layoutLineaParams);
-                            }
-
-                            editingTv.setGravity(Gravity.LEFT);
+                            setLists();
+                            populateAll();
+//                            LinearLayout.LayoutParams editingTvParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                            editingTv.setLayoutParams(editingTvParams);
+//
+//                            List<View> viewsAdd = new ArrayList<View>();
+//                            LinearLayout lLayout = (LinearLayout) editingTv.getParent().getParent().getParent();
+//                            LinearLayout layoutSeccion = null;
+//                            int childcount2 = lLayout.getChildCount();
+//                            for (int i = 0; i < childcount2; i++) {
+//                                View v = lLayout.getChildAt(i);
+////                            v.setBackgroundColor(Color.GREEN);
+//                                layoutSeccion = (LinearLayout) v;
+//                                int cc = layoutSeccion.getChildCount();
+//                                for (int j = 0; j < cc; j++) {
+//                                    View v2 = layoutSeccion.getChildAt(j);
+////                                v2.setBackgroundColor(Color.BLUE);
+//                                    LinearLayout l2 = (LinearLayout) v2;
+//                                    int cc2 = l2.getChildCount();
+//                                    for (int k = 0; k < cc2; k++) {
+//                                        View v3 = l2.getChildAt(k);
+////                                    v3.setBackgroundColor(Color.RED);
+//                                        viewsAdd.add(v3);
+//                                    }
+//                                    l2.removeAllViews();
+//                                }
+//                                layoutSeccion.removeAllViews();
+//                            }
+//                            if (layoutSeccion != null) {
+//                                populateViews(layoutSeccion, viewsAdd, activity, null);
+//
+//                                LinearLayout.LayoutParams layoutLineaParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                                layoutLineaParams.setMargins(0, 0, 0, 10);
+//
+//                                layoutSeccion.setLayoutParams(layoutLineaParams);
+//                            }
+//
+//                            editingTv.setGravity(Gravity.LEFT);
                         }
                         //                        Utils.hideSoftKeyboard(activity);
                         resetEditor();
