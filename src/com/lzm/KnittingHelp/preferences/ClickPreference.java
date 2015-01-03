@@ -61,6 +61,5 @@ public class ClickPreference extends Preference {
         // Create the AlertDialog
         AlertDialog dialog = builder.create();
         dialog.show();
-
     }
 }

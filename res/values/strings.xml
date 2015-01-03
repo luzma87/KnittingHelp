@@ -103,5 +103,7 @@
     <string name="pattern_view_show_hide_counters">Mostrar/Ocultar contadores</string>
     <string name="global_minus_sign">-</string>
     <string name="global_counter_start">1</string>
+    <string name="settings_keep_screen_on_title">Mantener la pantalla encendida</string>
+    <string name="settings_keep_screen_on_summary">Mantiene la pantalla encendida mientras trabaja en un modelo</string>
 
 </resources>

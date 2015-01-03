@@ -7,6 +7,10 @@
         android:key="pref_reload_pattern"
 
         android:icon="@drawable/ic_action_refresh" />
+    <CheckBoxPreference
+        android:title="@string/settings_keep_screen_on_title"
+        android:summary="@string/settings_keep_screen_on_summary"
+        android:key="pref_keep_screen_on" />
     <ListPreference
         android:title="@string/settings_date_formats_title"
         android:summary="@string/settings_date_formats_summary"

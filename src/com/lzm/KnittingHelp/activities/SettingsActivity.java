@@ -22,6 +22,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public static final String KEY_PREF_RELOAD_PATTERNS = "pref_reload_pattern";
     public static final String KEY_PREF_DATE_FORMAT = "pref_date_format";
 
+    public static final String KEY_PREF_KEEP_SCREEN_ON = "pref_keep_screen_on";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,21 +38,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//        if (key.equals(KEY_PREF_RELOAD_PATTERNS)) {
-//            System.out.println("AQUIIIIIIIIIIIIII");
-////            Preference connectionPref = findPreference(key);
-////            // Set summary to be the user-description for the selected value
-////            connectionPref.setSummary(sharedPreferences.getString(key, ""));
-//        } else if (key.equals(KEY_PREF_DATE_FORMAT)) {
-//            System.out.println("********************************** change date format");
-//        }
     }
 
     public static class SettingsFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
         }
