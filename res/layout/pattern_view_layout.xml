@@ -4,144 +4,183 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <LinearLayout
+    <HorizontalScrollView
         android:id="@+id/pattern_view_layout_counters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        style="?android:attr/buttonBarStyle">
 
         <LinearLayout
-            android:id="@+id/pattern_view_layout_counter1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/pattern_view_btn_counter1_menos"
-
-                android:layout_width="35dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_red"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="-" />
-
-            <Button
-                android:id="@+id/pattern_view_btn_counter1_mas"
-
+            <LinearLayout
+                android:id="@+id/pattern_view_layout_counter1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_green"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="1" />
-        </LinearLayout>
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-        <LinearLayout
-            android:id="@+id/pattern_view_layout_counter2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
+                <Button
+                    android:id="@+id/pattern_view_btn_counter1_menos"
 
-            <Button
-                android:id="@+id/pattern_view_btn_counter2_menos"
+                    style="?android:attr/buttonBarButtonStyle"
 
-                android:layout_width="35dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_red"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="-" />
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_red"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/global_minus_sign" />
 
-            <Button
-                android:id="@+id/pattern_view_btn_counter2_mas"
+                <Button
+                    android:id="@+id/pattern_view_btn_counter1_mas"
 
+                    style="?android:attr/buttonBarButtonStyle"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_green"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/global_counter_start" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/pattern_view_layout_counter2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_green"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="1" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/pattern_view_layout_counter3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-            <Button
-                android:id="@+id/pattern_view_btn_counter3_menos"
+                <Button
+                    android:id="@+id/pattern_view_btn_counter2_menos"
 
-                android:layout_width="35dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_red"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="-" />
+                    style="?android:attr/buttonBarButtonStyle"
 
-            <Button
-                android:id="@+id/pattern_view_btn_counter3_mas"
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_red"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/global_minus_sign" />
 
+                <Button
+                    android:id="@+id/pattern_view_btn_counter2_mas"
+
+                    style="?android:attr/buttonBarButtonStyle"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_green"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/global_counter_start" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/pattern_view_layout_counter3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_green"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="1" />
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-    <LinearLayout
+                <Button
+                    android:id="@+id/pattern_view_btn_counter3_menos"
+
+                    style="?android:attr/buttonBarButtonStyle"
+
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_red"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/global_minus_sign" />
+
+                <Button
+                    android:id="@+id/pattern_view_btn_counter3_mas"
+
+                    style="?android:attr/buttonBarButtonStyle"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_green"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/global_counter_start" />
+            </LinearLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <RelativeLayout
         android:id="@+id/pattern_view_layout_botones"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_margin="5dp"
         android:layout_above="@id/pattern_view_layout_counters">
 
-        <ImageButton
-            android:id="@+id/pattern_view_btn_prev_seccion"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_previous" />
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/pattern_view_btn_prev_linea"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_rewind" />
+            <ImageButton
+                android:id="@+id/pattern_view_btn_prev_seccion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_purple"
+                android:src="@drawable/ic_action_previous"
+                android:contentDescription="@string/pattern_view_inicio_seccion" />
 
-        <ImageButton
-            android:id="@+id/pattern_view_btn_next_linea"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_fast_forward" />
+            <ImageButton
+                android:id="@+id/pattern_view_btn_prev_linea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_purple"
+                android:src="@drawable/ic_action_rewind"
+                android:contentDescription="@string/pattern_view_paso_anterior" />
 
-        <ImageButton
-            android:id="@+id/pattern_view_btn_next_seccion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_next" />
+            <ImageButton
+                android:id="@+id/pattern_view_btn_next_linea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_purple"
+                android:layout_marginStart="3dp"
+                android:layout_marginLeft="3dp"
+                android:src="@drawable/ic_action_fast_forward"
+                android:contentDescription="@string/pattern_view_paso_siguiente" />
+
+            <ImageButton
+                android:id="@+id/pattern_view_btn_next_seccion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_purple"
+                android:src="@drawable/ic_action_next"
+                android:contentDescription="@string/pattern_view_seccion_siguiente" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/pattern_view_btn_counters"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_counters" />
-    </LinearLayout>
+            android:src="@drawable/ic_counters"
+            android:background="@drawable/button_blue"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/pattern_view_show_hide_counters" />
+    </RelativeLayout>
 
     <ScrollView
         android:id="@+id/pattern_view_scroll"

@@ -96,5 +96,12 @@
     <string name="view_font_size_decrease">Disminuir tamaño de letra</string>
     <string name="set_counters_title">Modificar contador</string>
     <string name="set_counters_message">Ingrese el nuevo valor del contador</string>
+    <string name="pattern_view_inicio_seccion">Inicio de sección</string>
+    <string name="pattern_view_paso_anterior">Paso anterior</string>
+    <string name="pattern_view_paso_siguiente">Siguiente paso</string>
+    <string name="pattern_view_seccion_siguiente">Siguiente sección</string>
+    <string name="pattern_view_show_hide_counters">Mostrar/Ocultar contadores</string>
+    <string name="global_minus_sign">-</string>
+    <string name="global_counter_start">1</string>
 
 </resources>

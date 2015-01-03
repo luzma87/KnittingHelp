@@ -26,7 +26,7 @@
 
             android:layout_width="@android:dimen/thumbnail_width"
             android:layout_height="@android:dimen/thumbnail_height"
-            android:text="1"
+            android:text="@string/global_counter_start"
             android:textSize="40sp"
             android:textStyle="bold"
             android:background="@drawable/button_green"
@@ -45,7 +45,7 @@
 
             android:layout_width="wrap_content"
             android:layout_height="@android:dimen/thumbnail_height"
-            android:text="-"
+            android:text="@string/global_minus_sign"
             android:textSize="40sp"
             android:textStyle="bold"
             android:background="@drawable/button_red"
@@ -84,7 +84,7 @@
 
             android:layout_width="@android:dimen/thumbnail_width"
             android:layout_height="@android:dimen/thumbnail_height"
-            android:text="1"
+            android:text="@string/global_counter_start"
             android:textSize="40sp"
             android:textStyle="bold"
             android:background="@drawable/button_green"
@@ -103,7 +103,7 @@
 
             android:layout_width="wrap_content"
             android:layout_height="@android:dimen/thumbnail_height"
-            android:text="-"
+            android:text="@string/global_minus_sign"
             android:textSize="40sp"
             android:textStyle="bold"
             android:background="@drawable/button_red"
