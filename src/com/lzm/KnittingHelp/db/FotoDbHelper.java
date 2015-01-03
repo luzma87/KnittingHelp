@@ -173,12 +173,7 @@ public class FotoDbHelper extends DbHelper {
     }
 
     private Foto setDatosConPattern(Cursor c) {
-        Foto obj = new Foto(this.context);
-        obj.id = c.getLong((c.getColumnIndex(ALIAS_FOTO + "_" + KEY_ID)));
-        obj.fechaCreacion = c.getString(c.getColumnIndex(ALIAS_FOTO + "_" + KEY_FECHA_CREACION));
-        obj.fechaModificacion = c.getString(c.getColumnIndex(ALIAS_FOTO + "_" + KEY_FECHA_MODIFICACION));
-        obj.patternId = c.getLong(c.getColumnIndex(ALIAS_FOTO + "_" + KEY_PATTERN_ID));
-        obj.path = c.getString(c.getColumnIndex(ALIAS_FOTO + "_" + KEY_PATH));
+        Foto obj = setDatos(c);
 
         Pattern obj2 = new Pattern(this.context);
         obj2.id = c.getLong((c.getColumnIndex(ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID)));

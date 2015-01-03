@@ -21,6 +21,12 @@ public class Pattern {
     public long currentSeccionId;
     public Seccion currentSeccion = null;
 
+    public int contador1 = 1;
+    public int contador2 = 1;
+    public int contador3 = 1;
+
+    public int fontSize = 12;
+
     PatternDbHelper patternDbHelper;
 
     public Pattern(Activity context) {
@@ -48,6 +54,18 @@ public class Pattern {
     }
 
     public void save() {
+        if (this.fontSize == 0) {
+            fontSize = 12;
+        }
+        if (this.contador1 == 0) {
+            contador1 = 1;
+        }
+        if (this.contador2 == 0) {
+            contador2 = 1;
+        }
+        if (this.contador3 == 0) {
+            contador3 = 1;
+        }
         if (this.id == 0) {
             this.fechaCreacion = DbHelper.date2string(new Date());
             this.fechaModificacion = this.fechaCreacion;

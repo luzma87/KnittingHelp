@@ -80,20 +80,11 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
     ImageButton btnNextSeccion;
 
     ImageButton btnCounters;
-//    LinearLayout layoutCounter1;
-//    LinearLayout layoutCounter2;
-//    Button btnCounter1Menos;
-//    Button btnCounter1Mas;
-//    Button btnCounter2Menos;
-//    Button btnCounter2Mas;
 
     LinearLayout[] layoutsCounters;
     Button[] btnCountersMas;
     Button[] btnCountersMenos;
     int[] counters;
-
-//    int counter1 = 1;
-//    int counter2 = 1;
 
     int scrollThresh = 55;
 
@@ -114,6 +105,12 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         pattern = Pattern.getConCurrentSeccion(this, patternId);
         current = pattern.currentSeccion;
 
+        if (pattern.fontSize == 0) {
+            pattern.fontSize = 12;
+            pattern.save();
+        }
+        fontSize = pattern.fontSize;
+
         getActionBar().setTitle(pattern.nombre);
 
         btnPrevSeccion = (ImageButton) findViewById(R.id.pattern_view_btn_prev_seccion);
@@ -130,6 +127,10 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         btnCountersMenos = new Button[3];
         counters = new int[3];
 
+        counters[0] = pattern.contador1;
+        counters[1] = pattern.contador2;
+        counters[2] = pattern.contador3;
+
         layoutsCounters[0] = (LinearLayout) findViewById(R.id.pattern_view_layout_counter1);
         layoutsCounters[1] = (LinearLayout) findViewById(R.id.pattern_view_layout_counter2);
         layoutsCounters[2] = (LinearLayout) findViewById(R.id.pattern_view_layout_counter3);
@@ -142,33 +143,15 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         btnCountersMenos[1] = (Button) findViewById(R.id.pattern_view_btn_counter2_menos);
         btnCountersMenos[2] = (Button) findViewById(R.id.pattern_view_btn_counter3_menos);
 
-        for (Button button : btnCountersMas) {
+        for (int i = 0; i < btnCountersMas.length; i++) {
+            Button button = btnCountersMas[i];
+            button.setText("" + counters[i]);
             button.setOnClickListener(this);
             button.setOnLongClickListener(this);
         }
         for (Button button : btnCountersMenos) {
             button.setOnClickListener(this);
         }
-        for (int i = 0; i < counters.length; i++) {
-            counters[i] = 1;
-        }
-
-
-//        layoutCounter1 = (LinearLayout) findViewById(R.id.pattern_view_layout_counter1);
-//        layoutCounter2 = (LinearLayout) findViewById(R.id.pattern_view_layout_counter2);
-//        btnCounters = (ImageButton) findViewById(R.id.pattern_view_btn_counters);
-//        btnCounter1Menos = (Button) findViewById(R.id.pattern_view_btn_counter1_menos);
-//        btnCounter1Mas = (Button) findViewById(R.id.pattern_view_btn_counter1_mas);
-//        btnCounter2Menos = (Button) findViewById(R.id.pattern_view_btn_counter2_menos);
-//        btnCounter2Mas = (Button) findViewById(R.id.pattern_view_btn_counter2_mas);
-
-//        btnCounter1Menos.setOnClickListener(this);
-//        btnCounter1Mas.setOnClickListener(this);
-//        btnCounter2Menos.setOnClickListener(this);
-//        btnCounter2Mas.setOnClickListener(this);
-//
-//        btnCounter1Mas.setOnLongClickListener(this);
-//        btnCounter2Mas.setOnLongClickListener(this);
 
         btnPrevSeccion.setOnClickListener(this);
         btnPrevChunk.setOnClickListener(this);
@@ -213,7 +196,6 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                     seccionList.add(linea);
                     orden++;
 
-//                    String[] chunks = strLinea.split("[.,]");
                     String[] chunks = new String[1];
                     chunks[0] = strLinea;
                     for (String strChunk : chunks) {
@@ -338,12 +320,13 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
 
                 return true;
             case R.id.view_menu_font_size_increase_btn:
-
                 if (fontSize < 25) {
                     fontSize += 2;
                 } else {
                     fontSize = 26;
                 }
+                pattern.fontSize = fontSize;
+                pattern.save();
                 populateAll();
                 return true;
             case R.id.view_menu_font_size_decrease_btn:
@@ -352,6 +335,8 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                 } else {
                     fontSize = 8;
                 }
+                pattern.fontSize = fontSize;
+                pattern.save();
                 populateAll();
                 return true;
             default:
@@ -841,13 +826,31 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
         scrollView.scrollTo(0, currentChunkRealTop - scrollThresh);
     }
 
+    private void setCounterValue(int pos, int value) {
+        counters[pos] = value;
+        switch (pos) {
+            case 0:
+                pattern.contador1 = value;
+                break;
+            case 1:
+                pattern.contador2 = value;
+                break;
+            case 2:
+                pattern.contador3 = value;
+                break;
+        }
+        pattern.save();
+        btnCountersMas[pos].setText("" + value);
+    }
+
     @Override
     public void onClick(View view) {
         boolean cont = true;
         for (int i = 0; i < btnCountersMas.length; i++) {
             if (view.getId() == btnCountersMas[i].getId()) {
-                counters[i] += 1;
-                btnCountersMas[i].setText("" + counters[i]);
+                setCounterValue(i, counters[i] + 1);
+//                counters[i] += 1;
+//                btnCountersMas[i].setText("" + counters[i]);
                 cont = false;
                 break;
             }
@@ -856,8 +859,9 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
             for (int i = 0; i < btnCountersMenos.length; i++) {
                 if (view.getId() == btnCountersMenos[i].getId()) {
                     if (counters[i] > 1) {
-                        counters[i] -= 1;
-                        btnCountersMas[i].setText("" + counters[i]);
+                        setCounterValue(i, counters[i] - 1);
+//                        counters[i] -= 1;
+//                        btnCountersMas[i].setText("" + counters[i]);
                     }
                     cont = false;
                     break;
@@ -896,41 +900,15 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
                         for (LinearLayout linearLayout : layoutsCounters) {
                             linearLayout.setVisibility(View.GONE);
                         }
-
-//                btnCounters.setBackgroundResource(R.drawable.ic_counters);
-//                layoutCounter1.setVisibility(View.GONE);
-//                layoutCounter2.setVisibility(View.GONE);
                     } else {
                         btnCounters.setImageResource(R.drawable.ic_counters_hide);
                         for (LinearLayout linearLayout : layoutsCounters) {
                             linearLayout.setVisibility(View.VISIBLE);
                         }
-//                btnCounters.setBackgroundResource(R.drawable.ic_counters_hide);
-//                layoutCounter1.setVisibility(View.VISIBLE);
-//                layoutCounter2.setVisibility(View.VISIBLE);
                     }
                 }
             }
         }
-        /*else if (view.getId() == btnCounter1Mas.getId()) {
-            counter1++;
-            btnCounter1Mas.setText("" + counter1);
-        } else if (view.getId() == btnCounter1Menos.getId()) {
-            if (counter1 > 1) {
-                counter1--;
-            }
-            btnCounter1Mas.setText("" + counter1);
-        } else if (view.getId() == btnCounter2Mas.getId()) {
-            counter2++;
-            btnCounter2Mas.setText("" + counter2);
-        } else if (view.getId() == btnCounter2Menos.getId()) {
-            if (counter2 > 1) {
-                counter2--;
-            }
-            btnCounter2Mas.setText("" + counter2);
-        }*/
-//        TextView currentTv = textViewList.get(currentPos);
-//        moveToChunk(currentTv);
     }
 
     private void alertCounter(final int pos) {
@@ -946,8 +924,9 @@ public class PatternViewActivity extends Activity implements View.OnClickListene
 
         alert.setPositiveButton(R.string.global_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                counters[pos] = Integer.parseInt(input.getText().toString());
-                btnCountersMas[pos].setText("" + counters[pos]);
+                setCounterValue(pos, Integer.parseInt(input.getText().toString()));
+//                counters[pos] = Integer.parseInt(input.getText().toString());
+//                btnCountersMas[pos].setText("" + counters[pos]);
                 // Do something with value!
             }
         });

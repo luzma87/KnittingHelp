@@ -18,7 +18,13 @@ public class PatternDbHelper extends DbHelper {
     public static final String KEY_IMAGEN = "imagen";
     public static final String KEY_CURRENT_SECCION_ID = "current_seccion_id";
 
-    public static final String[] KEYS_PATTERN = {KEY_NOMBRE, KEY_CONTENIDO, KEY_IMAGEN, KEY_CURRENT_SECCION_ID};
+    public static final String KEY_CONTADOR1 = "contador1";
+    public static final String KEY_CONTADOR2 = "contador2";
+    public static final String KEY_CONTADOR3 = "contador3";
+    public static final String KEY_FONT_SIZE = "font_size";
+
+    public static final String[] KEYS_PATTERN = {KEY_NOMBRE, KEY_CONTENIDO, KEY_IMAGEN, KEY_CURRENT_SECCION_ID,
+            KEY_CONTADOR1, KEY_CONTADOR2, KEY_CONTADOR3, KEY_FONT_SIZE};
 
     public PatternDbHelper(Activity context) {
         super(context);
@@ -122,6 +128,10 @@ public class PatternDbHelper extends DbHelper {
                 " p." + ALIAS_PATTERN + "_" + KEY_CONTENIDO + ", " +
                 " p." + ALIAS_PATTERN + "_" + KEY_IMAGEN + ", " +
                 " p." + ALIAS_PATTERN + "_" + KEY_CURRENT_SECCION_ID + ", " +
+                " p." + ALIAS_PATTERN + "_" + KEY_CONTADOR1 + ", " +
+                " p." + ALIAS_PATTERN + "_" + KEY_CONTADOR2 + ", " +
+                " p." + ALIAS_PATTERN + "_" + KEY_CONTADOR3 + ", " +
+                " p." + ALIAS_PATTERN + "_" + KEY_FONT_SIZE + ", " +
                 " s." + ALIAS_SECCION + "_" + SeccionDbHelper.KEY_ID + ", " +
                 " s." + ALIAS_SECCION + "_" + SeccionDbHelper.KEY_FECHA_CREACION + ", " +
                 " s." + ALIAS_SECCION + "_" + SeccionDbHelper.KEY_FECHA_MODIFICACION + ", " +
@@ -142,17 +152,15 @@ public class PatternDbHelper extends DbHelper {
         obj.contenido = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_CONTENIDO));
         obj.imagen = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_IMAGEN));
         obj.currentSeccionId = c.getLong(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_CURRENT_SECCION_ID));
+        obj.contador1 = c.getInt(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_CONTADOR1));
+        obj.contador2 = c.getInt(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_CONTADOR2));
+        obj.contador3 = c.getInt(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_CONTADOR3));
+        obj.fontSize = c.getInt(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_FONT_SIZE));
         return obj;
     }
 
     private Pattern setDatosConCurrentSeccion(Cursor c) {
-        Pattern obj = new Pattern(this.context);
-        obj.id = c.getLong((c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_ID)));
-        obj.fechaCreacion = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_FECHA_CREACION));
-        obj.fechaModificacion = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_FECHA_MODIFICACION));
-        obj.nombre = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_NOMBRE));
-        obj.contenido = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_CONTENIDO));
-        obj.imagen = c.getString(c.getColumnIndex(ALIAS_PATTERN + "_" + KEY_IMAGEN));
+        Pattern obj = setDatos(c);
 
         Seccion obj2 = new Seccion(this.context);
         obj2.id = c.getLong((c.getColumnIndex(ALIAS_SECCION + "_" + SeccionDbHelper.KEY_ID)));
@@ -176,6 +184,10 @@ public class PatternDbHelper extends DbHelper {
         values.put(ALIAS_PATTERN + "_" + KEY_CONTENIDO, obj.contenido);
         values.put(ALIAS_PATTERN + "_" + KEY_IMAGEN, obj.imagen);
         values.put(ALIAS_PATTERN + "_" + KEY_CURRENT_SECCION_ID, obj.currentSeccionId);
+        values.put(ALIAS_PATTERN + "_" + KEY_CONTADOR1, obj.contador1);
+        values.put(ALIAS_PATTERN + "_" + KEY_CONTADOR2, obj.contador2);
+        values.put(ALIAS_PATTERN + "_" + KEY_CONTADOR3, obj.contador3);
+        values.put(ALIAS_PATTERN + "_" + KEY_FONT_SIZE, obj.fontSize);
         return values;
     }
 }

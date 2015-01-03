@@ -1,8 +1,5 @@
 package com.lzm.KnittingHelp.fragments;
 
-import android.content.Context;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import com.lzm.KnittingHelp.MainActivity;
 import com.lzm.KnittingHelp.R;
-import com.lzm.KnittingHelp.db.Pattern;
 import com.lzm.KnittingHelp.utils.Utils;
 
 /**
@@ -24,6 +20,7 @@ public class CountersFragment extends MasterFragment implements View.OnClickList
     Button btnInc1;
     Button btnDec1;
     EditText txtMax1;
+    EditText txtLbl1;
 
     int count1 = 1;
     int max1 = 0;
@@ -31,6 +28,7 @@ public class CountersFragment extends MasterFragment implements View.OnClickList
     Button btnInc2;
     Button btnDec2;
     EditText txtMax2;
+    EditText txtLbl2;
 
     int count2 = 1;
     int max2 = 0;
@@ -43,6 +41,7 @@ public class CountersFragment extends MasterFragment implements View.OnClickList
         btnInc1 = (Button) view.findViewById(R.id.counters_btn_inc1);
         btnDec1 = (Button) view.findViewById(R.id.counters_btn_dec1);
         txtMax1 = (EditText) view.findViewById(R.id.counters_txt_max1);
+        txtLbl1 = (EditText) view.findViewById(R.id.counters_txt_name1);
 
         btnInc1.setOnClickListener(this);
         btnDec1.setOnClickListener(this);
@@ -68,6 +67,7 @@ public class CountersFragment extends MasterFragment implements View.OnClickList
         btnInc2 = (Button) view.findViewById(R.id.counters_btn_inc2);
         btnDec2 = (Button) view.findViewById(R.id.counters_btn_dec2);
         txtMax2 = (EditText) view.findViewById(R.id.counters_txt_max2);
+        txtLbl2 = (EditText) view.findViewById(R.id.counters_txt_name2);
 
         btnInc2.setOnClickListener(this);
         btnDec2.setOnClickListener(this);
@@ -90,22 +90,22 @@ public class CountersFragment extends MasterFragment implements View.OnClickList
             }
         });
 
+        if (savedInstanceState != null) {
+            count1 = savedInstanceState.getInt("count1");
+            btnInc1.setText("" + count1);
+            max1 = savedInstanceState.getInt("max1");
+            txtMax1.setText("" + max1);
+            txtLbl1.setText(savedInstanceState.getString("label1"));
+
+            count2 = savedInstanceState.getInt("count2");
+            btnInc2.setText("" + count2);
+            max2 = savedInstanceState.getInt("max2");
+            txtMax2.setText("" + max2);
+            txtLbl2.setText(savedInstanceState.getString("label2"));
+        }
+
         return view;
     }
-
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        if (savedInstanceState == null) {
-//            //log.e("LZM", "onCreate FIRST TIME");
-//        } else {
-//            //log.e("LZM", "onCreate SUBSEQUENT TIME");
-//            btnInc1.setText("" + count1);
-//            btnInc2.setText("" + count2);
-//            txtMax1.setText(max1);
-//            txtMax2.setText(max2);
-//        }
-//    }
 
     @Override
     public void onClick(View view) {
@@ -140,5 +140,16 @@ public class CountersFragment extends MasterFragment implements View.OnClickList
             }
             btnInc2.setText("" + count2);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("count1", count1);
+        outState.putInt("max1", max1);
+        outState.putString("label1", txtLbl1.getText().toString());
+        outState.putInt("count2", count2);
+        outState.putInt("max2", max2);
+        outState.putString("label2", txtLbl2.getText().toString());
+        super.onSaveInstanceState(outState);
     }
 }

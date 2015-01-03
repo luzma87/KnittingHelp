@@ -272,17 +272,7 @@ public class SeccionDbHelper extends DbHelper {
     }
 
     private Seccion setDatosConPattern(Cursor c) {
-        Seccion obj = new Seccion(this.context);
-        obj.id = c.getLong((c.getColumnIndex(ALIAS_SECCION + "_" + KEY_ID)));
-        obj.fechaCreacion = c.getString(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_FECHA_CREACION));
-        obj.fechaModificacion = c.getString(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_FECHA_MODIFICACION));
-        obj.patternId = c.getLong(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_PATTERN_ID));
-        obj.contenido = c.getString(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_CONTENIDO));
-        obj.imagen = c.getString(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_IMAGEN));
-        obj.orden = c.getInt(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_ORDEN));
-        obj.seccionPadreId = c.getLong(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_SECCION_PADRE_ID));
-        obj.tipo = c.getInt(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_TIPO));
-        obj.separador = c.getString(c.getColumnIndex(ALIAS_SECCION + "_" + KEY_SEPARADOR));
+        Seccion obj = setDatos(c);
 
         Pattern obj2 = new Pattern(this.context);
         obj2.id = c.getLong((c.getColumnIndex(ALIAS_PATTERN + "_" + PatternDbHelper.KEY_ID)));
